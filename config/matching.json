@@ -1,0 +1,10 @@
+{
+  "_about": "Rules for the coverage check. Matching is done in code (src/core/coverage.ts) using only these settings and config/integrations.json.",
+  "stopwords": ["for", "the", "and", "via", "of"],
+  "ignore_variant_suffixes": ["via M365"],
+  "bare_name_max_tokens": 1,
+  "notes": {
+    "ignore_variant_suffixes": "Cards that differ only by one of these suffixes are treated as connection routes for the same product, not different products (for example 'Okta' and 'Okta via M365').",
+    "bare_name_max_tokens": "If the customer names only a vendor (this many words or fewer) and that vendor has two or more distinct product cards, the tool goes to Confirm with SAFE even when one card matches exactly (for example 'ServiceNow')."
+  }
+}

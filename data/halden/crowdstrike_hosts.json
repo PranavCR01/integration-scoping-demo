@@ -1,0 +1,202 @@
+[
+  {
+    "device_id": "cs-hal-lt-001",
+    "hostname": "HAL-LT-001",
+    "local_ip": "10.20.1.11",
+    "mac_address": "00:1a:2b:3c:00:01",
+    "instance_id": null,
+    "serial_number": "C02HAL001",
+    "os_version": "Windows 11",
+    "last_seen": "2026-11-01T00:00:00.000Z"
+  },
+  {
+    "device_id": "cs-hal-lt-002",
+    "hostname": "HAL-LT-002",
+    "local_ip": "10.20.2.11",
+    "mac_address": "00:1a:2b:3c:00:02",
+    "instance_id": null,
+    "serial_number": "C02HAL002",
+    "os_version": "Windows 11",
+    "last_seen": "2026-11-01T00:00:00.000Z"
+  },
+  {
+    "device_id": "cs-hal-lt-003",
+    "hostname": "HAL-LT-003",
+    "local_ip": "10.20.3.11",
+    "mac_address": "00:1a:2b:3c:00:03",
+    "instance_id": null,
+    "serial_number": "C02HAL003",
+    "os_version": "Windows 11",
+    "last_seen": "2026-11-01T00:00:00.000Z"
+  },
+  {
+    "device_id": "cs-hal-lt-004",
+    "hostname": "HAL-LT-004",
+    "local_ip": "10.20.4.11",
+    "mac_address": "00:1a:2b:3c:00:04",
+    "instance_id": null,
+    "serial_number": "C02HAL004",
+    "os_version": "Windows 11",
+    "last_seen": "2026-11-01T00:00:00.000Z"
+  },
+  {
+    "device_id": "cs-hal-lt-005",
+    "hostname": "HAL-LT-005",
+    "local_ip": "10.20.4.17",
+    "mac_address": "00:1a:2b:3c:00:05",
+    "instance_id": null,
+    "serial_number": "C02HAL005",
+    "os_version": "Windows 11",
+    "last_seen": "2026-10-13T00:00:00.000Z"
+  },
+  {
+    "device_id": "cs-hal-lt-007",
+    "hostname": "HAL-LT-007",
+    "local_ip": "10.20.7.11",
+    "mac_address": "00:1a:2b:3c:00:07",
+    "instance_id": null,
+    "serial_number": "C02HAL007",
+    "os_version": "Windows 11",
+    "last_seen": "2026-11-01T00:00:00.000Z"
+  },
+  {
+    "device_id": "cs-hal-lt-007-old",
+    "hostname": "HAL-LT-007",
+    "local_ip": "10.20.7.11",
+    "mac_address": "00:1a:2b:3c:00:07",
+    "instance_id": null,
+    "serial_number": "C02HAL007",
+    "os_version": "Windows 10",
+    "last_seen": "2026-08-30T00:00:00.000Z"
+  },
+  {
+    "device_id": "cs-hal-lt-008",
+    "hostname": "HAL-LT-008",
+    "local_ip": "10.20.8.11",
+    "mac_address": "00:1a:2b:3c:00:08",
+    "instance_id": null,
+    "serial_number": "C02HAL008",
+    "os_version": "Windows 11",
+    "last_seen": "2026-11-01T00:00:00.000Z"
+  },
+  {
+    "device_id": "cs-hal-lt-009",
+    "hostname": "HAL-LT-009",
+    "local_ip": "10.20.4.17",
+    "mac_address": "00:1a:2b:3c:00:09",
+    "instance_id": null,
+    "serial_number": "C02HAL009",
+    "os_version": "Windows 11",
+    "last_seen": "2026-11-01T00:00:00.000Z"
+  },
+  {
+    "device_id": "cs-hal-lt-010",
+    "hostname": "HAL-LT-010",
+    "local_ip": "10.20.10.11",
+    "mac_address": "00:1a:2b:3c:00:10",
+    "instance_id": null,
+    "serial_number": "C02HAL010",
+    "os_version": "Windows 11",
+    "last_seen": "2026-11-01T00:00:00.000Z"
+  },
+  {
+    "device_id": "cs-hal-lt-011",
+    "hostname": "HAL-LT-011",
+    "local_ip": "10.20.11.11",
+    "mac_address": "00:1a:2b:3c:00:11",
+    "instance_id": null,
+    "serial_number": "C02HAL011",
+    "os_version": "Windows 11",
+    "last_seen": "2026-11-01T00:00:00.000Z"
+  },
+  {
+    "device_id": "cs-e20",
+    "hostname": "web-prod-01",
+    "local_ip": "10.0.1.15",
+    "instance_id": "i-0a1b2c3d4e5f60001",
+    "serial_number": null,
+    "os_version": "Amazon Linux 2023",
+    "last_seen": "2026-11-01T00:00:00.000Z"
+  },
+  {
+    "device_id": "cs-e21",
+    "hostname": "web-prod-02",
+    "local_ip": "10.0.1.16",
+    "instance_id": "i-0a1b2c3d4e5f60002",
+    "serial_number": null,
+    "os_version": "Amazon Linux 2023",
+    "last_seen": "2026-11-01T00:00:00.000Z"
+  },
+  {
+    "device_id": "cs-e22",
+    "hostname": "api-prod-01",
+    "local_ip": "10.0.1.40",
+    "instance_id": "i-0a1b2c3d4e5f60003",
+    "serial_number": null,
+    "os_version": "Amazon Linux 2023",
+    "last_seen": "2026-11-01T00:00:00.000Z"
+  },
+  {
+    "device_id": "cs-e23",
+    "hostname": "app-01",
+    "local_ip": "10.0.2.21",
+    "instance_id": "i-0a1b2c3d4e5f60101",
+    "serial_number": null,
+    "os_version": "Amazon Linux 2023",
+    "last_seen": "2026-11-01T00:00:00.000Z"
+  },
+  {
+    "device_id": "cs-e24",
+    "hostname": "app-01",
+    "local_ip": "10.1.2.21",
+    "instance_id": "i-0a1b2c3d4e5f60202",
+    "serial_number": null,
+    "os_version": "Amazon Linux 2023",
+    "last_seen": "2026-11-01T00:00:00.000Z"
+  },
+  {
+    "device_id": "cs-e26",
+    "hostname": "batch-worker-07",
+    "local_ip": "10.0.4.77",
+    "instance_id": "i-0a1b2c3d4e5f60006",
+    "serial_number": null,
+    "os_version": "Amazon Linux 2023",
+    "last_seen": "2026-10-31T00:00:00.000Z"
+  },
+  {
+    "device_id": "cs-e31",
+    "hostname": "FILESERVER-02",
+    "local_ip": "10.30.0.40",
+    "instance_id": null,
+    "serial_number": null,
+    "os_version": "Windows Server 2019",
+    "last_seen": "2026-11-01T00:00:00.000Z"
+  },
+  {
+    "device_id": "cs-e34",
+    "hostname": "DC-01",
+    "local_ip": "10.30.0.5",
+    "instance_id": null,
+    "serial_number": null,
+    "os_version": "Windows Server 2019",
+    "last_seen": "2026-11-01T00:00:00.000Z"
+  },
+  {
+    "device_id": "cs-e35",
+    "hostname": "DC-02",
+    "local_ip": "10.30.0.6",
+    "instance_id": null,
+    "serial_number": null,
+    "os_version": "Windows Server 2019",
+    "last_seen": "2026-11-01T00:00:00.000Z"
+  },
+  {
+    "device_id": "cs-e37",
+    "hostname": "KIOSK-LOBBY-01",
+    "local_ip": "10.40.0.8",
+    "instance_id": null,
+    "serial_number": null,
+    "os_version": "Windows Server 2019",
+    "last_seen": "2026-10-31T00:00:00.000Z"
+  }
+]

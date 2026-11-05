@@ -1,0 +1,19 @@
+{
+  "_about": "Settings for the data checks. Values marked PLACEHOLDER must be agreed with the customer.",
+  "hostname": { "strip_domain": true, "lowercase": true },
+  "stale_after_days": { "value": 30, "placeholder": true, "note": "PLACEHOLDER: agree the staleness window with the customer" },
+  "scan_recent_days": { "value": 30, "placeholder": true, "note": "PLACEHOLDER: how recently an asset must have been scanned to count as covered" },
+  "coverage": {
+    "population_sources": ["tenable_assets", "crowdstrike_hosts"],
+    "edr_sources": ["crowdstrike_hosts"],
+    "scan_sources": ["tenable_assets"],
+    "note": "Coverage is measured over machines seen by the vulnerability scanner or the EDR tool. Devices seen only by the identity tool are listed separately and not counted, until the customer agrees which devices are in scope."
+  },
+  "readiness": [
+    { "check": "counts", "level": "block", "text": "Export counts differ from what the customer's console shows" },
+    { "check": "review_queue", "level": "block", "text": "Possible duplicates are waiting for a person to decide" },
+    { "check": "orphans", "level": "block", "text": "Findings point to assets no tool reports" },
+    { "check": "stale", "level": "warn", "text": "Stale assets need a decision: keep, exclude, or investigate" },
+    { "check": "edr_coverage", "level": "warn", "below": 0.9, "placeholder": true, "text": "Endpoint agent coverage is below the agreed threshold (PLACEHOLDER: 90%)" }
+  ]
+}

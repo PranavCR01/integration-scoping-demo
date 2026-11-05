@@ -1,0 +1,27 @@
+{
+  "_about": "A deliberately small common format for assets and findings. Modeled loosely on OCSF (no OCSF spec is attached, so these are our names, not OCSF field names). SAFE's internal data model would replace this file.",
+  "asset": {
+    "asset_id": "Our id for the merged asset",
+    "hostname": "Short hostname, lowercased, domain removed",
+    "fqdn": "Full hostname as reported",
+    "ipv4": "IPv4 addresses",
+    "mac": "MAC addresses",
+    "cloud_instance_id": "Cloud provider instance id",
+    "serial_number": "Hardware serial number",
+    "display_name": "Device name a person gave it (identity tools)",
+    "os": "Operating system",
+    "last_seen": "Most recent time any tool saw the asset",
+    "sources": "Which tools reported it"
+  },
+  "finding": {
+    "finding_id": "Source tool's id for the finding",
+    "asset_ref": "Source tool's id for the affected asset or project",
+    "title": "Short title",
+    "type": "Kind of finding",
+    "severity": "Severity as the source reports it",
+    "status": "Open, fixed, ignored, etc. as the source reports it",
+    "first_seen": "When first found",
+    "last_seen": "When last updated or seen",
+    "source": "Which tool reported it"
+  }
+}

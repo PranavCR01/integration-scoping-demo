@@ -1,0 +1,166 @@
+{
+  "_about": "Ground truth for scoring: which real machine each record belongs to, and the cases planted on purpose.",
+  "record_entity": {
+    "tenable_assets:tio-1": "E01",
+    "tenable_assets:tio-2": "E02",
+    "tenable_assets:tio-3": "E03",
+    "tenable_assets:tio-7": "E07",
+    "tenable_assets:tio-8": "E08",
+    "tenable_assets:tio-9": "E09",
+    "tenable_assets:tio-10": "E10",
+    "tenable_assets:tio-11": "E11",
+    "tenable_assets:tio-e20": "E20",
+    "tenable_assets:tio-e21": "E21",
+    "tenable_assets:tio-e22": "E22",
+    "tenable_assets:tio-e23": "E23",
+    "tenable_assets:tio-e25": "E25",
+    "tenable_assets:tio-e30": "E30",
+    "tenable_assets:tio-e31": "E31",
+    "tenable_assets:tio-e32": "E32",
+    "tenable_assets:tio-e33": "E33",
+    "tenable_assets:tio-e36": "E36",
+    "tenable_assets:tio-e34": "E34",
+    "tenable_assets:tio-e35": "E35",
+    "crowdstrike_hosts:cs-hal-lt-001": "E01",
+    "crowdstrike_hosts:cs-hal-lt-002": "E02",
+    "crowdstrike_hosts:cs-hal-lt-003": "E03",
+    "crowdstrike_hosts:cs-hal-lt-004": "E04",
+    "crowdstrike_hosts:cs-hal-lt-005": "E05",
+    "crowdstrike_hosts:cs-hal-lt-007": "E07",
+    "crowdstrike_hosts:cs-hal-lt-007-old": "E07",
+    "crowdstrike_hosts:cs-hal-lt-008": "E08",
+    "crowdstrike_hosts:cs-hal-lt-009": "E09",
+    "crowdstrike_hosts:cs-hal-lt-010": "E10",
+    "crowdstrike_hosts:cs-hal-lt-011": "E11",
+    "crowdstrike_hosts:cs-e20": "E20",
+    "crowdstrike_hosts:cs-e21": "E21",
+    "crowdstrike_hosts:cs-e22": "E22",
+    "crowdstrike_hosts:cs-e23": "E23",
+    "crowdstrike_hosts:cs-e24": "E24",
+    "crowdstrike_hosts:cs-e26": "E26",
+    "crowdstrike_hosts:cs-e31": "E31",
+    "crowdstrike_hosts:cs-e34": "E34",
+    "crowdstrike_hosts:cs-e35": "E35",
+    "crowdstrike_hosts:cs-e37": "E37",
+    "okta_devices:guo-1": "E01",
+    "okta_devices:guo-2": "E02",
+    "okta_devices:guo-3": "E03",
+    "okta_devices:guo-4": "E04",
+    "okta_devices:guo-5": "E05",
+    "okta_devices:guo-7": "E07",
+    "okta_devices:guo-8": "E08",
+    "okta_devices:guo-9": "E09",
+    "okta_devices:guo-10": "E10",
+    "okta_devices:guo-11": "E11",
+    "okta_devices:guo-12": "E12",
+    "okta_devices:guo-13": "E13"
+  },
+  "planted": [
+    {
+      "case": "Same laptop, short name in one tool and full domain name in another (HAL-LT-001 vs hal-lt-001.halden.local)",
+      "entities": [
+        "E01"
+      ],
+      "expect": "merge"
+    },
+    {
+      "case": "Okta shows a friendly device name (\"Priya's MacBook Pro\"); only the serial number links it",
+      "entities": [
+        "E02"
+      ],
+      "expect": "merge"
+    },
+    {
+      "case": "Laptop last scanned 52 days ago",
+      "entities": [
+        "E03"
+      ],
+      "expect": "coverage gap: not scanned recently"
+    },
+    {
+      "case": "Laptop with the endpoint agent but never scanned",
+      "entities": [
+        "E04"
+      ],
+      "expect": "coverage gap: not scanned"
+    },
+    {
+      "case": "Two CrowdStrike records for one laptop after a reinstall",
+      "entities": [
+        "E07"
+      ],
+      "expect": "merge, flagged as duplicate inside one tool"
+    },
+    {
+      "case": "Okta device with no serial number whose name equals a hostname",
+      "entities": [
+        "E08"
+      ],
+      "expect": "review (weak match)"
+    },
+    {
+      "case": "Two different laptops share IP 10.20.4.17 (address reassigned)",
+      "entities": [
+        "E05",
+        "E09"
+      ],
+      "expect": "review, must not merge"
+    },
+    {
+      "case": "Phones and tablets seen only by Okta",
+      "entities": [
+        "E12",
+        "E13"
+      ],
+      "expect": "listed separately, not counted in coverage"
+    },
+    {
+      "case": "Scanner sees an AWS-style name (ip-10-0-1-15), EDR sees web-prod-01; only the cloud instance ID links them",
+      "entities": [
+        "E20"
+      ],
+      "expect": "merge"
+    },
+    {
+      "case": "Two different servers both named app-01 (production and staging) with different instance IDs",
+      "entities": [
+        "E23",
+        "E24"
+      ],
+      "expect": "must not merge (conflict)"
+    },
+    {
+      "case": "Production database server with no endpoint agent",
+      "entities": [
+        "E25"
+      ],
+      "expect": "coverage gap: no EDR"
+    },
+    {
+      "case": "Same file server, but its IP changed between the two tools and nothing else links them",
+      "entities": [
+        "E31"
+      ],
+      "expect": "review (same hostname only)"
+    },
+    {
+      "case": "Three servers not seen in 47 to 120 days",
+      "entities": [
+        "E32",
+        "E33",
+        "E36"
+      ],
+      "expect": "stale"
+    },
+    {
+      "case": "Two findings point to asset IDs missing from the asset export",
+      "entities": [],
+      "expect": "orphan findings"
+    },
+    {
+      "case": "Tenable console shows 2 more assets than the export returned",
+      "entities": [],
+      "expect": "count mismatch"
+    }
+  ]
+}

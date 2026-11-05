@@ -1,0 +1,146 @@
+{
+  "_about": "What the plan contains and what a custom connector scoping sheet must cover. SAFE's internal template replaces this file.",
+  "document": {
+    "title_prefix": "Integration Scoping Plan",
+    "status": "Draft for customer review",
+    "footer": "Fictional customer. Built from public documentation only. SAFE's internal connector list and scoping template would replace the public versions used here.",
+    "oob_access_note": "For out-of-the-box connectors, SAFE's connector documentation decides the exact access needed. The access details above are what each vendor documents; confirm them with SAFE."
+  },
+  "access_items": [
+    {
+      "key": "auth",
+      "label": "How we connect",
+      "expects": [
+        "auth"
+      ]
+    },
+    {
+      "key": "permissions",
+      "label": "Permissions or scopes",
+      "expects": [
+        "scope",
+        "permission"
+      ]
+    }
+  ],
+  "custom_sheet_items": [
+    {
+      "key": "base_url",
+      "label": "Base URL",
+      "expects": [
+        "base_url"
+      ]
+    },
+    {
+      "key": "versioning",
+      "label": "Versioning",
+      "expects": [
+        "version"
+      ]
+    },
+    {
+      "key": "auth",
+      "label": "Authentication",
+      "expects": [
+        "auth"
+      ]
+    },
+    {
+      "key": "endpoints",
+      "label": "Endpoints",
+      "expects": [
+        "endpoint"
+      ]
+    },
+    {
+      "key": "filters",
+      "label": "Useful filters",
+      "expects": [
+        "param"
+      ]
+    },
+    {
+      "key": "pagination",
+      "label": "Pagination",
+      "expects": [
+        "pagination"
+      ]
+    },
+    {
+      "key": "rate_limits",
+      "label": "Rate limits",
+      "expects": [
+        "rate_limit"
+      ]
+    },
+    {
+      "key": "key_fields",
+      "label": "Fields to map",
+      "expects": [
+        "field"
+      ]
+    },
+    {
+      "key": "asset_relationship",
+      "label": "How records relate to assets",
+      "always_confirm": "customer"
+    }
+  ],
+  "data_checks": [
+    {
+      "key": "counts",
+      "label": "Counts",
+      "text": "Asset and finding totals match what each tool's own console shows."
+    },
+    {
+      "key": "duplicates",
+      "label": "Duplicates",
+      "text": "The same machine seen by more than one tool is merged once, with the reason and a confidence level for each match. Weak matches go to a person to review."
+    },
+    {
+      "key": "staleness",
+      "label": "Staleness",
+      "text": "Assets not seen within the customer's agreed window are flagged."
+    },
+    {
+      "key": "coverage",
+      "label": "Coverage",
+      "text": "Share of assets with an endpoint agent; share scanned recently."
+    },
+    {
+      "key": "orphans",
+      "label": "Orphan findings",
+      "text": "Findings that point to an asset no tool reports are flagged."
+    }
+  ],
+  "retrieval_default_keywords": [
+    "orgs",
+    "organizations",
+    "assets",
+    "devices",
+    "hosts",
+    "projects",
+    "targets",
+    "issues",
+    "vulnerabilities",
+    "findings"
+  ],
+  "standard_questions": [
+    {
+      "key": "owners",
+      "text": "Who owns each tool's admin account, and who approves API access?"
+    },
+    {
+      "key": "crown_jewels",
+      "text": "Which systems hold your most critical data or revenue? This decides what counts first in the risk figure."
+    },
+    {
+      "key": "lookback",
+      "text": "What lookback window should vulnerability history use, and after how many days should an asset count as stale?"
+    },
+    {
+      "key": "source_of_truth",
+      "text": "Is there an existing asset inventory (a CMDB) we should treat as the source of truth?"
+    }
+  ]
+}

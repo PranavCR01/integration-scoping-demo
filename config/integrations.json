@@ -1,0 +1,741 @@
+{
+  "label": "SAFE public integrations page (captured Nov 4, 2026)",
+  "source_note": "Public page lists 105 cards; SAFE claims 150+. A tool missing here is NOT proof SAFE lacks a connector: it lands in Custom work, confirm with SAFE.",
+  "integrations": [
+    {
+      "name": "Adobe Experience Manager",
+      "source": {
+        "file": "sources/01_safe_integrations_public_list.md",
+        "line": 15
+      }
+    },
+    {
+      "name": "Akamai API Security",
+      "source": {
+        "file": "sources/01_safe_integrations_public_list.md",
+        "line": 16
+      }
+    },
+    {
+      "name": "Archer",
+      "source": {
+        "file": "sources/01_safe_integrations_public_list.md",
+        "line": 17
+      }
+    },
+    {
+      "name": "Armis",
+      "source": {
+        "file": "sources/01_safe_integrations_public_list.md",
+        "line": 18
+      }
+    },
+    {
+      "name": "Asana",
+      "source": {
+        "file": "sources/01_safe_integrations_public_list.md",
+        "line": 19
+      }
+    },
+    {
+      "name": "Atlassian Confluence",
+      "source": {
+        "file": "sources/01_safe_integrations_public_list.md",
+        "line": 20
+      }
+    },
+    {
+      "name": "Atlassian JIRA",
+      "source": {
+        "file": "sources/01_safe_integrations_public_list.md",
+        "line": 21
+      }
+    },
+    {
+      "name": "Atlassian Opsgenie",
+      "source": {
+        "file": "sources/01_safe_integrations_public_list.md",
+        "line": 22
+      }
+    },
+    {
+      "name": "Auth0",
+      "source": {
+        "file": "sources/01_safe_integrations_public_list.md",
+        "line": 23
+      }
+    },
+    {
+      "name": "Automox",
+      "source": {
+        "file": "sources/01_safe_integrations_public_list.md",
+        "line": 24
+      }
+    },
+    {
+      "name": "Axonius",
+      "source": {
+        "file": "sources/01_safe_integrations_public_list.md",
+        "line": 25
+      }
+    },
+    {
+      "name": "Azure Defender for Cloud",
+      "source": {
+        "file": "sources/01_safe_integrations_public_list.md",
+        "line": 26
+      }
+    },
+    {
+      "name": "Bitbucket",
+      "source": {
+        "file": "sources/01_safe_integrations_public_list.md",
+        "line": 27
+      }
+    },
+    {
+      "name": "Cisco Umbrella",
+      "source": {
+        "file": "sources/01_safe_integrations_public_list.md",
+        "line": 28
+      }
+    },
+    {
+      "name": "Cisco XDR",
+      "source": {
+        "file": "sources/01_safe_integrations_public_list.md",
+        "line": 29
+      }
+    },
+    {
+      "name": "Citrix ShareFile via M365",
+      "source": {
+        "file": "sources/01_safe_integrations_public_list.md",
+        "line": 30
+      }
+    },
+    {
+      "name": "Claroty xDome",
+      "source": {
+        "file": "sources/01_safe_integrations_public_list.md",
+        "line": 31
+      }
+    },
+    {
+      "name": "Cloudflare",
+      "source": {
+        "file": "sources/01_safe_integrations_public_list.md",
+        "line": 32
+      }
+    },
+    {
+      "name": "CrowdStrike Falcon",
+      "source": {
+        "file": "sources/01_safe_integrations_public_list.md",
+        "line": 33
+      }
+    },
+    {
+      "name": "Crowdstrike Falcon Exposure Management (Spotlight)",
+      "source": {
+        "file": "sources/01_safe_integrations_public_list.md",
+        "line": 34
+      }
+    },
+    {
+      "name": "CyberArk Identity",
+      "source": {
+        "file": "sources/01_safe_integrations_public_list.md",
+        "line": 35
+      }
+    },
+    {
+      "name": "Databricks",
+      "source": {
+        "file": "sources/01_safe_integrations_public_list.md",
+        "line": 36
+      }
+    },
+    {
+      "name": "Datadog",
+      "source": {
+        "file": "sources/01_safe_integrations_public_list.md",
+        "line": 37
+      }
+    },
+    {
+      "name": "Defender for Endpoint via M365",
+      "source": {
+        "file": "sources/01_safe_integrations_public_list.md",
+        "line": 38
+      }
+    },
+    {
+      "name": "Document360",
+      "source": {
+        "file": "sources/01_safe_integrations_public_list.md",
+        "line": 39
+      }
+    },
+    {
+      "name": "DocuSign",
+      "source": {
+        "file": "sources/01_safe_integrations_public_list.md",
+        "line": 40
+      }
+    },
+    {
+      "name": "DocuSign via M365",
+      "source": {
+        "file": "sources/01_safe_integrations_public_list.md",
+        "line": 41
+      }
+    },
+    {
+      "name": "Duo Security",
+      "source": {
+        "file": "sources/01_safe_integrations_public_list.md",
+        "line": 42
+      }
+    },
+    {
+      "name": "Dynatrace",
+      "source": {
+        "file": "sources/01_safe_integrations_public_list.md",
+        "line": 43
+      }
+    },
+    {
+      "name": "Fastly",
+      "source": {
+        "file": "sources/01_safe_integrations_public_list.md",
+        "line": 44
+      }
+    },
+    {
+      "name": "Freshservice",
+      "source": {
+        "file": "sources/01_safe_integrations_public_list.md",
+        "line": 45
+      }
+    },
+    {
+      "name": "GCP – Security Command Center",
+      "source": {
+        "file": "sources/01_safe_integrations_public_list.md",
+        "line": 46
+      }
+    },
+    {
+      "name": "GitHub",
+      "source": {
+        "file": "sources/01_safe_integrations_public_list.md",
+        "line": 47
+      }
+    },
+    {
+      "name": "GitHub via M365",
+      "source": {
+        "file": "sources/01_safe_integrations_public_list.md",
+        "line": 48
+      }
+    },
+    {
+      "name": "GitLab",
+      "source": {
+        "file": "sources/01_safe_integrations_public_list.md",
+        "line": 49
+      }
+    },
+    {
+      "name": "Google Workspace",
+      "source": {
+        "file": "sources/01_safe_integrations_public_list.md",
+        "line": 50
+      }
+    },
+    {
+      "name": "Grafana",
+      "source": {
+        "file": "sources/01_safe_integrations_public_list.md",
+        "line": 51
+      }
+    },
+    {
+      "name": "Harness",
+      "source": {
+        "file": "sources/01_safe_integrations_public_list.md",
+        "line": 52
+      }
+    },
+    {
+      "name": "Imperva WAF",
+      "source": {
+        "file": "sources/01_safe_integrations_public_list.md",
+        "line": 53
+      }
+    },
+    {
+      "name": "IronClad",
+      "source": {
+        "file": "sources/01_safe_integrations_public_list.md",
+        "line": 54
+      }
+    },
+    {
+      "name": "Jamf",
+      "source": {
+        "file": "sources/01_safe_integrations_public_list.md",
+        "line": 55
+      }
+    },
+    {
+      "name": "Jira (ITSM)",
+      "source": {
+        "file": "sources/01_safe_integrations_public_list.md",
+        "line": 56
+      }
+    },
+    {
+      "name": "JumpCloud",
+      "source": {
+        "file": "sources/01_safe_integrations_public_list.md",
+        "line": 57
+      }
+    },
+    {
+      "name": "KnowBe4",
+      "source": {
+        "file": "sources/01_safe_integrations_public_list.md",
+        "line": 58
+      }
+    },
+    {
+      "name": "LastPass",
+      "source": {
+        "file": "sources/01_safe_integrations_public_list.md",
+        "line": 59
+      }
+    },
+    {
+      "name": "LaunchDarkly",
+      "source": {
+        "file": "sources/01_safe_integrations_public_list.md",
+        "line": 60
+      }
+    },
+    {
+      "name": "Malware Patrol",
+      "source": {
+        "file": "sources/01_safe_integrations_public_list.md",
+        "line": 61
+      }
+    },
+    {
+      "name": "Microsoft 365 Defender",
+      "source": {
+        "file": "sources/01_safe_integrations_public_list.md",
+        "line": 62
+      }
+    },
+    {
+      "name": "Microsoft 365 Exchange Online",
+      "source": {
+        "file": "sources/01_safe_integrations_public_list.md",
+        "line": 63
+      }
+    },
+    {
+      "name": "Microsoft App Governance via M365",
+      "source": {
+        "file": "sources/01_safe_integrations_public_list.md",
+        "line": 64
+      }
+    },
+    {
+      "name": "Microsoft Defender for Endpoints",
+      "source": {
+        "file": "sources/01_safe_integrations_public_list.md",
+        "line": 65
+      }
+    },
+    {
+      "name": "Microsoft Defender for Identity via M365",
+      "source": {
+        "file": "sources/01_safe_integrations_public_list.md",
+        "line": 66
+      }
+    },
+    {
+      "name": "Microsoft Entra ID SSO",
+      "source": {
+        "file": "sources/01_safe_integrations_public_list.md",
+        "line": 67
+      }
+    },
+    {
+      "name": "Microsoft Entra ID User Provisioning",
+      "source": {
+        "file": "sources/01_safe_integrations_public_list.md",
+        "line": 68
+      }
+    },
+    {
+      "name": "Microsoft Entra ID via M365",
+      "source": {
+        "file": "sources/01_safe_integrations_public_list.md",
+        "line": 69
+      }
+    },
+    {
+      "name": "Microsoft Intune",
+      "source": {
+        "file": "sources/01_safe_integrations_public_list.md",
+        "line": 70
+      }
+    },
+    {
+      "name": "Microsoft SharePoint",
+      "source": {
+        "file": "sources/01_safe_integrations_public_list.md",
+        "line": 71
+      }
+    },
+    {
+      "name": "Microsoft Teams",
+      "source": {
+        "file": "sources/01_safe_integrations_public_list.md",
+        "line": 72
+      }
+    },
+    {
+      "name": "Mulesoft",
+      "source": {
+        "file": "sources/01_safe_integrations_public_list.md",
+        "line": 73
+      }
+    },
+    {
+      "name": "Netlify",
+      "source": {
+        "file": "sources/01_safe_integrations_public_list.md",
+        "line": 74
+      }
+    },
+    {
+      "name": "Okta",
+      "source": {
+        "file": "sources/01_safe_integrations_public_list.md",
+        "line": 75
+      }
+    },
+    {
+      "name": "Okta via M365",
+      "source": {
+        "file": "sources/01_safe_integrations_public_list.md",
+        "line": 76
+      }
+    },
+    {
+      "name": "OneTrust",
+      "source": {
+        "file": "sources/01_safe_integrations_public_list.md",
+        "line": 77
+      }
+    },
+    {
+      "name": "Orca Security",
+      "source": {
+        "file": "sources/01_safe_integrations_public_list.md",
+        "line": 78
+      }
+    },
+    {
+      "name": "PAN Cortex XDR",
+      "source": {
+        "file": "sources/01_safe_integrations_public_list.md",
+        "line": 79
+      }
+    },
+    {
+      "name": "Phishing Report Upload",
+      "source": {
+        "file": "sources/01_safe_integrations_public_list.md",
+        "line": 80
+      }
+    },
+    {
+      "name": "PingOne SSO",
+      "source": {
+        "file": "sources/01_safe_integrations_public_list.md",
+        "line": 81
+      }
+    },
+    {
+      "name": "Pipedrive",
+      "source": {
+        "file": "sources/01_safe_integrations_public_list.md",
+        "line": 82
+      }
+    },
+    {
+      "name": "Prisma Cloud",
+      "source": {
+        "file": "sources/01_safe_integrations_public_list.md",
+        "line": 83
+      }
+    },
+    {
+      "name": "Qualys SCA",
+      "source": {
+        "file": "sources/01_safe_integrations_public_list.md",
+        "line": 84
+      }
+    },
+    {
+      "name": "Qualys VMDR",
+      "source": {
+        "file": "sources/01_safe_integrations_public_list.md",
+        "line": 85
+      }
+    },
+    {
+      "name": "Rapid7 InsightVM",
+      "source": {
+        "file": "sources/01_safe_integrations_public_list.md",
+        "line": 86
+      }
+    },
+    {
+      "name": "Rapid7 InsightVM Cloud",
+      "source": {
+        "file": "sources/01_safe_integrations_public_list.md",
+        "line": 87
+      }
+    },
+    {
+      "name": "Rubrik",
+      "source": {
+        "file": "sources/01_safe_integrations_public_list.md",
+        "line": 88
+      }
+    },
+    {
+      "name": "Salesforce via M365",
+      "source": {
+        "file": "sources/01_safe_integrations_public_list.md",
+        "line": 89
+      }
+    },
+    {
+      "name": "SecurityTrails",
+      "source": {
+        "file": "sources/01_safe_integrations_public_list.md",
+        "line": 90
+      }
+    },
+    {
+      "name": "SentinelOne",
+      "source": {
+        "file": "sources/01_safe_integrations_public_list.md",
+        "line": 91
+      }
+    },
+    {
+      "name": "Sentry",
+      "source": {
+        "file": "sources/01_safe_integrations_public_list.md",
+        "line": 92
+      }
+    },
+    {
+      "name": "ServiceNow",
+      "source": {
+        "file": "sources/01_safe_integrations_public_list.md",
+        "line": 93
+      }
+    },
+    {
+      "name": "ServiceNow CLM",
+      "source": {
+        "file": "sources/01_safe_integrations_public_list.md",
+        "line": 94
+      }
+    },
+    {
+      "name": "ServiceNow CMDB",
+      "source": {
+        "file": "sources/01_safe_integrations_public_list.md",
+        "line": 95
+      }
+    },
+    {
+      "name": "ServiceNow IRM",
+      "source": {
+        "file": "sources/01_safe_integrations_public_list.md",
+        "line": 96
+      }
+    },
+    {
+      "name": "ServiceNow ITSM",
+      "source": {
+        "file": "sources/01_safe_integrations_public_list.md",
+        "line": 97
+      }
+    },
+    {
+      "name": "ServiceNow TPRM",
+      "source": {
+        "file": "sources/01_safe_integrations_public_list.md",
+        "line": 98
+      }
+    },
+    {
+      "name": "ServiceNow via M365",
+      "source": {
+        "file": "sources/01_safe_integrations_public_list.md",
+        "line": 99
+      }
+    },
+    {
+      "name": "SharePoint via M365",
+      "source": {
+        "file": "sources/01_safe_integrations_public_list.md",
+        "line": 100
+      }
+    },
+    {
+      "name": "Shodan",
+      "source": {
+        "file": "sources/01_safe_integrations_public_list.md",
+        "line": 101
+      }
+    },
+    {
+      "name": "Snowflake",
+      "source": {
+        "file": "sources/01_safe_integrations_public_list.md",
+        "line": 102
+      }
+    },
+    {
+      "name": "SpyCloud",
+      "source": {
+        "file": "sources/01_safe_integrations_public_list.md",
+        "line": 103
+      }
+    },
+    {
+      "name": "SumoLogic",
+      "source": {
+        "file": "sources/01_safe_integrations_public_list.md",
+        "line": 104
+      }
+    },
+    {
+      "name": "Tableau",
+      "source": {
+        "file": "sources/01_safe_integrations_public_list.md",
+        "line": 105
+      }
+    },
+    {
+      "name": "Tanium Comply",
+      "source": {
+        "file": "sources/01_safe_integrations_public_list.md",
+        "line": 106
+      }
+    },
+    {
+      "name": "Teams via M365",
+      "source": {
+        "file": "sources/01_safe_integrations_public_list.md",
+        "line": 107
+      }
+    },
+    {
+      "name": "Teamwork",
+      "source": {
+        "file": "sources/01_safe_integrations_public_list.md",
+        "line": 108
+      }
+    },
+    {
+      "name": "Tenable Security Center",
+      "source": {
+        "file": "sources/01_safe_integrations_public_list.md",
+        "line": 109
+      }
+    },
+    {
+      "name": "Tenable Vulnerability Management",
+      "source": {
+        "file": "sources/01_safe_integrations_public_list.md",
+        "line": 110
+      }
+    },
+    {
+      "name": "Terraform",
+      "source": {
+        "file": "sources/01_safe_integrations_public_list.md",
+        "line": 111
+      }
+    },
+    {
+      "name": "Thycotic",
+      "source": {
+        "file": "sources/01_safe_integrations_public_list.md",
+        "line": 112
+      }
+    },
+    {
+      "name": "Twingate",
+      "source": {
+        "file": "sources/01_safe_integrations_public_list.md",
+        "line": 113
+      }
+    },
+    {
+      "name": "VA Report",
+      "source": {
+        "file": "sources/01_safe_integrations_public_list.md",
+        "line": 114
+      }
+    },
+    {
+      "name": "Veracode",
+      "source": {
+        "file": "sources/01_safe_integrations_public_list.md",
+        "line": 115
+      }
+    },
+    {
+      "name": "Wiz",
+      "source": {
+        "file": "sources/01_safe_integrations_public_list.md",
+        "line": 116
+      }
+    },
+    {
+      "name": "Zendesk",
+      "source": {
+        "file": "sources/01_safe_integrations_public_list.md",
+        "line": 117
+      }
+    },
+    {
+      "name": "Zoom",
+      "source": {
+        "file": "sources/01_safe_integrations_public_list.md",
+        "line": 118
+      }
+    },
+    {
+      "name": "Zoom via M365",
+      "source": {
+        "file": "sources/01_safe_integrations_public_list.md",
+        "line": 119
+      }
+    }
+  ]
+}

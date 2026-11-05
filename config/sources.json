@@ -1,0 +1,15 @@
+{
+  "_about": "Display names for every source file a citation can point to.",
+  "files": {
+    "sources/01_safe_integrations_public_list.md": "SAFE public integrations page (captured Nov 4, 2026)",
+    "sources/02_okta_management_openapi_v2026.42.1.yaml": "Okta Management OpenAPI v2026.42.1",
+    "sources/03_tenable_vm_api_notes.md": "Tenable VM API notes (developer.tenable.com)",
+    "sources/03b_pytenable_exports_api.py": "pyTenable SDK, exports module",
+    "sources/04_snyk_rest_openapi.json": "Snyk REST OpenAPI spec",
+    "sources/04b_snyk_about_rest_api.md": "Snyk docs: About the REST API",
+    "sources/04c_snyk_authentication.md": "Snyk docs: Authentication for API",
+    "config/canonical_schema.json": "Our common format (config)",
+    "config/aliases.json": "Name aliases (config)",
+    "config/variants/integrations.safe-internal-example.json": "Simulated SAFE internal list (config)"
+  }
+}

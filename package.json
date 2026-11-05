@@ -1,0 +1,38 @@
+{
+  "name": "integration-scoping-demo",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "index": "tsx scripts/build-index.ts",
+    "dev": "npm run index && vite",
+    "build": "npm run index && tsc --noEmit && vite build",
+    "test": "npm run index && vitest run",
+    "eval": "npm run index && tsx scripts/eval.ts",
+    "draft": "npm run index && tsx scripts/draft.ts"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^1.5.0",
+    "jsonc-parser": "^3.3.1",
+    "papaparse": "^5.7.0",
+    "pdfmake": "^0.3.13",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "yaml": "^2.9.1",
+    "zod": "^4.6.7"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.3.4",
+    "@types/node": "^26.6.6",
+    "@types/papaparse": "^5.5.2",
+    "@types/pdfmake": "^0.3.3",
+    "@types/react": "^18.3.31",
+    "@types/react-dom": "^18.3.7",
+    "@vitejs/plugin-react": "^6.2.1",
+    "tailwindcss": "^4.3.4",
+    "tsx": "^4.23.15",
+    "typescript": "^7.0.2",
+    "vite": "^8.3.6",
+    "vitest": "^5.1.0"
+  }
+}

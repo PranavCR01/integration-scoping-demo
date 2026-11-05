@@ -1,0 +1,9 @@
+{
+  "_about": "PLACEHOLDER values only. Not estimates. Replace with SAFE's own numbers. The model never writes these.",
+  "label": "Placeholder from config, not an estimate",
+  "by_bucket": {
+    "out_of_box": "TBD",
+    "confirm_with_safe": "TBD",
+    "custom_work": "TBD"
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "_about": "How customers commonly write a tool name, mapped to the exact card name. An alias only applies if its target card exists in the active integrations config.",
+  "aliases": [
+    { "say": "Tenable VM", "means": "Tenable Vulnerability Management" }
+  ]
+}

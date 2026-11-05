@@ -1,0 +1,18 @@
+{
+  "_about": "How records from different tools are judged to be the same machine. Applied in code (src/core/dedupe.ts). Confidence values are editable defaults, not measured probabilities.",
+  "merge_threshold": 0.7,
+  "rules": [
+    { "key": "cloud_instance_id", "label": "Same cloud instance ID", "match": [["cloud_instance_id", "cloud_instance_id"]], "confidence": 0.98 },
+    { "key": "serial_number", "label": "Same hardware serial number", "match": [["serial_number", "serial_number"]], "confidence": 0.95 },
+    { "key": "mac", "label": "Same MAC address", "match": [["mac", "mac"]], "confidence": 0.9 },
+    { "key": "hostname_and_ip", "label": "Same hostname and a shared IP address", "match": [["hostname", "hostname"], ["ipv4", "ipv4"]], "confidence": 0.85 },
+    { "key": "hostname_only", "label": "Same hostname, nothing else in common", "match": [["hostname", "hostname"]], "confidence": 0.6 },
+    { "key": "display_name", "label": "Device display name equals a hostname", "match": [["display_name", "hostname"]], "confidence": 0.5 },
+    { "key": "ip_only", "label": "Shared IP address only (IPs get reassigned)", "match": [["ipv4", "ipv4"]], "confidence": 0.3 }
+  ],
+  "conflict_keys": ["cloud_instance_id", "serial_number"],
+  "notes": {
+    "conflict_keys": "If two records both have one of these and the values differ, they are different machines, whatever else matches. MAC is not a conflict key because one machine can report different network cards to different tools.",
+    "merge_threshold": "Matches at or above this confidence merge automatically. Matches below it go to a person to review and are NOT merged."
+  }
+}

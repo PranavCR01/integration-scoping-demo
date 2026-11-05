@@ -1,0 +1,868 @@
+{
+  "created_at": "2026-11-05T08:54:23.276Z",
+  "model": "claude-opus-5-5",
+  "prompt_file": "prompts/draft.v1.md",
+  "customer_id": "halden",
+  "tools": [
+    "Okta",
+    "Tenable VM",
+    "CrowdStrike Falcon",
+    "ServiceNow ITSM",
+    "Microsoft Defender",
+    "Snyk"
+  ],
+  "draft": {
+    "rows": [
+      {
+        "section": "access",
+        "tool": "Okta",
+        "item": "auth",
+        "text": "We connect with an Okta API token sent in the `Authorization` header with the `SSWS` prefix. Okta also supports an OAuth access token sent in the same header as a `Bearer` token.",
+        "facts": [
+          {
+            "kind": "auth",
+            "value": "Authorization",
+            "method": null,
+            "path": null,
+            "cite_file": "sources/02_okta_management_openapi_v2026.42.1.yaml",
+            "cite_line": 100424,
+            "quote": null
+          },
+          {
+            "kind": "auth",
+            "value": "SSWS",
+            "method": null,
+            "path": null,
+            "cite_file": "sources/02_okta_management_openapi_v2026.42.1.yaml",
+            "cite_line": 100424,
+            "quote": null
+          },
+          {
+            "kind": "auth",
+            "value": "Bearer",
+            "method": null,
+            "path": null,
+            "cite_file": "sources/02_okta_management_openapi_v2026.42.1.yaml",
+            "cite_line": 100429,
+            "quote": null
+          }
+        ]
+      },
+      {
+        "section": "access",
+        "tool": "Okta",
+        "item": "permissions",
+        "text": "For OAuth access, read access to the core records uses these scopes: `okta.users.read`, `okta.groups.read`, `okta.apps.read`, `okta.devices.read` and `okta.logs.read`.",
+        "facts": [
+          {
+            "kind": "scope",
+            "value": "okta.users.read",
+            "method": "get",
+            "path": "/api/v1/users",
+            "cite_file": "sources/02_okta_management_openapi_v2026.42.1.yaml",
+            "cite_line": 27061,
+            "quote": null
+          },
+          {
+            "kind": "scope",
+            "value": "okta.groups.read",
+            "method": "get",
+            "path": "/api/v1/groups",
+            "cite_file": "sources/02_okta_management_openapi_v2026.42.1.yaml",
+            "cite_line": 14115,
+            "quote": null
+          },
+          {
+            "kind": "scope",
+            "value": "okta.apps.read",
+            "method": "get",
+            "path": "/api/v1/apps",
+            "cite_file": "sources/02_okta_management_openapi_v2026.42.1.yaml",
+            "cite_line": 2004,
+            "quote": null
+          },
+          {
+            "kind": "scope",
+            "value": "okta.devices.read",
+            "method": "get",
+            "path": "/api/v1/devices",
+            "cite_file": "sources/02_okta_management_openapi_v2026.42.1.yaml",
+            "cite_line": 11809,
+            "quote": null
+          },
+          {
+            "kind": "scope",
+            "value": "okta.logs.read",
+            "method": "get",
+            "path": "/api/v1/logs",
+            "cite_file": "sources/02_okta_management_openapi_v2026.42.1.yaml",
+            "cite_line": 19732,
+            "quote": null
+          }
+        ]
+      },
+      {
+        "section": "access",
+        "tool": "Tenable Vulnerability Management",
+        "item": "auth",
+        "text": "We connect with an access key and secret key generated for a user account. They are sent in the `X-APIKeys` header as `accessKey` and `secretKey`, against `https://cloud.tenable.com`.",
+        "facts": [
+          {
+            "kind": "auth",
+            "value": "X-APIKeys",
+            "method": null,
+            "path": null,
+            "cite_file": "sources/03_tenable_vm_api_notes.md",
+            "cite_line": 8,
+            "quote": "`X-APIKeys: accessKey=<access_key>;secretKey=<secret_key>`"
+          },
+          {
+            "kind": "auth",
+            "value": "accessKey",
+            "method": null,
+            "path": null,
+            "cite_file": "sources/03_tenable_vm_api_notes.md",
+            "cite_line": 8,
+            "quote": "`X-APIKeys: accessKey=<access_key>;secretKey=<secret_key>`"
+          },
+          {
+            "kind": "auth",
+            "value": "secretKey",
+            "method": null,
+            "path": null,
+            "cite_file": "sources/03_tenable_vm_api_notes.md",
+            "cite_line": 8,
+            "quote": "`X-APIKeys: accessKey=<access_key>;secretKey=<secret_key>`"
+          },
+          {
+            "kind": "base_url",
+            "value": "https://cloud.tenable.com",
+            "method": null,
+            "path": null,
+            "cite_file": "sources/03_tenable_vm_api_notes.md",
+            "cite_line": 7,
+            "quote": "- Base URL used in examples: `https://cloud.tenable.com`"
+          },
+          {
+            "kind": "doc",
+            "value": "Keys are generated per user account",
+            "method": null,
+            "path": null,
+            "cite_file": "sources/03_tenable_vm_api_notes.md",
+            "cite_line": 9,
+            "quote": "Keys are generated per user account"
+          }
+        ]
+      },
+      {
+        "section": "access",
+        "tool": "Tenable Vulnerability Management",
+        "item": "permissions",
+        "text": "Vulnerability export needs the `Basic` role or the custom privilege `VM.VM_EXPLORE.VM_EXPLORE.EXPORT`. The user also needs `Can View` access on the exported assets, which the `All Assets` object can grant. The sources do not name the role needed for asset export.",
+        "facts": [
+          {
+            "kind": "permission",
+            "value": "Basic",
+            "method": null,
+            "path": null,
+            "cite_file": "sources/03_tenable_vm_api_notes.md",
+            "cite_line": 14,
+            "quote": "Basic [16] role"
+          },
+          {
+            "kind": "permission",
+            "value": "VM.VM_EXPLORE.VM_EXPLORE.EXPORT",
+            "method": null,
+            "path": null,
+            "cite_file": "sources/03_tenable_vm_api_notes.md",
+            "cite_line": 14,
+            "quote": "`VM.VM_EXPLORE.VM_EXPLORE.EXPORT`"
+          },
+          {
+            "kind": "permission",
+            "value": "Can View",
+            "method": null,
+            "path": null,
+            "cite_file": "sources/03_tenable_vm_api_notes.md",
+            "cite_line": 14,
+            "quote": "\"Can View\" access control permission"
+          },
+          {
+            "kind": "permission",
+            "value": "All Assets",
+            "method": null,
+            "path": null,
+            "cite_file": "sources/03_tenable_vm_api_notes.md",
+            "cite_line": 14,
+            "quote": "the `All Assets` object can grant this"
+          }
+        ]
+      },
+      {
+        "section": "access",
+        "tool": "Snyk",
+        "item": "auth",
+        "text": "We connect with a Snyk service account token sent in the `Authorization` header with the `token` prefix. Snyk API access requires the Enterprise plan.",
+        "facts": [
+          {
+            "kind": "auth",
+            "value": "Authorization",
+            "method": null,
+            "path": null,
+            "cite_file": "sources/04c_snyk_authentication.md",
+            "cite_line": 44,
+            "quote": "provide the API token in an `Authorization: token` header"
+          },
+          {
+            "kind": "auth",
+            "value": "token",
+            "method": null,
+            "path": null,
+            "cite_file": "sources/04c_snyk_authentication.md",
+            "cite_line": 44,
+            "quote": "provide the API token in an `Authorization: token` header"
+          },
+          {
+            "kind": "doc",
+            "value": "Enterprise users should use a service account",
+            "method": null,
+            "path": null,
+            "cite_file": "sources/04c_snyk_authentication.md",
+            "cite_line": 22,
+            "quote": "**Enterprise users should use a service account** to authenticate for any kind of automation."
+          },
+          {
+            "kind": "doc",
+            "value": "Enterprise plan customer",
+            "method": null,
+            "path": null,
+            "cite_file": "sources/04c_snyk_authentication.md",
+            "cite_line": 13,
+            "quote": "To use the Snyk API, you must be an Enterprise plan customer and have a token from Snyk."
+          }
+        ]
+      },
+      {
+        "section": "access",
+        "tool": "Snyk",
+        "item": "permissions",
+        "text": "Confirm",
+        "facts": []
+      },
+      {
+        "section": "custom_sheet",
+        "tool": "Snyk",
+        "item": "base_url",
+        "text": "The default base URL is `https://api.snyk.io/rest`. Other regions use their own base URL, for example `https://api.eu.snyk.io/rest`. Tokens only work in the region where they were created.",
+        "facts": [
+          {
+            "kind": "base_url",
+            "value": "https://api.snyk.io/rest",
+            "method": null,
+            "path": null,
+            "cite_file": "sources/04_snyk_rest_openapi.json",
+            "cite_line": 122726,
+            "quote": null
+          },
+          {
+            "kind": "base_url",
+            "value": "https://api.eu.snyk.io/rest",
+            "method": null,
+            "path": null,
+            "cite_file": "sources/04b_snyk_about_rest_api.md",
+            "cite_line": 18,
+            "quote": "<tr><td>SNYK-EU-01</td><td><code>https://api.eu.snyk.io/rest</code></td></tr>"
+          },
+          {
+            "kind": "doc",
+            "value": "Snyk tokens are region-specific.",
+            "method": null,
+            "path": null,
+            "cite_file": "sources/04b_snyk_about_rest_api.md",
+            "cite_line": 20,
+            "quote": "Snyk tokens are region-specific."
+          }
+        ]
+      },
+      {
+        "section": "custom_sheet",
+        "tool": "Snyk",
+        "item": "versioning",
+        "text": "Each request sends a `version` query parameter as a date in `YYYY-MM-DD` format. Snyk recommends `2024-10-15`. Deprecated endpoints return a `Sunset` header with the end-of-support date.",
+        "facts": [
+          {
+            "kind": "param",
+            "value": "version",
+            "method": "get",
+            "path": "/orgs/{org_id}/issues",
+            "cite_file": "sources/04_snyk_rest_openapi.json",
+            "cite_line": 76027,
+            "quote": null
+          },
+          {
+            "kind": "version",
+            "value": "YYYY-MM-DD",
+            "method": null,
+            "path": null,
+            "cite_file": "sources/04b_snyk_about_rest_api.md",
+            "cite_line": 56,
+            "quote": "The format for the date is `YYYY-MM-DD`."
+          },
+          {
+            "kind": "version",
+            "value": "2024-10-15",
+            "method": null,
+            "path": null,
+            "cite_file": "sources/04b_snyk_about_rest_api.md",
+            "cite_line": 56,
+            "quote": "Snyk recommends using `2024-10-15` the version number unless you are using an earlier version for a specific reason."
+          },
+          {
+            "kind": "version",
+            "value": "Sunset",
+            "method": null,
+            "path": null,
+            "cite_file": "sources/04b_snyk_about_rest_api.md",
+            "cite_line": 84,
+            "quote": "it will contain a `Sunset` header indicating the date"
+          }
+        ]
+      },
+      {
+        "section": "custom_sheet",
+        "tool": "Snyk",
+        "item": "auth",
+        "text": "Send the token in the `Authorization` header with the `token` prefix. Use a service account token for automation. Requests that contain data must send `Content-Type: application/vnd.api+json`.",
+        "facts": [
+          {
+            "kind": "auth",
+            "value": "Authorization",
+            "method": null,
+            "path": null,
+            "cite_file": "sources/04_snyk_rest_openapi.json",
+            "cite_line": 31109,
+            "quote": null
+          },
+          {
+            "kind": "auth",
+            "value": "token",
+            "method": null,
+            "path": null,
+            "cite_file": "sources/04c_snyk_authentication.md",
+            "cite_line": 44,
+            "quote": "provide the API token in an `Authorization: token` header"
+          },
+          {
+            "kind": "auth",
+            "value": "Content-Type: application/vnd.api+json",
+            "method": null,
+            "path": null,
+            "cite_file": "sources/04b_snyk_about_rest_api.md",
+            "cite_line": 33,
+            "quote": "Content-Type: application/vnd.api+json"
+          }
+        ]
+      },
+      {
+        "section": "custom_sheet",
+        "tool": "Snyk",
+        "item": "endpoints",
+        "text": "`/orgs` lists organizations. `/orgs/{org_id}/projects` lists projects and `/orgs/{org_id}/targets` lists targets. `/orgs/{org_id}/issues` and `/groups/{group_id}/issues` list issues.",
+        "facts": [
+          {
+            "kind": "endpoint",
+            "value": "/orgs",
+            "method": "get",
+            "path": "/orgs",
+            "cite_file": "sources/04_snyk_rest_openapi.json",
+            "cite_line": 62402,
+            "quote": null
+          },
+          {
+            "kind": "endpoint",
+            "value": "/orgs/{org_id}/projects",
+            "method": "get",
+            "path": "/orgs/{org_id}/projects",
+            "cite_file": "sources/04_snyk_rest_openapi.json",
+            "cite_line": 80094,
+            "quote": null
+          },
+          {
+            "kind": "endpoint",
+            "value": "/orgs/{org_id}/targets",
+            "method": "get",
+            "path": "/orgs/{org_id}/targets",
+            "cite_file": "sources/04_snyk_rest_openapi.json",
+            "cite_line": 85213,
+            "quote": null
+          },
+          {
+            "kind": "endpoint",
+            "value": "/orgs/{org_id}/issues",
+            "method": "get",
+            "path": "/orgs/{org_id}/issues",
+            "cite_file": "sources/04_snyk_rest_openapi.json",
+            "cite_line": 76022,
+            "quote": null
+          },
+          {
+            "kind": "endpoint",
+            "value": "/groups/{group_id}/issues",
+            "method": "get",
+            "path": "/groups/{group_id}/issues",
+            "cite_file": "sources/04_snyk_rest_openapi.json",
+            "cite_line": 35290,
+            "quote": null
+          }
+        ]
+      },
+      {
+        "section": "custom_sheet",
+        "tool": "Snyk",
+        "item": "filters",
+        "text": "The issues list accepts `updated_after`, `created_after`, `effective_severity_level`, `status`, `ignored` and `type`.",
+        "facts": [
+          {
+            "kind": "param",
+            "value": "updated_after",
+            "method": "get",
+            "path": "/orgs/{org_id}/issues",
+            "cite_file": "sources/04_snyk_rest_openapi.json",
+            "cite_line": 76068,
+            "quote": null
+          },
+          {
+            "kind": "param",
+            "value": "created_after",
+            "method": "get",
+            "path": "/orgs/{org_id}/issues",
+            "cite_file": "sources/04_snyk_rest_openapi.json",
+            "cite_line": 76086,
+            "quote": null
+          },
+          {
+            "kind": "param",
+            "value": "effective_severity_level",
+            "method": "get",
+            "path": "/orgs/{org_id}/issues",
+            "cite_file": "sources/04_snyk_rest_openapi.json",
+            "cite_line": 76095,
+            "quote": null
+          },
+          {
+            "kind": "param",
+            "value": "status",
+            "method": "get",
+            "path": "/orgs/{org_id}/issues",
+            "cite_file": "sources/04_snyk_rest_openapi.json",
+            "cite_line": 76098,
+            "quote": null
+          },
+          {
+            "kind": "param",
+            "value": "ignored",
+            "method": "get",
+            "path": "/orgs/{org_id}/issues",
+            "cite_file": "sources/04_snyk_rest_openapi.json",
+            "cite_line": 76101,
+            "quote": null
+          },
+          {
+            "kind": "param",
+            "value": "type",
+            "method": "get",
+            "path": "/orgs/{org_id}/issues",
+            "cite_file": "sources/04_snyk_rest_openapi.json",
+            "cite_line": 76056,
+            "quote": null
+          }
+        ]
+      },
+      {
+        "section": "custom_sheet",
+        "tool": "Snyk",
+        "item": "pagination",
+        "text": "Cursor-based. Responses include next and previous links built from `starting_after`, `ending_before` and `limit`. Setting the `sort` parameter removes the guarantee of consistent pages, so we keep the default order.",
+        "facts": [
+          {
+            "kind": "pagination",
+            "value": "starting_after",
+            "method": "get",
+            "path": "/orgs/{org_id}/issues",
+            "cite_file": "sources/04_snyk_rest_openapi.json",
+            "cite_line": 76030,
+            "quote": null
+          },
+          {
+            "kind": "pagination",
+            "value": "ending_before",
+            "method": "get",
+            "path": "/orgs/{org_id}/issues",
+            "cite_file": "sources/04_snyk_rest_openapi.json",
+            "cite_line": 76033,
+            "quote": null
+          },
+          {
+            "kind": "pagination",
+            "value": "limit",
+            "method": "get",
+            "path": "/orgs/{org_id}/issues",
+            "cite_file": "sources/04_snyk_rest_openapi.json",
+            "cite_line": 76036,
+            "quote": null
+          },
+          {
+            "kind": "doc",
+            "value": "sort",
+            "method": null,
+            "path": null,
+            "cite_file": "sources/04b_snyk_about_rest_api.md",
+            "cite_line": 94,
+            "quote": "if you specify the `sort` parameter, consistent pagination is no longer guaranteed"
+          }
+        ]
+      },
+      {
+        "section": "custom_sheet",
+        "tool": "Snyk",
+        "item": "rate_limits",
+        "text": "`1620` requests per minute per API key. Above that, Snyk returns `429` until requests stop for one minute. These requests can be retried later.",
+        "facts": [
+          {
+            "kind": "rate_limit",
+            "value": "1620",
+            "method": null,
+            "path": null,
+            "cite_file": "sources/04b_snyk_about_rest_api.md",
+            "cite_line": 135,
+            "quote": "There is a limit of **1620 requests per minute**, per API key."
+          },
+          {
+            "kind": "rate_limit",
+            "value": "429",
+            "method": null,
+            "path": null,
+            "cite_file": "sources/04b_snyk_about_rest_api.md",
+            "cite_line": 135,
+            "quote": "All requests above the limit will get a response with the status code `429`"
+          }
+        ]
+      },
+      {
+        "section": "custom_sheet",
+        "tool": "Snyk",
+        "item": "key_fields",
+        "text": "From `/orgs/{org_id}/issues`: `id` maps to `finding_id`, `attributes.title` to `title`, `attributes.type` to `type`, `attributes.effective_severity_level` to `severity`, `attributes.status` to `status`, and `attributes.created_at` to `first_seen`.",
+        "facts": [
+          {
+            "kind": "endpoint",
+            "value": "/orgs/{org_id}/issues",
+            "method": "get",
+            "path": "/orgs/{org_id}/issues",
+            "cite_file": "sources/04_snyk_rest_openapi.json",
+            "cite_line": 76022,
+            "quote": null
+          },
+          {
+            "kind": "field",
+            "value": "id",
+            "method": "get",
+            "path": "/orgs/{org_id}/issues",
+            "cite_file": "sources/04_snyk_rest_openapi.json",
+            "cite_line": 17815,
+            "quote": null
+          },
+          {
+            "kind": "canonical_field",
+            "value": "finding_id",
+            "method": null,
+            "path": null,
+            "cite_file": "config/canonical_schema.json",
+            "cite_line": null,
+            "quote": null
+          },
+          {
+            "kind": "field",
+            "value": "attributes.title",
+            "method": "get",
+            "path": "/orgs/{org_id}/issues",
+            "cite_file": "sources/04_snyk_rest_openapi.json",
+            "cite_line": 18450,
+            "quote": null
+          },
+          {
+            "kind": "canonical_field",
+            "value": "title",
+            "method": null,
+            "path": null,
+            "cite_file": "config/canonical_schema.json",
+            "cite_line": null,
+            "quote": null
+          },
+          {
+            "kind": "field",
+            "value": "attributes.type",
+            "method": "get",
+            "path": "/orgs/{org_id}/issues",
+            "cite_file": "sources/04_snyk_rest_openapi.json",
+            "cite_line": 18464,
+            "quote": null
+          },
+          {
+            "kind": "canonical_field",
+            "value": "type",
+            "method": null,
+            "path": null,
+            "cite_file": "config/canonical_schema.json",
+            "cite_line": null,
+            "quote": null
+          },
+          {
+            "kind": "field",
+            "value": "attributes.effective_severity_level",
+            "method": "get",
+            "path": "/orgs/{org_id}/issues",
+            "cite_file": "sources/04_snyk_rest_openapi.json",
+            "cite_line": 18353,
+            "quote": null
+          },
+          {
+            "kind": "canonical_field",
+            "value": "severity",
+            "method": null,
+            "path": null,
+            "cite_file": "config/canonical_schema.json",
+            "cite_line": null,
+            "quote": null
+          },
+          {
+            "kind": "field",
+            "value": "attributes.status",
+            "method": "get",
+            "path": "/orgs/{org_id}/issues",
+            "cite_file": "sources/04_snyk_rest_openapi.json",
+            "cite_line": 18442,
+            "quote": null
+          },
+          {
+            "kind": "canonical_field",
+            "value": "status",
+            "method": null,
+            "path": null,
+            "cite_file": "config/canonical_schema.json",
+            "cite_line": null,
+            "quote": null
+          },
+          {
+            "kind": "field",
+            "value": "attributes.created_at",
+            "method": "get",
+            "path": "/orgs/{org_id}/issues",
+            "cite_file": "sources/04_snyk_rest_openapi.json",
+            "cite_line": 18341,
+            "quote": null
+          },
+          {
+            "kind": "canonical_field",
+            "value": "first_seen",
+            "method": null,
+            "path": null,
+            "cite_file": "config/canonical_schema.json",
+            "cite_line": null,
+            "quote": null
+          }
+        ]
+      },
+      {
+        "section": "order",
+        "tool": null,
+        "item": "1",
+        "text": "Which assets you have and which vulnerabilities affect them. Everything later depends on this.",
+        "facts": []
+      },
+      {
+        "section": "order",
+        "tool": null,
+        "item": "2",
+        "text": "Who can access which systems and apps.",
+        "facts": []
+      },
+      {
+        "section": "order",
+        "tool": null,
+        "item": "3",
+        "text": "Where fixes are tracked once priorities are set.",
+        "facts": []
+      },
+      {
+        "section": "order",
+        "tool": null,
+        "item": "4",
+        "text": "Which assets you have and which vulnerabilities affect them. Everything later depends on this.",
+        "facts": []
+      },
+      {
+        "section": "order",
+        "tool": null,
+        "item": "5",
+        "text": "More findings that sharpen the overall picture.",
+        "facts": []
+      },
+      {
+        "section": "question",
+        "tool": null,
+        "item": "variant:Crowdstrike Falcon Exposure Management (Spotlight)",
+        "text": "SAFE also lists \"Crowdstrike Falcon Exposure Management (Spotlight)\". Do you use it in addition to CrowdStrike Falcon?",
+        "facts": []
+      },
+      {
+        "section": "question",
+        "tool": null,
+        "item": "which_product:Microsoft Defender",
+        "text": "Which Microsoft Defender product do you license? SAFE lists these: Microsoft 365 Defender, Microsoft Defender for Endpoints, Microsoft Defender for Identity via M365, Azure Defender for Cloud, Defender for Endpoint via M365.",
+        "facts": []
+      },
+      {
+        "section": "question",
+        "tool": null,
+        "item": "owners",
+        "text": "Who owns the admin account for each tool, and who approves API access?",
+        "facts": []
+      },
+      {
+        "section": "question",
+        "tool": null,
+        "item": "crown_jewels",
+        "text": "Which systems hold your most critical data or drive the most revenue? These count first in the risk figure.",
+        "facts": []
+      },
+      {
+        "section": "question",
+        "tool": null,
+        "item": "lookback",
+        "text": "How far back should vulnerability history go, and after how many days without activity should an asset count as stale?",
+        "facts": []
+      },
+      {
+        "section": "question",
+        "tool": null,
+        "item": "source_of_truth",
+        "text": "Do you have an existing asset inventory, such as a CMDB, that we should treat as the source of truth?",
+        "facts": []
+      },
+      {
+        "section": "data_note",
+        "tool": "Tenable Vulnerability Management",
+        "item": "Default export window",
+        "text": "Without time filters, a vulnerability export only includes findings found or fixed in the last `30` days. We will set time filters to match the agreed lookback.",
+        "facts": [
+          {
+            "kind": "doc",
+            "value": "30",
+            "method": null,
+            "path": null,
+            "cite_file": "sources/03_tenable_vm_api_notes.md",
+            "cite_line": 21,
+            "quote": "Default without time filters: only vulnerabilities found or fixed in the last 30 days are exported."
+          }
+        ]
+      },
+      {
+        "section": "data_note",
+        "tool": "Okta",
+        "item": "Device matching",
+        "text": "Okta devices include `profile.serialNumber`, which maps to `serial_number`, and `profile.displayName`, which maps to `display_name`. These can help match the same device across tools.",
+        "facts": [
+          {
+            "kind": "field",
+            "value": "profile.serialNumber",
+            "method": "get",
+            "path": "/api/v1/devices",
+            "cite_file": "sources/02_okta_management_openapi_v2026.42.1.yaml",
+            "cite_line": 76903,
+            "quote": null
+          },
+          {
+            "kind": "canonical_field",
+            "value": "serial_number",
+            "method": null,
+            "path": null,
+            "cite_file": "config/canonical_schema.json",
+            "cite_line": null,
+            "quote": null
+          },
+          {
+            "kind": "field",
+            "value": "profile.displayName",
+            "method": "get",
+            "path": "/api/v1/devices",
+            "cite_file": "sources/02_okta_management_openapi_v2026.42.1.yaml",
+            "cite_line": 76863,
+            "quote": null
+          },
+          {
+            "kind": "canonical_field",
+            "value": "display_name",
+            "method": null,
+            "path": null,
+            "cite_file": "config/canonical_schema.json",
+            "cite_line": null,
+            "quote": null
+          }
+        ]
+      },
+      {
+        "section": "question",
+        "tool": "Snyk",
+        "item": "extra_1",
+        "text": "Is your Snyk account on the Enterprise plan, and which Snyk region hosts it? API access needs the Enterprise plan, and tokens only work in their own region.",
+        "facts": [
+          {
+            "kind": "doc",
+            "value": "Enterprise plan customer",
+            "method": null,
+            "path": null,
+            "cite_file": "sources/04c_snyk_authentication.md",
+            "cite_line": 13,
+            "quote": "To use the Snyk API, you must be an Enterprise plan customer and have a token from Snyk."
+          },
+          {
+            "kind": "doc",
+            "value": "Snyk tokens are region-specific.",
+            "method": null,
+            "path": null,
+            "cite_file": "sources/04b_snyk_about_rest_api.md",
+            "cite_line": 20,
+            "quote": "Snyk tokens are region-specific."
+          }
+        ]
+      },
+      {
+        "section": "question",
+        "tool": "Tenable Vulnerability Management",
+        "item": "extra_2",
+        "text": "Can you create a dedicated Tenable user account for this integration? Tenable recommends a separate user for each API integration, and each user has one valid API key at a time.",
+        "facts": [
+          {
+            "kind": "doc",
+            "value": "use a unique user account for each API integration",
+            "method": null,
+            "path": null,
+            "cite_file": "sources/03_tenable_vm_api_notes.md",
+            "cite_line": 43,
+            "quote": "use a unique user account for each API integration"
+          },
+          {
+            "kind": "doc",
+            "value": "One valid API key per user at a time.",
+            "method": null,
+            "path": null,
+            "cite_file": "sources/03_tenable_vm_api_notes.md",
+            "cite_line": 42,
+            "quote": "- One valid API key per user at a time."
+          }
+        ]
+      }
+    ]
+  }
+}

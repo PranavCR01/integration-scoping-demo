@@ -1,0 +1,38 @@
+{
+  "_about": "Ordering rules for 'what to connect first'. Code applies these; the model only rewords the 'unlocks' text. Draft rules: confirm against SAFE's onboarding playbook.",
+  "goal_profiles": {
+    "board_ready_risk_figure": {
+      "label": "Board-ready risk figure",
+      "match_keywords": ["board", "risk figure", "risk number", "dollar"],
+      "steps": [
+        { "step": 1, "roles": ["vulnerabilities", "endpoint"], "unlocks": "What assets exist and what vulnerabilities they have. Nothing downstream is meaningful without this." },
+        { "step": 2, "roles": ["identity"], "unlocks": "Who has access to what." },
+        { "step": 3, "roles": ["ticketing"], "unlocks": "Where fixes get tracked once priorities exist." },
+        { "step": 4, "roles": ["appsec", "cloud", "other"], "unlocks": "Additional findings that refine the picture." }
+      ]
+    },
+    "default": {
+      "label": "General onboarding",
+      "match_keywords": [],
+      "steps": [
+        { "step": 1, "roles": ["vulnerabilities", "endpoint"], "unlocks": "An inventory of assets and their known weaknesses." },
+        { "step": 2, "roles": ["identity"], "unlocks": "Who has access to what." },
+        { "step": 3, "roles": ["ticketing", "appsec", "cloud", "other"], "unlocks": "Remediation tracking and additional findings." }
+      ]
+    }
+  },
+  "gates": {
+    "out_of_box": null,
+    "confirm_with_safe": "Connect after the exact product is confirmed.",
+    "custom_work": "Connect after SAFE confirms whether a connector exists."
+  },
+  "role_labels": {
+    "vulnerabilities": "Vulnerabilities",
+    "endpoint": "Endpoints",
+    "identity": "Identity",
+    "ticketing": "Ticketing",
+    "appsec": "Application security",
+    "cloud": "Cloud",
+    "other": "Other"
+  }
+}

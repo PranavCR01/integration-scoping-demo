@@ -1,0 +1,522 @@
+[
+  {
+    "id": "vuln-0001",
+    "asset.id": "tio-1",
+    "definition.id": 100000,
+    "definition.name": "Outdated web server package",
+    "severity": "critical",
+    "state": "FIXED",
+    "first_found": "2026-09-23T00:00:00.000Z",
+    "last_found": "2026-10-31T00:00:00.000Z"
+  },
+  {
+    "id": "vuln-0002",
+    "asset.id": "tio-2",
+    "definition.id": 100007,
+    "definition.name": "Weak TLS configuration",
+    "severity": "high",
+    "state": "OPEN",
+    "first_found": "2026-09-23T00:00:00.000Z",
+    "last_found": "2026-10-31T00:00:00.000Z"
+  },
+  {
+    "id": "vuln-0003",
+    "asset.id": "tio-2",
+    "definition.id": 100020,
+    "definition.name": "Missing operating system update",
+    "severity": "medium",
+    "state": "OPEN",
+    "first_found": "2026-09-22T00:00:00.000Z",
+    "last_found": "2026-10-31T00:00:00.000Z"
+  },
+  {
+    "id": "vuln-0004",
+    "asset.id": "tio-3",
+    "definition.id": 100014,
+    "definition.name": "Missing operating system update",
+    "severity": "medium",
+    "state": "OPEN",
+    "first_found": "2026-09-23T00:00:00.000Z",
+    "last_found": "2026-10-31T00:00:00.000Z"
+  },
+  {
+    "id": "vuln-0005",
+    "asset.id": "tio-3",
+    "definition.id": 100027,
+    "definition.name": "Outdated runtime library",
+    "severity": "low",
+    "state": "OPEN",
+    "first_found": "2026-09-22T00:00:00.000Z",
+    "last_found": "2026-10-31T00:00:00.000Z"
+  },
+  {
+    "id": "vuln-0006",
+    "asset.id": "tio-3",
+    "definition.id": 100040,
+    "definition.name": "Insecure service setting",
+    "severity": "critical",
+    "state": "OPEN",
+    "first_found": "2026-09-21T00:00:00.000Z",
+    "last_found": "2026-10-31T00:00:00.000Z"
+  },
+  {
+    "id": "vuln-0007",
+    "asset.id": "tio-7",
+    "definition.id": 100021,
+    "definition.name": "Outdated runtime library",
+    "severity": "low",
+    "state": "OPEN",
+    "first_found": "2026-09-23T00:00:00.000Z",
+    "last_found": "2026-10-31T00:00:00.000Z"
+  },
+  {
+    "id": "vuln-0008",
+    "asset.id": "tio-7",
+    "definition.id": 100034,
+    "definition.name": "Insecure service setting",
+    "severity": "critical",
+    "state": "OPEN",
+    "first_found": "2026-09-22T00:00:00.000Z",
+    "last_found": "2026-10-31T00:00:00.000Z"
+  },
+  {
+    "id": "vuln-0009",
+    "asset.id": "tio-7",
+    "definition.id": 100047,
+    "definition.name": "Outdated web server package",
+    "severity": "high",
+    "state": "OPEN",
+    "first_found": "2026-09-21T00:00:00.000Z",
+    "last_found": "2026-10-31T00:00:00.000Z"
+  },
+  {
+    "id": "vuln-0010",
+    "asset.id": "tio-7",
+    "definition.id": 100010,
+    "definition.name": "Weak TLS configuration",
+    "severity": "medium",
+    "state": "OPEN",
+    "first_found": "2026-09-20T00:00:00.000Z",
+    "last_found": "2026-10-31T00:00:00.000Z"
+  },
+  {
+    "id": "vuln-0011",
+    "asset.id": "tio-8",
+    "definition.id": 100028,
+    "definition.name": "Insecure service setting",
+    "severity": "critical",
+    "state": "OPEN",
+    "first_found": "2026-09-23T00:00:00.000Z",
+    "last_found": "2026-10-31T00:00:00.000Z"
+  },
+  {
+    "id": "vuln-0012",
+    "asset.id": "tio-9",
+    "definition.id": 100035,
+    "definition.name": "Outdated web server package",
+    "severity": "high",
+    "state": "FIXED",
+    "first_found": "2026-09-23T00:00:00.000Z",
+    "last_found": "2026-10-31T00:00:00.000Z"
+  },
+  {
+    "id": "vuln-0013",
+    "asset.id": "tio-9",
+    "definition.id": 100048,
+    "definition.name": "Weak TLS configuration",
+    "severity": "medium",
+    "state": "OPEN",
+    "first_found": "2026-09-22T00:00:00.000Z",
+    "last_found": "2026-10-31T00:00:00.000Z"
+  },
+  {
+    "id": "vuln-0014",
+    "asset.id": "tio-10",
+    "definition.id": 100042,
+    "definition.name": "Weak TLS configuration",
+    "severity": "medium",
+    "state": "OPEN",
+    "first_found": "2026-09-23T00:00:00.000Z",
+    "last_found": "2026-10-31T00:00:00.000Z"
+  },
+  {
+    "id": "vuln-0015",
+    "asset.id": "tio-10",
+    "definition.id": 100005,
+    "definition.name": "Missing operating system update",
+    "severity": "low",
+    "state": "OPEN",
+    "first_found": "2026-09-22T00:00:00.000Z",
+    "last_found": "2026-10-31T00:00:00.000Z"
+  },
+  {
+    "id": "vuln-0016",
+    "asset.id": "tio-10",
+    "definition.id": 100018,
+    "definition.name": "Outdated runtime library",
+    "severity": "critical",
+    "state": "OPEN",
+    "first_found": "2026-09-21T00:00:00.000Z",
+    "last_found": "2026-10-31T00:00:00.000Z"
+  },
+  {
+    "id": "vuln-0017",
+    "asset.id": "tio-11",
+    "definition.id": 100049,
+    "definition.name": "Missing operating system update",
+    "severity": "low",
+    "state": "OPEN",
+    "first_found": "2026-09-23T00:00:00.000Z",
+    "last_found": "2026-10-31T00:00:00.000Z"
+  },
+  {
+    "id": "vuln-0018",
+    "asset.id": "tio-11",
+    "definition.id": 100012,
+    "definition.name": "Outdated runtime library",
+    "severity": "critical",
+    "state": "OPEN",
+    "first_found": "2026-09-22T00:00:00.000Z",
+    "last_found": "2026-10-31T00:00:00.000Z"
+  },
+  {
+    "id": "vuln-0019",
+    "asset.id": "tio-11",
+    "definition.id": 100025,
+    "definition.name": "Insecure service setting",
+    "severity": "high",
+    "state": "OPEN",
+    "first_found": "2026-09-21T00:00:00.000Z",
+    "last_found": "2026-10-31T00:00:00.000Z"
+  },
+  {
+    "id": "vuln-0020",
+    "asset.id": "tio-11",
+    "definition.id": 100038,
+    "definition.name": "Outdated web server package",
+    "severity": "medium",
+    "state": "OPEN",
+    "first_found": "2026-09-20T00:00:00.000Z",
+    "last_found": "2026-10-31T00:00:00.000Z"
+  },
+  {
+    "id": "vuln-0021",
+    "asset.id": "tio-e20",
+    "definition.id": 100006,
+    "definition.name": "Outdated runtime library",
+    "severity": "critical",
+    "state": "OPEN",
+    "first_found": "2026-09-23T00:00:00.000Z",
+    "last_found": "2026-10-31T00:00:00.000Z"
+  },
+  {
+    "id": "vuln-0022",
+    "asset.id": "tio-e21",
+    "definition.id": 100013,
+    "definition.name": "Insecure service setting",
+    "severity": "high",
+    "state": "OPEN",
+    "first_found": "2026-09-23T00:00:00.000Z",
+    "last_found": "2026-10-31T00:00:00.000Z"
+  },
+  {
+    "id": "vuln-0023",
+    "asset.id": "tio-e21",
+    "definition.id": 100026,
+    "definition.name": "Outdated web server package",
+    "severity": "medium",
+    "state": "OPEN",
+    "first_found": "2026-09-22T00:00:00.000Z",
+    "last_found": "2026-10-31T00:00:00.000Z"
+  },
+  {
+    "id": "vuln-0024",
+    "asset.id": "tio-e22",
+    "definition.id": 100020,
+    "definition.name": "Outdated web server package",
+    "severity": "medium",
+    "state": "FIXED",
+    "first_found": "2026-09-23T00:00:00.000Z",
+    "last_found": "2026-10-31T00:00:00.000Z"
+  },
+  {
+    "id": "vuln-0025",
+    "asset.id": "tio-e22",
+    "definition.id": 100033,
+    "definition.name": "Weak TLS configuration",
+    "severity": "low",
+    "state": "OPEN",
+    "first_found": "2026-09-22T00:00:00.000Z",
+    "last_found": "2026-10-31T00:00:00.000Z"
+  },
+  {
+    "id": "vuln-0026",
+    "asset.id": "tio-e22",
+    "definition.id": 100046,
+    "definition.name": "Missing operating system update",
+    "severity": "critical",
+    "state": "OPEN",
+    "first_found": "2026-09-21T00:00:00.000Z",
+    "last_found": "2026-10-31T00:00:00.000Z"
+  },
+  {
+    "id": "vuln-0027",
+    "asset.id": "tio-e23",
+    "definition.id": 100027,
+    "definition.name": "Weak TLS configuration",
+    "severity": "low",
+    "state": "OPEN",
+    "first_found": "2026-09-23T00:00:00.000Z",
+    "last_found": "2026-10-31T00:00:00.000Z"
+  },
+  {
+    "id": "vuln-0028",
+    "asset.id": "tio-e23",
+    "definition.id": 100040,
+    "definition.name": "Missing operating system update",
+    "severity": "critical",
+    "state": "OPEN",
+    "first_found": "2026-09-22T00:00:00.000Z",
+    "last_found": "2026-10-31T00:00:00.000Z"
+  },
+  {
+    "id": "vuln-0029",
+    "asset.id": "tio-e23",
+    "definition.id": 100003,
+    "definition.name": "Outdated runtime library",
+    "severity": "high",
+    "state": "OPEN",
+    "first_found": "2026-09-21T00:00:00.000Z",
+    "last_found": "2026-10-31T00:00:00.000Z"
+  },
+  {
+    "id": "vuln-0030",
+    "asset.id": "tio-e23",
+    "definition.id": 100016,
+    "definition.name": "Insecure service setting",
+    "severity": "medium",
+    "state": "OPEN",
+    "first_found": "2026-09-20T00:00:00.000Z",
+    "last_found": "2026-10-31T00:00:00.000Z"
+  },
+  {
+    "id": "vuln-0031",
+    "asset.id": "tio-e25",
+    "definition.id": 100034,
+    "definition.name": "Missing operating system update",
+    "severity": "critical",
+    "state": "OPEN",
+    "first_found": "2026-09-23T00:00:00.000Z",
+    "last_found": "2026-10-31T00:00:00.000Z"
+  },
+  {
+    "id": "vuln-0032",
+    "asset.id": "tio-e30",
+    "definition.id": 100041,
+    "definition.name": "Outdated runtime library",
+    "severity": "high",
+    "state": "OPEN",
+    "first_found": "2026-09-23T00:00:00.000Z",
+    "last_found": "2026-10-31T00:00:00.000Z"
+  },
+  {
+    "id": "vuln-0033",
+    "asset.id": "tio-e30",
+    "definition.id": 100004,
+    "definition.name": "Insecure service setting",
+    "severity": "medium",
+    "state": "OPEN",
+    "first_found": "2026-09-22T00:00:00.000Z",
+    "last_found": "2026-10-31T00:00:00.000Z"
+  },
+  {
+    "id": "vuln-0034",
+    "asset.id": "tio-e31",
+    "definition.id": 100048,
+    "definition.name": "Insecure service setting",
+    "severity": "medium",
+    "state": "OPEN",
+    "first_found": "2026-09-23T00:00:00.000Z",
+    "last_found": "2026-10-31T00:00:00.000Z"
+  },
+  {
+    "id": "vuln-0035",
+    "asset.id": "tio-e31",
+    "definition.id": 100011,
+    "definition.name": "Outdated web server package",
+    "severity": "low",
+    "state": "OPEN",
+    "first_found": "2026-09-22T00:00:00.000Z",
+    "last_found": "2026-10-31T00:00:00.000Z"
+  },
+  {
+    "id": "vuln-0036",
+    "asset.id": "tio-e31",
+    "definition.id": 100024,
+    "definition.name": "Weak TLS configuration",
+    "severity": "critical",
+    "state": "OPEN",
+    "first_found": "2026-09-21T00:00:00.000Z",
+    "last_found": "2026-10-31T00:00:00.000Z"
+  },
+  {
+    "id": "vuln-0037",
+    "asset.id": "tio-e32",
+    "definition.id": 100005,
+    "definition.name": "Outdated web server package",
+    "severity": "low",
+    "state": "FIXED",
+    "first_found": "2026-09-23T00:00:00.000Z",
+    "last_found": "2026-10-31T00:00:00.000Z"
+  },
+  {
+    "id": "vuln-0038",
+    "asset.id": "tio-e32",
+    "definition.id": 100018,
+    "definition.name": "Weak TLS configuration",
+    "severity": "critical",
+    "state": "OPEN",
+    "first_found": "2026-09-22T00:00:00.000Z",
+    "last_found": "2026-10-31T00:00:00.000Z"
+  },
+  {
+    "id": "vuln-0039",
+    "asset.id": "tio-e32",
+    "definition.id": 100031,
+    "definition.name": "Missing operating system update",
+    "severity": "high",
+    "state": "OPEN",
+    "first_found": "2026-09-21T00:00:00.000Z",
+    "last_found": "2026-10-31T00:00:00.000Z"
+  },
+  {
+    "id": "vuln-0040",
+    "asset.id": "tio-e32",
+    "definition.id": 100044,
+    "definition.name": "Outdated runtime library",
+    "severity": "medium",
+    "state": "OPEN",
+    "first_found": "2026-09-20T00:00:00.000Z",
+    "last_found": "2026-10-31T00:00:00.000Z"
+  },
+  {
+    "id": "vuln-0041",
+    "asset.id": "tio-e33",
+    "definition.id": 100012,
+    "definition.name": "Weak TLS configuration",
+    "severity": "critical",
+    "state": "OPEN",
+    "first_found": "2026-09-23T00:00:00.000Z",
+    "last_found": "2026-10-31T00:00:00.000Z"
+  },
+  {
+    "id": "vuln-0042",
+    "asset.id": "tio-e36",
+    "definition.id": 100019,
+    "definition.name": "Missing operating system update",
+    "severity": "high",
+    "state": "OPEN",
+    "first_found": "2026-09-23T00:00:00.000Z",
+    "last_found": "2026-10-31T00:00:00.000Z"
+  },
+  {
+    "id": "vuln-0043",
+    "asset.id": "tio-e36",
+    "definition.id": 100032,
+    "definition.name": "Outdated runtime library",
+    "severity": "medium",
+    "state": "OPEN",
+    "first_found": "2026-09-22T00:00:00.000Z",
+    "last_found": "2026-10-31T00:00:00.000Z"
+  },
+  {
+    "id": "vuln-0044",
+    "asset.id": "tio-e34",
+    "definition.id": 100026,
+    "definition.name": "Outdated runtime library",
+    "severity": "medium",
+    "state": "OPEN",
+    "first_found": "2026-09-23T00:00:00.000Z",
+    "last_found": "2026-10-31T00:00:00.000Z"
+  },
+  {
+    "id": "vuln-0045",
+    "asset.id": "tio-e34",
+    "definition.id": 100039,
+    "definition.name": "Insecure service setting",
+    "severity": "low",
+    "state": "OPEN",
+    "first_found": "2026-09-22T00:00:00.000Z",
+    "last_found": "2026-10-31T00:00:00.000Z"
+  },
+  {
+    "id": "vuln-0046",
+    "asset.id": "tio-e34",
+    "definition.id": 100002,
+    "definition.name": "Outdated web server package",
+    "severity": "critical",
+    "state": "OPEN",
+    "first_found": "2026-09-21T00:00:00.000Z",
+    "last_found": "2026-10-31T00:00:00.000Z"
+  },
+  {
+    "id": "vuln-0047",
+    "asset.id": "tio-e35",
+    "definition.id": 100033,
+    "definition.name": "Insecure service setting",
+    "severity": "low",
+    "state": "OPEN",
+    "first_found": "2026-09-23T00:00:00.000Z",
+    "last_found": "2026-10-31T00:00:00.000Z"
+  },
+  {
+    "id": "vuln-0048",
+    "asset.id": "tio-e35",
+    "definition.id": 100046,
+    "definition.name": "Outdated web server package",
+    "severity": "critical",
+    "state": "OPEN",
+    "first_found": "2026-09-22T00:00:00.000Z",
+    "last_found": "2026-10-31T00:00:00.000Z"
+  },
+  {
+    "id": "vuln-0049",
+    "asset.id": "tio-e35",
+    "definition.id": 100009,
+    "definition.name": "Weak TLS configuration",
+    "severity": "high",
+    "state": "OPEN",
+    "first_found": "2026-09-21T00:00:00.000Z",
+    "last_found": "2026-10-31T00:00:00.000Z"
+  },
+  {
+    "id": "vuln-0050",
+    "asset.id": "tio-e35",
+    "definition.id": 100022,
+    "definition.name": "Missing operating system update",
+    "severity": "medium",
+    "state": "OPEN",
+    "first_found": "2026-09-20T00:00:00.000Z",
+    "last_found": "2026-10-31T00:00:00.000Z"
+  },
+  {
+    "id": "vuln-0051",
+    "asset.id": "tio-retired-77",
+    "definition.id": 100003,
+    "definition.name": "Outdated runtime library",
+    "severity": "high",
+    "state": "OPEN",
+    "first_found": "2026-08-04T00:00:00.000Z",
+    "last_found": "2026-10-18T00:00:00.000Z"
+  },
+  {
+    "id": "vuln-0052",
+    "asset.id": "tio-retired-78",
+    "definition.id": 100003,
+    "definition.name": "Outdated runtime library",
+    "severity": "high",
+    "state": "OPEN",
+    "first_found": "2026-08-04T00:00:00.000Z",
+    "last_found": "2026-10-18T00:00:00.000Z"
+  }
+]

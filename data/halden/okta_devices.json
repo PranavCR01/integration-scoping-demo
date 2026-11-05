@@ -1,0 +1,122 @@
+[
+  {
+    "id": "guo-1",
+    "status": "ACTIVE",
+    "lastUpdated": "2026-11-01T00:00:00.000Z",
+    "profile": {
+      "displayName": "HAL-LT-001",
+      "serialNumber": "C02HAL001",
+      "platform": "WINDOWS"
+    }
+  },
+  {
+    "id": "guo-2",
+    "status": "ACTIVE",
+    "lastUpdated": "2026-11-01T00:00:00.000Z",
+    "profile": {
+      "displayName": "Priya's MacBook Pro",
+      "serialNumber": "C02HAL002",
+      "platform": "WINDOWS"
+    }
+  },
+  {
+    "id": "guo-3",
+    "status": "ACTIVE",
+    "lastUpdated": "2026-11-01T00:00:00.000Z",
+    "profile": {
+      "displayName": "HAL-LT-003",
+      "serialNumber": "C02HAL003",
+      "platform": "WINDOWS"
+    }
+  },
+  {
+    "id": "guo-4",
+    "status": "ACTIVE",
+    "lastUpdated": "2026-11-01T00:00:00.000Z",
+    "profile": {
+      "displayName": "HAL-LT-004",
+      "serialNumber": "C02HAL004",
+      "platform": "WINDOWS"
+    }
+  },
+  {
+    "id": "guo-5",
+    "status": "ACTIVE",
+    "lastUpdated": "2026-11-01T00:00:00.000Z",
+    "profile": {
+      "displayName": "HAL-LT-005",
+      "serialNumber": "C02HAL005",
+      "platform": "WINDOWS"
+    }
+  },
+  {
+    "id": "guo-7",
+    "status": "ACTIVE",
+    "lastUpdated": "2026-11-01T00:00:00.000Z",
+    "profile": {
+      "displayName": "HAL-LT-007",
+      "serialNumber": "C02HAL007",
+      "platform": "WINDOWS"
+    }
+  },
+  {
+    "id": "guo-8",
+    "status": "ACTIVE",
+    "lastUpdated": "2026-11-01T00:00:00.000Z",
+    "profile": {
+      "displayName": "HAL-LT-008",
+      "serialNumber": null,
+      "platform": "WINDOWS"
+    }
+  },
+  {
+    "id": "guo-9",
+    "status": "ACTIVE",
+    "lastUpdated": "2026-11-01T00:00:00.000Z",
+    "profile": {
+      "displayName": "HAL-LT-009",
+      "serialNumber": "C02HAL009",
+      "platform": "WINDOWS"
+    }
+  },
+  {
+    "id": "guo-10",
+    "status": "ACTIVE",
+    "lastUpdated": "2026-11-01T00:00:00.000Z",
+    "profile": {
+      "displayName": "HAL-LT-010",
+      "serialNumber": "C02HAL010",
+      "platform": "WINDOWS"
+    }
+  },
+  {
+    "id": "guo-11",
+    "status": "ACTIVE",
+    "lastUpdated": "2026-11-01T00:00:00.000Z",
+    "profile": {
+      "displayName": "HAL-LT-011",
+      "serialNumber": "C02HAL011",
+      "platform": "WINDOWS"
+    }
+  },
+  {
+    "id": "guo-12",
+    "status": "ACTIVE",
+    "lastUpdated": "2026-10-31T00:00:00.000Z",
+    "profile": {
+      "displayName": "Marco's iPhone",
+      "serialNumber": "F2LHAL012",
+      "platform": "IOS"
+    }
+  },
+  {
+    "id": "guo-13",
+    "status": "ACTIVE",
+    "lastUpdated": "2026-10-27T00:00:00.000Z",
+    "profile": {
+      "displayName": "Dana's iPad",
+      "serialNumber": "DMPHAL013",
+      "platform": "IOS"
+    }
+  }
+]

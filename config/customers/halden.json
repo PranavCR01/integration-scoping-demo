@@ -1,0 +1,8 @@
+{
+  "id": "halden",
+  "name": "Halden Outfitters",
+  "fictional": true,
+  "goal": "A board-ready cyber risk figure within 30 days of kickoff.",
+  "tools": ["Okta", "Tenable VM", "CrowdStrike Falcon", "ServiceNow ITSM", "Microsoft Defender", "Snyk"],
+  "data_dir": "data/halden"
+}

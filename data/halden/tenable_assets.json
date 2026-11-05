@@ -1,0 +1,326 @@
+[
+  {
+    "id": "tio-1",
+    "hostnames": [
+      "hal-lt-001"
+    ],
+    "fqdns": [
+      "hal-lt-001.halden.local"
+    ],
+    "ipv4s": [
+      "10.20.1.11"
+    ],
+    "macs": [
+      "00:1A:2B:3C:00:01"
+    ],
+    "operating_systems": [
+      "Microsoft Windows 11"
+    ],
+    "last_seen": "2026-10-31T00:00:00.000Z"
+  },
+  {
+    "id": "tio-2",
+    "hostnames": [
+      "HAL-LT-002"
+    ],
+    "ipv4s": [
+      "10.20.2.11"
+    ],
+    "operating_systems": [
+      "Microsoft Windows 11"
+    ],
+    "last_seen": "2026-10-30T00:00:00.000Z"
+  },
+  {
+    "id": "tio-3",
+    "hostnames": [
+      "hal-lt-003"
+    ],
+    "ipv4s": [
+      "10.20.3.11"
+    ],
+    "macs": [
+      "00:1a:2b:3c:00:03"
+    ],
+    "operating_systems": [
+      "Microsoft Windows 11"
+    ],
+    "last_seen": "2026-09-11T00:00:00.000Z"
+  },
+  {
+    "id": "tio-7",
+    "hostnames": [
+      "hal-lt-007"
+    ],
+    "fqdns": [
+      "hal-lt-007.halden.local"
+    ],
+    "ipv4s": [
+      "10.20.7.11"
+    ],
+    "macs": [
+      "00:1A:2B:3C:00:07"
+    ],
+    "operating_systems": [
+      "Microsoft Windows 11"
+    ],
+    "last_seen": "2026-10-31T00:00:00.000Z"
+  },
+  {
+    "id": "tio-8",
+    "hostnames": [
+      "hal-lt-008"
+    ],
+    "fqdns": [
+      "hal-lt-008.halden.local"
+    ],
+    "ipv4s": [
+      "10.20.8.11"
+    ],
+    "macs": [
+      "00:1A:2B:3C:00:08"
+    ],
+    "operating_systems": [
+      "Microsoft Windows 11"
+    ],
+    "last_seen": "2026-10-31T00:00:00.000Z"
+  },
+  {
+    "id": "tio-9",
+    "hostnames": [
+      "hal-lt-009"
+    ],
+    "fqdns": [
+      "hal-lt-009.halden.local"
+    ],
+    "ipv4s": [
+      "10.20.4.17"
+    ],
+    "macs": [
+      "00:1A:2B:3C:00:09"
+    ],
+    "operating_systems": [
+      "Microsoft Windows 11"
+    ],
+    "last_seen": "2026-10-31T00:00:00.000Z"
+  },
+  {
+    "id": "tio-10",
+    "hostnames": [
+      "hal-lt-010"
+    ],
+    "fqdns": [
+      "hal-lt-010.halden.local"
+    ],
+    "ipv4s": [
+      "10.20.10.11"
+    ],
+    "macs": [
+      "00:1A:2B:3C:00:10"
+    ],
+    "operating_systems": [
+      "Microsoft Windows 11"
+    ],
+    "last_seen": "2026-10-31T00:00:00.000Z"
+  },
+  {
+    "id": "tio-11",
+    "hostnames": [
+      "hal-lt-011"
+    ],
+    "fqdns": [
+      "hal-lt-011.halden.local"
+    ],
+    "ipv4s": [
+      "10.20.11.11"
+    ],
+    "macs": [
+      "00:1A:2B:3C:00:11"
+    ],
+    "operating_systems": [
+      "Microsoft Windows 11"
+    ],
+    "last_seen": "2026-10-31T00:00:00.000Z"
+  },
+  {
+    "id": "tio-e20",
+    "hostnames": [
+      "ip-10-0-1-15"
+    ],
+    "fqdns": [
+      "ip-10-0-1-15.ec2.internal"
+    ],
+    "ipv4s": [
+      "10.0.1.15"
+    ],
+    "cloud_instance_id": "i-0a1b2c3d4e5f60001",
+    "operating_systems": [
+      "Amazon Linux 2023"
+    ],
+    "last_seen": "2026-11-01T00:00:00.000Z"
+  },
+  {
+    "id": "tio-e21",
+    "hostnames": [
+      "ip-10-0-1-16"
+    ],
+    "fqdns": [
+      "ip-10-0-1-16.ec2.internal"
+    ],
+    "ipv4s": [
+      "10.0.1.16"
+    ],
+    "cloud_instance_id": "i-0a1b2c3d4e5f60002",
+    "operating_systems": [
+      "Amazon Linux 2023"
+    ],
+    "last_seen": "2026-11-01T00:00:00.000Z"
+  },
+  {
+    "id": "tio-e22",
+    "hostnames": [
+      "api-prod-01"
+    ],
+    "fqdns": [],
+    "ipv4s": [
+      "10.0.1.40"
+    ],
+    "cloud_instance_id": "i-0a1b2c3d4e5f60003",
+    "operating_systems": [
+      "Amazon Linux 2023"
+    ],
+    "last_seen": "2026-11-01T00:00:00.000Z"
+  },
+  {
+    "id": "tio-e23",
+    "hostnames": [
+      "app-01"
+    ],
+    "fqdns": [],
+    "ipv4s": [
+      "10.0.2.21"
+    ],
+    "cloud_instance_id": "i-0a1b2c3d4e5f60101",
+    "operating_systems": [
+      "Amazon Linux 2023"
+    ],
+    "last_seen": "2026-11-01T00:00:00.000Z"
+  },
+  {
+    "id": "tio-e25",
+    "hostnames": [
+      "db-prod-01"
+    ],
+    "fqdns": [],
+    "ipv4s": [
+      "10.0.3.10"
+    ],
+    "cloud_instance_id": "i-0a1b2c3d4e5f60005",
+    "operating_systems": [
+      "Amazon Linux 2023"
+    ],
+    "last_seen": "2026-11-01T00:00:00.000Z"
+  },
+  {
+    "id": "tio-e30",
+    "hostnames": [
+      "fileserver-01"
+    ],
+    "fqdns": [],
+    "ipv4s": [
+      "10.30.0.11"
+    ],
+    "operating_systems": [
+      "Windows Server 2019"
+    ],
+    "last_seen": "2026-10-30T00:00:00.000Z"
+  },
+  {
+    "id": "tio-e31",
+    "hostnames": [
+      "fileserver-02"
+    ],
+    "fqdns": [],
+    "ipv4s": [
+      "10.30.0.12"
+    ],
+    "operating_systems": [
+      "Windows Server 2019"
+    ],
+    "last_seen": "2026-10-28T00:00:00.000Z"
+  },
+  {
+    "id": "tio-e32",
+    "hostnames": [
+      "print-srv-01"
+    ],
+    "fqdns": [],
+    "ipv4s": [
+      "10.30.0.21"
+    ],
+    "operating_systems": [
+      "Windows Server 2019"
+    ],
+    "last_seen": "2026-07-30T00:00:00.000Z"
+  },
+  {
+    "id": "tio-e33",
+    "hostnames": [
+      "legacy-erp-01"
+    ],
+    "fqdns": [],
+    "ipv4s": [
+      "10.30.0.31"
+    ],
+    "operating_systems": [
+      "Windows Server 2019"
+    ],
+    "last_seen": "2026-07-05T00:00:00.000Z"
+  },
+  {
+    "id": "tio-e36",
+    "hostnames": [
+      "scanner-test-vm"
+    ],
+    "fqdns": [],
+    "ipv4s": [
+      "10.30.0.99"
+    ],
+    "operating_systems": [
+      "Windows Server 2019"
+    ],
+    "last_seen": "2026-09-16T00:00:00.000Z"
+  },
+  {
+    "id": "tio-e34",
+    "hostnames": [
+      "dc-01"
+    ],
+    "fqdns": [
+      "dc-01.halden.local"
+    ],
+    "ipv4s": [
+      "10.30.0.5"
+    ],
+    "operating_systems": [
+      "Windows Server 2019"
+    ],
+    "last_seen": "2026-11-01T00:00:00.000Z"
+  },
+  {
+    "id": "tio-e35",
+    "hostnames": [
+      "dc-02"
+    ],
+    "fqdns": [
+      "dc-02.halden.local"
+    ],
+    "ipv4s": [
+      "10.30.0.6"
+    ],
+    "operating_systems": [
+      "Windows Server 2019"
+    ],
+    "last_seen": "2026-11-01T00:00:00.000Z"
+  }
+]
