@@ -125,3 +125,13 @@ tests/             verifier (planted errors), coverage, data, config swap
 - **"Tenable VM" match type:** It is an alias match, not an exact one. "Tenable Security Center" is also listed, so a bare "Tenable" is ambiguous.
 - **Tenable permissions:** The listed permissions come from the vulnerability export page. Permissions for the asset export are not in the notes, so they show as Confirm.
 - **Snyk Bearer tokens:** The docs say Bearer tokens are for Snyk Apps. Automation uses a service account token with `Authorization: token`.
+
+## Screenshots
+
+| Scoping plan | Citation drawer |
+|---|---|
+| ![Scoping plan](docs/screenshots/plan.png) | ![Citation](docs/screenshots/citation.png) |
+| **Data readiness** | **Day-one config swap** |
+| ![Data readiness](docs/screenshots/data-readiness.png) | ![Config swap](docs/screenshots/config-swap.png) |
+
+Sample exports: [customer plan (Markdown)](docs/sample/halden-scoping-plan.md), [customer plan (PDF)](docs/sample/halden-scoping-plan.pdf), [internal handoff](docs/sample/halden-internal-handoff.md).
