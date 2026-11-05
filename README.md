@@ -1,5 +1,9 @@
 # Integration Scoping
 
+**Live demo:** https://integration-scoping-demo.vercel.app · **Video (1 min):** https://youtu.be/Ivrze962BzY
+
+[![Watch the 1-minute walkthrough](docs/screenshots/video-thumbnail.jpg)](https://youtu.be/Ivrze962BzY)
+
 A tool a Forward Deployed Engineer could use on day one with a new customer. You enter the customer's tools and goal, and it produces a one-page scoping plan the customer can sign off on:
 
 - **Coverage:** which tools SAFE connects to out of the box, which need confirming, and which would be custom work.
