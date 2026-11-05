@@ -67,6 +67,7 @@ export function expectedRows(coverage: CoverageResult[], cfg: AppConfig): Expect
 
 export interface QuestionSeed {
   key: string
+  tool: string | null
   text: string // code-written default wording, always safe to show
   allow: string[] // names the wording may mention
 }
@@ -77,6 +78,7 @@ export function questionSeeds(coverage: CoverageResult[], cfg: AppConfig): Quest
     if (c.bucket === 'confirm_with_safe') {
       seeds.push({
         key: `which_product:${c.input}`,
+        tool: c.tool_key,
         text: `Which ${c.input} product do you license? SAFE lists: ${c.candidates.join(', ')}.`,
         allow: [c.input, ...c.candidates],
       })
@@ -84,11 +86,11 @@ export function questionSeeds(coverage: CoverageResult[], cfg: AppConfig): Quest
     if (c.bucket === 'out_of_box') {
       const distinct = c.variants.filter((v) => !/via m365$/i.test(v))
       for (const v of distinct) {
-        seeds.push({ key: `variant:${v}`, text: `SAFE also lists "${v}". Do you use it as well as ${c.input}?`, allow: [v, c.input, c.tool_key] })
+        seeds.push({ key: `variant:${v}`, tool: c.tool_key, text: `SAFE also lists "${v}". Do you use it as well as ${c.input}?`, allow: [v, c.input, c.tool_key] })
       }
     }
   }
-  for (const q of cfg.scoping_template.standard_questions) seeds.push({ key: q.key, text: q.text, allow: [] })
+  for (const q of cfg.scoping_template.standard_questions) seeds.push({ key: q.key, tool: null, text: q.text, allow: [] })
   return seeds
 }
 
@@ -201,17 +203,17 @@ export function assemble({ cfg, coverage, order, draft, ctxFor }: AssembleInput)
   for (const seed of questionSeeds(coverage, cfg)) {
     const d = drafts.get(rowKey({ section: 'question', tool: null, item: seed.key }))
     if (!d) {
-      questions.push({ key: seed.key, text: seed.text, status: 'verified', held_back: null })
+      questions.push({ key: seed.key, tool: seed.tool, text: seed.text, status: 'verified', held_back: null })
       continue
     }
     rowsTotal++
     const c = coverage.find((x) => seed.allow.includes(x.input)) ?? coverage[0]
     const check = checkRow(d.text, d.facts, ctxFor(c), [...toolNames, ...seed.allow])
     for (const f of check.facts) log.push({ ...f, row: `question/${seed.key}` })
-    if (check.ok) questions.push({ key: seed.key, text: d.text, status: 'verified', held_back: null })
+    if (check.ok) questions.push({ key: seed.key, tool: seed.tool, text: d.text, status: 'verified', held_back: null })
     else {
       held.push({ row: `question/${seed.key}`, draft_text: d.text, reason: check.reason! })
-      questions.push({ key: seed.key, text: seed.text, status: 'verified', held_back: { draft_text: d.text, reason: check.reason! } })
+      questions.push({ key: seed.key, tool: seed.tool, text: seed.text, status: 'verified', held_back: { draft_text: d.text, reason: check.reason! } })
     }
   }
   for (const d of draft?.rows ?? []) {
@@ -220,7 +222,7 @@ export function assemble({ cfg, coverage, order, draft, ctxFor }: AssembleInput)
     const c = (d.tool && byTool.get(d.tool)) || coverage[0]
     const check = checkRow(d.text, d.facts, ctxFor(c), toolNames)
     for (const f of check.facts) log.push({ ...f, row: `question/${d.item}` })
-    if (check.ok) questions.push({ key: d.item, text: d.text, status: 'verified', held_back: null })
+    if (check.ok) questions.push({ key: d.item, tool: d.tool && byTool.has(d.tool) ? d.tool : null, text: d.text, status: 'verified', held_back: null })
     else held.push({ row: `question/${d.item}`, draft_text: d.text, reason: check.reason! })
   }
 

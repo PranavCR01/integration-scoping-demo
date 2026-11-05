@@ -8,6 +8,11 @@ A tool a Forward Deployed Engineer could use on day one with a new customer. You
 - **Data checks:** what we check before the data feeds a risk number.
 - **Open questions:** what we still need to ask the customer.
 
+On top of the plan:
+- **A summary block** answers the questions a customer-success leader asks first: how many tools can connect now, what SAFE must decide, how many answers the customer owes, and whether the data is ready for a risk figure. Everything in it is counted by code.
+- **Who owes what** groups every open item by the person who has to act. Each customer contact gets a **Copy email** button. The emails are built only from verified rows and checked questions.
+- **Show evidence** switches between a clean customer view and the full source trail: line-level citations and the full matching reasons.
+
 It also runs those data checks on sample exports. That means mapping each tool's records into one common format, finding the same machine across tools, and flagging stale assets, coverage gaps, orphan findings and count mismatches.
 
 **Everything here is a proof of concept.** The customer (Halden Outfitters) is fictional, the exports are synthetic, and the only sources are public vendor docs plus SAFE's public integrations page.
@@ -21,6 +26,7 @@ It also runs those data checks on sample exports. That means mapping each tool's
 | The connection order (rules in config) | Rewording the open questions |
 | Verifying every endpoint, parameter, field, scope, header, rate limit and version against the attached specs and docs | Proposing extra notes and questions (also verified) |
 | Duplicate detection, staleness, coverage, counts, the readiness gate | Nothing |
+| The summary, the who-owes-what list and the emails | Nothing |
 
 Every fact the model writes comes with a citation (file plus line). The verifier then checks it:
 - **Spec facts** (endpoints, parameters, response fields, OAuth scopes, auth schemes, base URLs) are checked against an index of the OpenAPI spec.
@@ -128,9 +134,11 @@ tests/             verifier (planted errors), coverage, data, config swap
 
 ## Screenshots
 
-| Scoping plan | Citation drawer |
+| Summary and plan | Who owes what, with emails |
 |---|---|
-| ![Scoping plan](docs/screenshots/plan.png) | ![Citation](docs/screenshots/citation.png) |
+| ![Summary](docs/screenshots/plan.png) | ![Who owes what](docs/screenshots/who-owes-what.png) |
+| **Show evidence** | **Citation drawer** |
+| ![Evidence](docs/screenshots/evidence.png) | ![Citation](docs/screenshots/citation.png) |
 | **Data readiness** | **Day-one config swap** |
 | ![Data readiness](docs/screenshots/data-readiness.png) | ![Config swap](docs/screenshots/config-swap.png) |
 

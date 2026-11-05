@@ -97,6 +97,7 @@ export async function buildPlan(opts: BuildOptions): Promise<Plan> {
 
   return {
     document: cfg.scoping_template.document,
+    project_owner: cfg.tool_profiles.project_owner ?? 'Customer project lead',
     customer,
     generated_at: new Date().toISOString(),
     config_label: cfg.integrations.label,

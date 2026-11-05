@@ -63,6 +63,7 @@ export function matchTool(input: string, cfg: AppConfig): CoverageResult {
         matched_card: null,
         tool_key: input,
         rule: 'bare_vendor_name',
+        short: `${all.length} ${input} products listed: which one?`,
         why: `"${input}" matches a card, but SAFE's list has ${all.length} ${input} products (${all.join(', ')}). Need the exact product the customer licenses.`,
         candidates: all,
         variants: sameProductRoutes.map((c) => c.name),
@@ -84,6 +85,7 @@ export function matchTool(input: string, cfg: AppConfig): CoverageResult {
       matched_card: target.name,
       tool_key: target.name,
       rule: exact ? 'exact' : 'alias',
+      short: exact ? "On SAFE's list" : `On SAFE's list as ${target.name}`,
       why,
       candidates: [target.name],
       variants: [...sameProductRoutes, ...distinct].map((c) => c.name),
@@ -106,6 +108,7 @@ export function matchTool(input: string, cfg: AppConfig): CoverageResult {
       matched_card: null,
       tool_key: input,
       rule: 'partial',
+      short: `${names.length} ${rarest.charAt(0).toUpperCase() + rarest.slice(1)} products listed: which one?`,
       why: `No card named "${input}". ${names.length} card${names.length > 1 ? 's' : ''} on SAFE's list contain "${rarest}": ${names.join(', ')}. Need the exact product the customer licenses.`,
       candidates: names,
       variants: [],
@@ -120,6 +123,7 @@ export function matchTool(input: string, cfg: AppConfig): CoverageResult {
     matched_card: null,
     tool_key: input,
     rule: 'no_match',
+    short: "Not on SAFE's public list",
     why:
       `Not on SAFE's public list (${cards.length} cards). SAFE claims more integrations than it lists publicly, so Confirm with SAFE before scoping a build.` +
       (vendorCards.length ? ` Cards sharing a word with it: ${vendorCards.join(', ')}.` : ''),

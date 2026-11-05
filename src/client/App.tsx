@@ -8,10 +8,12 @@ import { downloadPdf, downloadText } from './pdf'
 import { PlanView } from './components/PlanView'
 import { DataView } from './components/DataView'
 import { DocPreview, VerificationView } from './components/Views'
+import { OwnersView, SummaryCard } from './components/Summary'
+import { buildActions, buildSummary } from '../core/summary'
 import { Drawer } from './components/Drawer'
 import { Pill, type CiteTarget } from './components/ui'
 
-type Tab = 'plan' | 'data' | 'verification' | 'handoff'
+type Tab = 'plan' | 'owners' | 'data' | 'verification' | 'handoff'
 
 export default function App() {
   const [meta, setMeta] = useState<Meta | null>(null)
@@ -27,6 +29,7 @@ export default function App() {
   const [busy, setBusy] = useState<'plan' | 'data' | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [tab, setTab] = useState<Tab>('plan')
+  const [evidence, setEvidence] = useState(false)
   const [cite, setCite] = useState<CiteTarget | null>(null)
   const fileRef = useRef<HTMLInputElement>(null)
 
@@ -46,7 +49,15 @@ export default function App() {
     setBusy('plan')
     setError(null)
     try {
-      const p = await getPlan({ customer, mode, overrides: ov })
+      const [p, d] = await Promise.all([
+        getPlan({ customer, mode, overrides: ov }),
+        prev ? Promise.resolve(null) : getData({ customer, decisions: {}, uploads: {}, overrides: ov }).catch(() => null),
+      ])
+      if (!prev) {
+        setData(d)
+        setDecisions({})
+        setUploads({})
+      }
       const diff: Record<string, string> = {}
       if (prev) for (const c of p.coverage) {
         const before = prev.coverage.find((x) => x.input === c.input)
@@ -93,6 +104,8 @@ export default function App() {
   const exportName = customer ? customer.name.toLowerCase().replace(/[^a-z0-9]+/g, '-') : 'plan'
   const blocks = plan ? planBlocks(plan, labels, plan.document.oob_access_note, plan.document.footer, plan.document.title_prefix, plan.document.status) : []
   const handoff = plan ? handoffBlocks(plan, data, labels) : []
+  const summary = plan ? buildSummary(plan, data) : null
+  const actions = plan ? buildActions(plan, data) : []
   const excerptFor = (c: CiteTarget) => plan?.excerpts[`${c.file}#L${c.line}`] ?? data?.excerpts?.[`${c.file}#L${c.line}`]
 
   if (!meta || !customer) {
@@ -242,28 +255,50 @@ export default function App() {
             </div>
           ) : (
             <>
-              <nav className="mb-4 flex gap-1 overflow-x-auto rounded-lg bg-slate-200/60 p-1 text-sm">
-                {(
-                  [
-                    ['plan', 'Scoping plan'],
-                    ['data', 'Data readiness'],
-                    ['verification', `Verification (${plan.verification.facts_verified}/${plan.verification.facts_total})`],
-                    ['handoff', 'Internal handoff'],
-                  ] as [Tab, string][]
-                ).map(([k, l]) => (
-                  <button
-                    key={k}
-                    onClick={() => {
-                      setTab(k)
-                      if (k === 'data' && !data) runData()
-                    }}
-                    className={`whitespace-nowrap rounded-md px-3 py-1.5 font-medium ${tab === k ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-600 hover:text-slate-900'}`}
-                  >
-                    {l}
-                  </button>
-                ))}
-              </nav>
-              {tab === 'plan' && <PlanView plan={plan} labels={labels} onCite={setCite} changed={changed} />}
+              <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
+                <nav className="flex gap-1 overflow-x-auto rounded-lg bg-slate-200/60 p-1 text-sm">
+                  {(
+                    [
+                      ['plan', 'Plan'],
+                      ['owners', `Who owes what (${actions.length})`],
+                      ['data', 'Data readiness'],
+                      ['verification', `Verification (${plan.verification.facts_verified}/${plan.verification.facts_total})`],
+                      ['handoff', 'Internal handoff'],
+                    ] as [Tab, string][]
+                  ).map(([k, l]) => (
+                    <button
+                      key={k}
+                      onClick={() => {
+                        setTab(k)
+                        if (k === 'data' && !data) runData()
+                      }}
+                      className={`whitespace-nowrap rounded-md px-3 py-1.5 font-medium ${tab === k ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-600 hover:text-slate-900'}`}
+                    >
+                      {l}
+                    </button>
+                  ))}
+                </nav>
+                {tab === 'plan' && (
+                  <label className="flex cursor-pointer select-none items-center gap-2 text-sm text-slate-700">
+                    <span>Show evidence</span>
+                    <button
+                      role="switch"
+                      aria-checked={evidence}
+                      onClick={() => setEvidence(!evidence)}
+                      className={`relative h-5 w-9 rounded-full transition ${evidence ? 'bg-teal-700' : 'bg-slate-300'}`}
+                    >
+                      <span className={`absolute top-0.5 h-4 w-4 rounded-full bg-white shadow transition ${evidence ? 'left-[18px]' : 'left-0.5'}`} />
+                    </button>
+                  </label>
+                )}
+              </div>
+              {tab === 'plan' && (
+                <div className="space-y-4">
+                  {summary && <SummaryCard plan={plan} summary={summary} onOwners={() => setTab('owners')} />}
+                  <PlanView plan={plan} labels={labels} onCite={setCite} changed={changed} evidence={evidence} />
+                </div>
+              )}
+              {tab === 'owners' && <OwnersView actions={actions} customerName={plan.customer.name} dataRun={!!data} />}
               {tab === 'data' && (
                 <DataView
                   data={data}

@@ -3,6 +3,7 @@
 import type { Plan, PlanRow } from './types.js'
 import { BUCKET_LABEL } from './types.js'
 import type { DataReport } from './data.js'
+import { buildActions, buildSummary } from './summary.js'
 
 export type Block =
   | { t: 'h1' | 'h2' | 'h3' | 'p' | 'note'; text: string }
@@ -36,6 +37,7 @@ export function planBlocks(plan: Plan, labels: Record<string, string>, oobNote: 
   b.push({ t: 'p', text: `**Goal:** ${plan.customer.goal}` })
   b.push({ t: 'p', text: `**Prepared:** ${fmtDate(plan.generated_at)} · **Status:** ${status}` })
   b.push({ t: 'p', text: `**Sources:** ${plan.config_label}; vendor API docs listed under each tool. Anything not found in those sources is marked **Confirm**.` })
+  b.push({ t: 'p', text: `**At a glance:** ${buildSummary(plan, null).headline}` })
   b.push({ t: 'hr' })
 
   b.push({ t: 'h2', text: '1. Coverage check' })
@@ -90,6 +92,12 @@ export function handoffBlocks(plan: Plan, data: DataReport | null, labels: Recor
   b.push({ t: 'h2', text: 'Decisions needed from SAFE' })
   const needs = plan.coverage.filter((c) => c.bucket !== 'out_of_box')
   b.push({ t: 'list', items: needs.length ? needs.map((c) => `**${c.input}** (${BUCKET_LABEL[c.bucket]}): ${c.why}`) : ['None'] })
+
+  b.push({ t: 'h2', text: 'Who owes what' })
+  for (const a of buildActions(plan, data)) {
+    b.push({ t: 'h3', text: `${a.owner}${a.tools.length ? ` (${a.tools.join(', ')})` : ''}` })
+    b.push({ t: 'list', items: a.items.map((i) => `${i.kind}: ${i.text}`) })
+  }
 
   b.push({ t: 'h2', text: 'Every Confirm item' })
   const confirms = [

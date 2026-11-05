@@ -44,6 +44,7 @@ export interface ToolProfile {
 
 export interface ToolProfilesConfig {
   default_owner: string
+  project_owner: string
   profiles: Record<string, ToolProfile>
   family_profiles: Record<string, { role: string; owner: string } | string>
 }
@@ -112,6 +113,8 @@ export interface CoverageResult {
   // canonical name used for profile lookup (card name, or the customer's name for custom work)
   tool_key: string
   rule: 'exact' | 'alias' | 'bare_vendor_name' | 'partial' | 'no_match'
+  // a few words for the customer view; 'why' has the full reasoning
+  short: string
   why: string
   candidates: string[]
   variants: string[]
@@ -230,6 +233,8 @@ export interface OrderStep {
 
 export interface PlanQuestion {
   key: string
+  // the tool this question is about (null: a general question for the customer's project lead)
+  tool: string | null
   text: string
   status: 'verified' | 'confirm'
   held_back: { draft_text: string; reason: string } | null
@@ -248,6 +253,7 @@ export interface VerificationSummary {
 
 export interface Plan {
   document: ScopingTemplate['document']
+  project_owner: string
   customer: Customer
   generated_at: string
   config_label: string

@@ -1,6 +1,7 @@
 {
   "_about": "Per-tool settings: what role the tool plays in the plan, who owns it on the customer side, and which vendor documents are on file for verification. Roles and owner titles are editable defaults, not facts from vendor docs. Tools with no 'docs' entry get 'Confirm' for every access detail.",
   "default_owner": "Tool administrator (confirm with customer)",
+  "project_owner": "Customer project lead",
   "profiles": {
     "Okta": {
       "role": "identity",
@@ -8,7 +9,13 @@
       "docs": {
         "spec": "sources/02_okta_management_openapi_v2026.42.1.yaml",
         "files": [],
-        "retrieval_keywords": ["users", "groups", "apps", "logs", "devices"],
+        "retrieval_keywords": [
+          "users",
+          "groups",
+          "apps",
+          "logs",
+          "devices"
+        ],
         "label": "Okta Management OpenAPI v2026.42.1"
       }
     },
@@ -18,8 +25,18 @@
       "docs": {
         "spec": null,
         "files": [
-          { "file": "sources/03_tenable_vm_api_notes.md" },
-          { "file": "sources/03b_pytenable_exports_api.py", "include_lines": [[25, 45]] }
+          {
+            "file": "sources/03_tenable_vm_api_notes.md"
+          },
+          {
+            "file": "sources/03b_pytenable_exports_api.py",
+            "include_lines": [
+              [
+                25,
+                45
+              ]
+            ]
+          }
         ],
         "label": "Tenable developer docs (notes) and pyTenable SDK"
       }
@@ -38,8 +55,12 @@
       "docs": {
         "spec": "sources/04_snyk_rest_openapi.json",
         "files": [
-          { "file": "sources/04b_snyk_about_rest_api.md" },
-          { "file": "sources/04c_snyk_authentication.md" }
+          {
+            "file": "sources/04b_snyk_about_rest_api.md"
+          },
+          {
+            "file": "sources/04c_snyk_authentication.md"
+          }
         ],
         "label": "Snyk REST OpenAPI, About the REST API, Authentication for API"
       }
@@ -47,9 +68,21 @@
   },
   "family_profiles": {
     "_about": "Used when a tool lands in Confirm with SAFE and the exact card is not known yet. Matched on a word in the customer's tool name.",
-    "defender": { "role": "endpoint", "owner": "Microsoft security administrator" },
-    "servicenow": { "role": "ticketing", "owner": "ServiceNow administrator" },
-    "crowdstrike": { "role": "endpoint", "owner": "Endpoint security (EDR) administrator" },
-    "tenable": { "role": "vulnerabilities", "owner": "Vulnerability management lead" }
+    "defender": {
+      "role": "endpoint",
+      "owner": "Microsoft security administrator"
+    },
+    "servicenow": {
+      "role": "ticketing",
+      "owner": "ServiceNow administrator"
+    },
+    "crowdstrike": {
+      "role": "endpoint",
+      "owner": "Endpoint security (EDR) administrator"
+    },
+    "tenable": {
+      "role": "vulnerabilities",
+      "owner": "Vulnerability management lead"
+    }
   }
 }

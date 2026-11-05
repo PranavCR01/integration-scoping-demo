@@ -3,63 +3,212 @@
   "sources": {
     "tenable_assets": {
       "label": "Tenable VM asset export",
+      "short": "Tenable",
       "tool": "Tenable Vulnerability Management",
       "entity": "asset",
       "file": "tenable_assets.json",
       "fields": [
-        { "canonical": "source_id", "from": "id" },
-        { "canonical": "fqdn", "from": "fqdns", "transform": "first" },
-        { "canonical": "hostname", "from": "hostnames", "transform": "first" },
-        { "canonical": "ipv4", "from": "ipv4s", "transform": "list" },
-        { "canonical": "mac", "from": "macs", "transform": "list" },
-        { "canonical": "cloud_instance_id", "from": "cloud_instance_id" },
-        { "canonical": "os", "from": "operating_systems", "transform": "first" },
-        { "canonical": "last_seen", "from": "last_seen" }
+        {
+          "canonical": "source_id",
+          "from": "id"
+        },
+        {
+          "canonical": "fqdn",
+          "from": "fqdns",
+          "transform": "first"
+        },
+        {
+          "canonical": "hostname",
+          "from": "hostnames",
+          "transform": "first"
+        },
+        {
+          "canonical": "ipv4",
+          "from": "ipv4s",
+          "transform": "list"
+        },
+        {
+          "canonical": "mac",
+          "from": "macs",
+          "transform": "list"
+        },
+        {
+          "canonical": "cloud_instance_id",
+          "from": "cloud_instance_id"
+        },
+        {
+          "canonical": "os",
+          "from": "operating_systems",
+          "transform": "first"
+        },
+        {
+          "canonical": "last_seen",
+          "from": "last_seen"
+        }
       ]
     },
     "tenable_vulns": {
       "label": "Tenable VM vulnerability export",
+      "short": "Tenable",
       "tool": "Tenable Vulnerability Management",
       "entity": "finding",
       "file": "tenable_vulns.json",
       "fields": [
-        { "canonical": "finding_id", "from": "id", "verify": { "kind": "doc", "cite_file": "sources/03_tenable_vm_api_notes.md", "cite_line": 20, "quote": "core properties (`id`, `asset.id`, `definition.id`, exploit/patch metadata) are always included", "value": "id" } },
-        { "canonical": "asset_ref", "from": "asset.id", "verify": { "kind": "doc", "cite_file": "sources/03_tenable_vm_api_notes.md", "cite_line": 20, "quote": "core properties (`id`, `asset.id`, `definition.id`, exploit/patch metadata) are always included", "value": "asset.id" } },
-        { "canonical": "type", "from": "definition.id", "verify": { "kind": "doc", "cite_file": "sources/03_tenable_vm_api_notes.md", "cite_line": 20, "quote": "core properties (`id`, `asset.id`, `definition.id`, exploit/patch metadata) are always included", "value": "definition.id" } },
-        { "canonical": "title", "from": "definition.name" },
-        { "canonical": "severity", "from": "severity" },
-        { "canonical": "status", "from": "state" },
-        { "canonical": "first_seen", "from": "first_found" },
-        { "canonical": "last_seen", "from": "last_found" }
+        {
+          "canonical": "finding_id",
+          "from": "id",
+          "verify": {
+            "kind": "doc",
+            "cite_file": "sources/03_tenable_vm_api_notes.md",
+            "cite_line": 20,
+            "quote": "core properties (`id`, `asset.id`, `definition.id`, exploit/patch metadata) are always included",
+            "value": "id"
+          }
+        },
+        {
+          "canonical": "asset_ref",
+          "from": "asset.id",
+          "verify": {
+            "kind": "doc",
+            "cite_file": "sources/03_tenable_vm_api_notes.md",
+            "cite_line": 20,
+            "quote": "core properties (`id`, `asset.id`, `definition.id`, exploit/patch metadata) are always included",
+            "value": "asset.id"
+          }
+        },
+        {
+          "canonical": "type",
+          "from": "definition.id",
+          "verify": {
+            "kind": "doc",
+            "cite_file": "sources/03_tenable_vm_api_notes.md",
+            "cite_line": 20,
+            "quote": "core properties (`id`, `asset.id`, `definition.id`, exploit/patch metadata) are always included",
+            "value": "definition.id"
+          }
+        },
+        {
+          "canonical": "title",
+          "from": "definition.name"
+        },
+        {
+          "canonical": "severity",
+          "from": "severity"
+        },
+        {
+          "canonical": "status",
+          "from": "state"
+        },
+        {
+          "canonical": "first_seen",
+          "from": "first_found"
+        },
+        {
+          "canonical": "last_seen",
+          "from": "last_found"
+        }
       ]
     },
     "crowdstrike_hosts": {
       "label": "CrowdStrike Falcon host list",
+      "short": "CrowdStrike",
       "tool": "CrowdStrike Falcon",
       "entity": "asset",
       "file": "crowdstrike_hosts.json",
       "fields": [
-        { "canonical": "source_id", "from": "device_id" },
-        { "canonical": "hostname", "from": "hostname" },
-        { "canonical": "ipv4", "from": "local_ip", "transform": "list" },
-        { "canonical": "mac", "from": "mac_address", "transform": "list" },
-        { "canonical": "cloud_instance_id", "from": "instance_id" },
-        { "canonical": "serial_number", "from": "serial_number" },
-        { "canonical": "os", "from": "os_version" },
-        { "canonical": "last_seen", "from": "last_seen" }
+        {
+          "canonical": "source_id",
+          "from": "device_id"
+        },
+        {
+          "canonical": "hostname",
+          "from": "hostname"
+        },
+        {
+          "canonical": "ipv4",
+          "from": "local_ip",
+          "transform": "list"
+        },
+        {
+          "canonical": "mac",
+          "from": "mac_address",
+          "transform": "list"
+        },
+        {
+          "canonical": "cloud_instance_id",
+          "from": "instance_id"
+        },
+        {
+          "canonical": "serial_number",
+          "from": "serial_number"
+        },
+        {
+          "canonical": "os",
+          "from": "os_version"
+        },
+        {
+          "canonical": "last_seen",
+          "from": "last_seen"
+        }
       ]
     },
     "okta_devices": {
       "label": "Okta devices",
+      "short": "Okta",
       "tool": "Okta",
       "entity": "asset",
       "file": "okta_devices.json",
       "fields": [
-        { "canonical": "source_id", "from": "id", "verify": { "kind": "field", "path": "/api/v1/devices", "cite_file": "sources/02_okta_management_openapi_v2026.42.1.yaml", "value": "id" } },
-        { "canonical": "display_name", "from": "profile.displayName", "verify": { "kind": "field", "path": "/api/v1/devices", "cite_file": "sources/02_okta_management_openapi_v2026.42.1.yaml", "value": "profile.displayName" } },
-        { "canonical": "serial_number", "from": "profile.serialNumber", "verify": { "kind": "field", "path": "/api/v1/devices", "cite_file": "sources/02_okta_management_openapi_v2026.42.1.yaml", "value": "profile.serialNumber" } },
-        { "canonical": "os", "from": "profile.platform", "verify": { "kind": "field", "path": "/api/v1/devices", "cite_file": "sources/02_okta_management_openapi_v2026.42.1.yaml", "value": "profile.platform" } },
-        { "canonical": "last_seen", "from": "lastUpdated", "verify": { "kind": "field", "path": "/api/v1/devices", "cite_file": "sources/02_okta_management_openapi_v2026.42.1.yaml", "value": "lastUpdated" } }
+        {
+          "canonical": "source_id",
+          "from": "id",
+          "verify": {
+            "kind": "field",
+            "path": "/api/v1/devices",
+            "cite_file": "sources/02_okta_management_openapi_v2026.42.1.yaml",
+            "value": "id"
+          }
+        },
+        {
+          "canonical": "display_name",
+          "from": "profile.displayName",
+          "verify": {
+            "kind": "field",
+            "path": "/api/v1/devices",
+            "cite_file": "sources/02_okta_management_openapi_v2026.42.1.yaml",
+            "value": "profile.displayName"
+          }
+        },
+        {
+          "canonical": "serial_number",
+          "from": "profile.serialNumber",
+          "verify": {
+            "kind": "field",
+            "path": "/api/v1/devices",
+            "cite_file": "sources/02_okta_management_openapi_v2026.42.1.yaml",
+            "value": "profile.serialNumber"
+          }
+        },
+        {
+          "canonical": "os",
+          "from": "profile.platform",
+          "verify": {
+            "kind": "field",
+            "path": "/api/v1/devices",
+            "cite_file": "sources/02_okta_management_openapi_v2026.42.1.yaml",
+            "value": "profile.platform"
+          }
+        },
+        {
+          "canonical": "last_seen",
+          "from": "lastUpdated",
+          "verify": {
+            "kind": "field",
+            "path": "/api/v1/devices",
+            "cite_file": "sources/02_okta_management_openapi_v2026.42.1.yaml",
+            "value": "lastUpdated"
+          }
+        }
       ]
     }
   }

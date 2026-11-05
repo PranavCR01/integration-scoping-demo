@@ -1,15 +1,16 @@
 import type { Plan, PlanRow } from '../../core/types'
-import { BucketBadge, CiteChip, ConfirmTag, Pill, Rich, Section, shortLabel, type CiteTarget } from './ui'
+import { BucketBadge, CiteChip, ConfirmTag, Rich, Section, shortLabel, type CiteTarget } from './ui'
 
 interface Props {
   plan: Plan
   labels: Record<string, string>
   onCite: (c: CiteTarget) => void
   changed: Record<string, string>
+  evidence: boolean
 }
 
-function Cites({ row, labels, onCite }: { row: PlanRow; labels: Record<string, string>; onCite: (c: CiteTarget) => void }) {
-  if (!row.citations.length) return null
+function Cites({ row, labels, onCite, evidence }: { row: PlanRow; labels: Record<string, string>; onCite: (c: CiteTarget) => void; evidence: boolean }) {
+  if (!row.citations.length || !evidence) return null
   const seen = new Set<string>()
   return (
     <div className="mt-1.5 flex flex-wrap gap-1">
@@ -27,49 +28,46 @@ function Cites({ row, labels, onCite }: { row: PlanRow; labels: Record<string, s
   )
 }
 
-function RowBody({ row, labels, onCite }: { row: PlanRow; labels: Record<string, string>; onCite: (c: CiteTarget) => void }) {
+function Checked() {
+  return (
+    <span title="Every technical detail here was checked against the vendor's docs. Turn on Show evidence to see the exact lines." className="ml-1.5 inline-flex translate-y-0.5 items-center text-teal-600">
+      <svg viewBox="0 0 16 16" className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3.5 8.5l3 3 6-7" strokeLinecap="round" strokeLinejoin="round" /></svg>
+    </span>
+  )
+}
+
+function RowBody({ row, labels, onCite, evidence }: { row: PlanRow; labels: Record<string, string>; onCite: (c: CiteTarget) => void; evidence: boolean }) {
   if (row.status === 'confirm') return <ConfirmTag reason={row.confirm_reason} />
   return (
     <div>
       <div className="text-sm leading-relaxed text-slate-700">
         <Rich text={row.text} />
+        {!evidence && row.citations.length > 0 && <Checked />}
       </div>
-      <Cites row={row} labels={labels} onCite={onCite} />
+      <Cites row={row} labels={labels} onCite={onCite} evidence={evidence} />
     </div>
   )
 }
 
-export function PlanView({ plan, labels, onCite, changed }: Props) {
+export function PlanView({ plan, labels, onCite, changed, evidence }: Props) {
   const customN = plan.custom_sheets.length ? 1 : 0
   return (
     <div className="space-y-4">
-      <header className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
-        <div className="flex flex-wrap items-center gap-2">
-          <Pill tone="amber">Fictional customer</Pill>
-          <Pill>{plan.document.status}</Pill>
-        </div>
-        <h1 className="mt-2 text-xl font-semibold text-slate-900">
-          {plan.document.title_prefix}: {plan.customer.name}
-        </h1>
-        <dl className="mt-2 grid gap-1 text-sm text-slate-600 sm:grid-cols-[7rem_1fr]">
-          <dt className="font-medium text-slate-500">Goal</dt>
-          <dd>{plan.customer.goal}</dd>
-          <dt className="font-medium text-slate-500">Integrations list</dt>
-          <dd>{plan.config_label}</dd>
-          <dt className="font-medium text-slate-500">Draft</dt>
-          <dd>{plan.draft_note}</dd>
-        </dl>
-        <p className="mt-3 text-sm text-slate-500">Anything not found in the attached sources is marked Confirm. Every technical detail shown was checked by code against the vendor docs; click a source to see the exact line.</p>
-      </header>
+      <div className="flex flex-wrap items-center gap-x-3 gap-y-1 px-1 text-xs text-slate-500">
+        <span className="font-medium text-slate-700">{plan.document.title_prefix}</span>
+        <span>{plan.document.status}</span>
+        <span>Integrations list: {plan.config_label}</span>
+        {evidence && <span>Draft: {plan.draft_note}</span>}
+      </div>
 
-      <Section n={1} title="Coverage check" aside={<span className="text-xs text-slate-500">Matched in code against the integrations config</span>}>
+      <Section n={1} title="Coverage check" aside={evidence ? <span className="text-xs text-slate-500">Matched in code against the integrations config</span> : undefined}>
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-slate-200 text-left text-xs uppercase tracking-wide text-slate-500">
                 <th className="py-2 pr-3 font-medium">Customer tool</th>
                 <th className="py-2 pr-3 font-medium">Bucket</th>
-                <th className="py-2 font-medium">Why</th>
+                <th className="py-2 font-medium">{evidence ? 'Why (full reasoning)' : 'Why'}</th>
               </tr>
             </thead>
             <tbody>
@@ -81,8 +79,8 @@ export function PlanView({ plan, labels, onCite, changed }: Props) {
                     {changed[c.input] && <div className="mt-1 text-xs font-medium text-teal-700">was {changed[c.input]}</div>}
                   </td>
                   <td className="py-2.5 text-slate-700">
-                    {c.why}
-                    {c.evidence.length > 0 && (
+                    {evidence ? c.why : c.short}
+                    {evidence && c.evidence.length > 0 && (
                       <div className="mt-1 flex flex-wrap gap-1">
                         {c.evidence.slice(0, 6).map((e) => (
                           <CiteChip key={`${e.file}#${e.line}`} c={e} label={shortLabel(e.file, labels).replace('SAFE public integrations page', 'SAFE list').replace('Simulated SAFE internal list', 'Internal list')} onOpen={onCite} />
@@ -97,7 +95,7 @@ export function PlanView({ plan, labels, onCite, changed }: Props) {
         </div>
       </Section>
 
-      <Section n={2} title="Connection order" aside={<span className="text-xs text-slate-500">Order from config/connection_order.json; wording drafted by the model</span>}>
+      <Section n={2} title="Connection order" aside={evidence ? <span className="text-xs text-slate-500">Order from config/connection_order.json; wording drafted by the model</span> : undefined}>
         <ol className="space-y-2.5">
           {plan.order.map((s) => (
             <li key={s.step} className="flex gap-3">
@@ -132,7 +130,7 @@ export function PlanView({ plan, labels, onCite, changed }: Props) {
                 {a.rows.map((r) => (
                   <div key={r.item}>
                     <div className="text-xs font-medium uppercase tracking-wide text-slate-500">{r.label}</div>
-                    <RowBody row={r} labels={labels} onCite={onCite} />
+                    <RowBody row={r} labels={labels} onCite={onCite} evidence={evidence} />
                   </div>
                 ))}
               </div>
@@ -151,7 +149,7 @@ export function PlanView({ plan, labels, onCite, changed }: Props) {
             {s.rows.map((r) => (
               <div key={r.item} className="grid gap-2 py-2.5 md:grid-cols-[11rem_1fr]">
                 <div className="text-sm font-medium text-slate-900">{r.label}</div>
-                <RowBody row={r} labels={labels} onCite={onCite} />
+                <RowBody row={r} labels={labels} onCite={onCite} evidence={evidence} />
               </div>
             ))}
           </div>
@@ -173,7 +171,7 @@ export function PlanView({ plan, labels, onCite, changed }: Props) {
               <div key={`${r.tool}-${r.item}`} className="text-sm">
                 <span className="font-medium text-slate-900">{r.tool}: </span>
                 <Rich text={r.text} />
-                <Cites row={r} labels={labels} onCite={onCite} />
+                <Cites row={r} labels={labels} onCite={onCite} evidence={evidence} />
               </div>
             ))}
           </div>

@@ -9,6 +9,7 @@ export interface MappingField {
 }
 export interface SourceMapping {
   label: string
+  short?: string
   tool: string
   entity: 'asset' | 'finding'
   file: string
@@ -103,7 +104,7 @@ export interface DataReport {
   excerpts?: Record<string, { file: string; start: number; lines: string[]; highlight: number }>
   as_of: string
   synthetic: boolean
-  sources: { key: string; label: string; tool: string; records: number; console: number | null; mismatch: boolean; uploaded: boolean }[]
+  sources: { key: string; label: string; short: string; entity: 'asset' | 'finding'; tool: string; records: number; console: number | null; mismatch: boolean; uploaded: boolean }[]
   mapping: { source: string; canonical: string; from: string; status: 'verified' | 'placeholder' | 'failed'; citation: { file: string; line: number } | null; detail: string }[]
   decisions_applied: number
   totals: { asset_records: number; merged_assets: number; cross_tool_merges: number; same_tool_duplicates: number; review: number; stale: number; identity_only: number; orphans: number; findings: number }
@@ -348,7 +349,7 @@ export function analyze(input: DataInput): DataReport {
   const assetById = new Map(assets.map((a) => [a.asset_id, a]))
   const label = (id: string) => {
     const a = assetById.get(id)!
-    return `${a.names.join(' / ') || a.asset_id} (${a.sources.join(', ')})`
+    return `${a.names.join(' / ') || a.asset_id} (${a.sources.map((s) => mappings[s]?.short ?? s).join(', ')})`
   }
 
   // Review queue: weak matches and blocked conflicts between assets that remain separate.
@@ -394,7 +395,7 @@ export function analyze(input: DataInput): DataReport {
   const sources = Object.entries(mappings).map(([key, m]) => {
     const n = (rows[key] ?? []).length
     const c = input.console_counts[key]
-    return { key, label: m.label, tool: m.tool, records: n, console: c ?? null, mismatch: c !== undefined && c !== n, uploaded: (input.uploaded ?? []).includes(key) }
+    return { key, label: m.label, short: m.short ?? m.tool, entity: m.entity, tool: m.tool, records: n, console: c ?? null, mismatch: c !== undefined && c !== n, uploaded: (input.uploaded ?? []).includes(key) }
   })
 
   const edrShare = population.length ? population.filter(hasEdr).length / population.length : 1
