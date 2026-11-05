@@ -8,7 +8,7 @@ Before the call: open https://integration-scoping-demo.vercel.app/, have Halden 
 
 ## 0:00 Setup (20 seconds)
 
-**Do:** Nothing yet. The Halden Outfitters screen is showing.
+**Do:** Nothing yet. The Halden Outfitters kickoff card is showing: the goal, their six tools, and what the tool produces.
 
 **Say:**
 > "When a new customer signs, the first week decides whether the 30-day promise holds. Someone has to work out what to connect, who to ask for access, and what could go wrong with the data. I built a small tool for that first week. This is a fictional customer, Halden Outfitters. They run six tools and want a board-ready risk figure in 30 days."
@@ -46,7 +46,7 @@ Before the call: open https://integration-scoping-demo.vercel.app/, have Halden 
 
 ## 2:35 Export (25 seconds)
 
-**Do:** Turn **Show evidence** off. Click **Customer plan (PDF)**.
+**Do:** Turn **Show evidence** off. Click **Export**, then **Customer plan (PDF)**.
 
 **Say:**
 > "One click gives the customer a clean plan to sign off on, and there's an internal handoff for the platform team with every open item."
@@ -79,7 +79,7 @@ Before the call: open https://integration-scoping-demo.vercel.app/, have Halden 
 
 ## 4:30 Day one (30 seconds)
 
-**Do:** Click **Use simulated internal list** in the header.
+**Do:** Click the integrations list button in the header ("SAFE public list · 105 integrations"), then **Use simulated internal list**.
 
 **Say:**
 > "Last thing. Everything SAFE-specific lives in config files: the integrations list, the ordering rules, the template, the data model. Say SAFE's internal list includes Snyk. I load that file..."

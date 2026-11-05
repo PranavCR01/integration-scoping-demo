@@ -10,12 +10,9 @@ export function SummaryCard({ plan, summary, onOwners }: { plan: Plan; summary: 
   return (
     <section className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
       <div className="border-b border-slate-100 bg-gradient-to-r from-teal-50 to-white px-5 py-4">
-        <div className="flex flex-wrap items-center gap-2">
-          <Pill tone="amber">Fictional customer</Pill>
-          <span className="text-xs text-slate-500">Goal: {plan.customer.goal}</span>
-        </div>
-        <h1 className="mt-2 text-xl font-semibold text-slate-900">{plan.customer.name}</h1>
-        <p className="mt-1 max-w-3xl text-[15px] leading-relaxed text-slate-700">{summary.headline}</p>
+        <div className="text-xs font-semibold uppercase tracking-[0.12em] text-teal-700">Where things stand</div>
+        <p className="mt-1.5 max-w-3xl text-lg font-medium leading-snug text-slate-900">{summary.headline}</p>
+        <div className="mt-1.5 text-xs text-slate-500">Goal: {plan.customer.goal}</div>
       </div>
       <div className="grid grid-cols-2 divide-x divide-y divide-slate-100 border-b border-slate-100 sm:grid-cols-4 sm:divide-y-0">
         <Tile value={`${summary.ready_now} of ${summary.tools_total}`} label="tools ready to connect" tone="emerald" />

@@ -1,11 +1,15 @@
 @import "tailwindcss";
 
 @theme {
-  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   --color-accent: #0f766e;
   --color-accent-soft: #ccfbf1;
 }
 
-body { @apply bg-slate-50 text-slate-800 antialiased; }
+body {
+  @apply text-slate-800 antialiased;
+  background: radial-gradient(1200px 400px at 50% -120px, #e6f4f1 0%, rgba(230, 244, 241, 0) 70%), #f7f8fa;
+  font-feature-settings: 'cv11', 'ss01';
+}
 code { @apply font-mono text-[0.85em] bg-slate-100 text-slate-800 rounded px-1 py-px break-words; }

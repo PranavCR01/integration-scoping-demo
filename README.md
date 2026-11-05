@@ -134,6 +134,8 @@ tests/             verifier (planted errors), coverage, data, config swap
 
 ## Screenshots
 
+![Landing](docs/screenshots/landing.png)
+
 | Summary and plan | Who owes what, with emails |
 |---|---|
 | ![Summary](docs/screenshots/plan.png) | ![Who owes what](docs/screenshots/who-owes-what.png) |
