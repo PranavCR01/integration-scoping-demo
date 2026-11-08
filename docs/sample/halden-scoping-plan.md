@@ -2,7 +2,7 @@
 
 **Goal:** A board-ready cyber risk figure within 30 days of kickoff.
 
-**Prepared:** Nov 5, 2026 · **Status:** Draft for customer review
+**Prepared:** Nov 8, 2026 · **Status:** Draft for customer review
 
 **Sources:** SAFE public integrations page (captured Nov 4, 2026); vendor API docs listed under each tool. Anything not found in those sources is marked **Confirm**.
 

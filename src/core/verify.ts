@@ -103,6 +103,12 @@ const FORMAT: Partial<Record<FactKind, RegExp>> = {
   version: /\d{4}-\d{2}-\d{2}|YYYY-MM-DD/,
   rate_limit: /\d/,
 }
+// Plain-English versions of the rules above, for the hold reason a person reads.
+const FORMAT_TEXT: Partial<Record<FactKind, string>> = {
+  version: 'a date such as 2024-10-15 (or the format YYYY-MM-DD)',
+  rate_limit: 'a number',
+}
+const KIND_TEXT: Partial<Record<FactKind, string>> = { version: 'an API version', rate_limit: 'a rate limit' }
 
 function splitMethodPath(fact: Fact): { method: string; path: string } {
   const m = fact.value.trim().match(/^(GET|POST|PUT|PATCH|DELETE|HEAD|OPTIONS)\s+(\S+)$/i)
@@ -168,7 +174,8 @@ function checkSpec(fact: Fact, idx: SpecIndex): FactCheck | null {
 
 export function verifyFact(fact: Fact, ctx: VerifyContext): FactCheck {
   if (FORMAT[fact.kind] && !FORMAT[fact.kind]!.test(fact.value)) {
-    return fail(fact, 'BAD_FORMAT', `A ${fact.kind} must look like ${FORMAT[fact.kind]}`)
+    const kind = KIND_TEXT[fact.kind] ?? `a ${fact.kind}`
+    return fail(fact, 'BAD_FORMAT', `"${fact.value}" was labelled as ${kind}, but ${kind} must be ${FORMAT_TEXT[fact.kind] ?? 'in the expected format'}. The source was mislabelled, so the item is held back`)
   }
   if (fact.kind === 'canonical_field') {
     const v = fact.value.replace(/^(asset|finding)\./, '')
