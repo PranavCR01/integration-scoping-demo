@@ -2,9 +2,7 @@
 
 **Live demo:** https://integration-scoping-demo.vercel.app
 
-**Video walkthrough (1 min):** [with voiceover](https://youtu.be/5G6rM0GdaOs) · [silent version](https://youtu.be/Ivrze962BzY) · [MP4 file](docs/video/integration-scoping-60s-voiceover.mp4)
-
-[![Watch the 1-minute walkthrough with voiceover](docs/screenshots/video-thumbnail.jpg)](https://youtu.be/5G6rM0GdaOs)
+[![Watch the 1-minute walkthrough](docs/screenshots/video-thumbnail.jpg)](https://youtu.be/5G6rM0GdaOs)
 
 A tool a Forward Deployed Engineer could use on day one with a new customer. You enter the customer's tools and goal, and it produces a one-page scoping plan the customer can sign off on:
 
