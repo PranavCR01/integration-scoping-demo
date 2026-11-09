@@ -15,7 +15,7 @@ export function SummaryCard({ plan, summary, onOwners }: { plan: Plan; summary: 
         <div className="mt-1.5 text-xs text-slate-500">Goal: {plan.customer.goal} · Plan built for: <span className="font-medium text-slate-700">{plan.goal.label}</span></div>
       </div>
       <div className="grid grid-cols-2 divide-x divide-y divide-slate-100 border-b border-slate-100 sm:grid-cols-4 sm:divide-y-0">
-        <Tile value={`${summary.ready_now} of ${summary.tools_total}`} label="tools ready to connect" tone="emerald" />
+        <Tile value={`${summary.ready_now} of ${summary.tools_total}`} label={summary.later_total ? `needed tools ready (${summary.later_total} more can wait)` : 'tools ready to connect'} tone="emerald" />
         <Tile value={summary.safe_items} label="items for SAFE to confirm" tone={summary.safe_items ? 'violet' : 'emerald'} />
         <Tile value={summary.customer_questions} label={`answers needed from ${plan.customer.name.split(' ')[0]}`} tone={summary.customer_questions ? 'amber' : 'emerald'} />
         <Tile
@@ -63,12 +63,17 @@ const PARTY = {
 }
 const KIND = { access: 'Access', question: 'Question', decision: 'Decision', data: 'Data' }
 
-export function OwnersView({ actions, customerName, dataRun }: { actions: OwnerActions[]; customerName: string; dataRun: boolean }) {
+export function OwnersView({ actions, customerName, dataRun, later = [] }: { actions: OwnerActions[]; customerName: string; dataRun: boolean; later?: string[] }) {
   return (
     <div className="space-y-4">
       <p className="text-sm text-slate-600">
         Every open item, grouped by the person who has to act. Emails are built only from verified details and checked questions; nothing new is written for them. {!dataRun && 'Data items appear once the data checks have run.'}
       </p>
+      {later.length > 0 && (
+        <p className="rounded-lg bg-slate-100 px-3 py-2 text-sm text-slate-600">
+          Not needed for this goal, so no requests yet: <span className="font-medium text-slate-700">{later.join(', ')}</span>.
+        </p>
+      )}
       {/* Narrow screens: one column in order. Wide screens: two independent columns, cards
           alternating left and right, so a tall card never leaves a gap beside a short one. */}
       <div className="space-y-4 xl:hidden">

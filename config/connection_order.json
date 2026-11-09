@@ -1,5 +1,5 @@
 {
-  "_about": "One rule set per customer goal. Code picks the rule set from keywords in the goal, then orders the tools by role. Each rule set also adds its own questions and the phrase the summary uses. These are DRAFT rules: confirm against SAFE's onboarding playbook.",
+  "_about": "One rule set per customer goal. Code picks the rule set from keywords in the goal, then orders the tools by role. Each rule set also adds its own questions and the phrase the summary uses. These are DRAFT rules: confirm against SAFE's onboarding playbook. 'needed_roles' lists the tool roles a goal actually needs; tools with other roles are shown as 'Not needed for this goal' and are left out of the summary counts, the customer requests and the data gate.",
   "goal_profiles": {
     "board_ready_risk_figure": {
       "label": "Board-ready risk figure",
@@ -15,6 +15,15 @@
       ],
       "outcome": "the risk figure can be trusted",
       "short": "a trusted risk figure",
+      "needed_roles": [
+        "vulnerabilities",
+        "endpoint",
+        "identity",
+        "ticketing",
+        "appsec",
+        "cloud",
+        "other"
+      ],
       "steps": [
         {
           "step": 1,
@@ -70,6 +79,13 @@
       ],
       "outcome": "fixes can be prioritized and tracked",
       "short": "prioritized, tracked fixes",
+      "needed_roles": [
+        "vulnerabilities",
+        "endpoint",
+        "ticketing",
+        "appsec",
+        "cloud"
+      ],
       "steps": [
         {
           "step": 1,
@@ -128,6 +144,10 @@
       ],
       "outcome": "access risk can be reported",
       "short": "a clear view of who has access",
+      "needed_roles": [
+        "identity",
+        "endpoint"
+      ],
       "steps": [
         {
           "step": 1,
@@ -193,6 +213,12 @@
       ],
       "outcome": "the evidence is complete",
       "short": "complete audit evidence",
+      "needed_roles": [
+        "identity",
+        "endpoint",
+        "vulnerabilities",
+        "ticketing"
+      ],
       "steps": [
         {
           "step": 1,
@@ -243,6 +269,15 @@
       "match_keywords": [],
       "outcome": "the data can be trusted",
       "short": "trusted data",
+      "needed_roles": [
+        "vulnerabilities",
+        "endpoint",
+        "identity",
+        "ticketing",
+        "appsec",
+        "cloud",
+        "other"
+      ],
       "steps": [
         {
           "step": 1,
@@ -276,7 +311,8 @@
   "gates": {
     "out_of_box": null,
     "confirm_with_safe": "Connect after the exact product is confirmed.",
-    "custom_work": "Connect after SAFE confirms whether a connector exists."
+    "custom_work": "Connect after SAFE confirms whether a connector exists.",
+    "later": "Not needed for this goal. Connect later if the scope grows."
   },
   "role_labels": {
     "vulnerabilities": "Vulnerabilities",

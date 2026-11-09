@@ -104,7 +104,7 @@ export interface DataReport {
   excerpts?: Record<string, { file: string; start: number; lines: string[]; highlight: number }>
   as_of: string
   synthetic: boolean
-  sources: { key: string; label: string; short: string; entity: 'asset' | 'finding'; tool: string; records: number; console: number | null; mismatch: boolean; uploaded: boolean }[]
+  sources: { key: string; label: string; short: string; entity: 'asset' | 'finding'; tool: string; records: number; console: number | null; mismatch: boolean; uploaded: boolean; in_scope: boolean }[]
   mapping: { source: string; canonical: string; from: string; status: 'verified' | 'placeholder' | 'failed'; citation: { file: string; line: number } | null; detail: string }[]
   decisions_applied: number
   totals: { asset_records: number; merged_assets: number; cross_tool_merges: number; same_tool_duplicates: number; review: number; stale: number; identity_only: number; orphans: number; findings: number }
@@ -229,6 +229,9 @@ export interface DataInput {
   mapping_checks?: DataReport['mapping']
   // A person's decisions on review items, keyed by the two record keys "a|b" (sorted).
   decisions?: Record<string, 'same' | 'different'>
+  // Sources whose tool the customer's goal needs. Problems in other sources are shown as
+  // warnings, not blockers. Undefined: every source counts.
+  in_scope_sources?: string[]
 }
 
 export function analyze(input: DataInput): DataReport {
@@ -392,24 +395,35 @@ export function analyze(input: DataInput): DataReport {
   const knownIds = new Set(records.map((r) => r.source_id))
   const orphans = findings.filter((f) => !knownIds.has(f.asset_ref)).map((f) => ({ finding_id: f.finding_id, asset_ref: f.asset_ref, source: f.source }))
 
+  const inScopeSrc = (src: string) => !input.in_scope_sources || input.in_scope_sources.includes(src)
   const sources = Object.entries(mappings).map(([key, m]) => {
     const n = (rows[key] ?? []).length
     const c = input.console_counts[key]
-    return { key, label: m.label, short: m.short ?? m.tool, entity: m.entity, tool: m.tool, records: n, console: c ?? null, mismatch: c !== undefined && c !== n, uploaded: (input.uploaded ?? []).includes(key) }
+    return { key, label: m.label, short: m.short ?? m.tool, entity: m.entity, tool: m.tool, records: n, console: c ?? null, mismatch: c !== undefined && c !== n, uploaded: (input.uploaded ?? []).includes(key), in_scope: inScopeSrc(key) }
   })
 
   const edrShare = population.length ? population.filter(hasEdr).length / population.length : 1
   const checks: CheckResult[] = rules.readiness.map((r) => {
     const mk = (fail: boolean, detail: string): CheckResult => ({ check: r.check, level: fail ? r.level : 'ok', text: r.text, detail })
+    // A problem that only involves tools this goal does not need is shown, but as a warning.
+    const scoped = (inScope: number, outOfScope: number, detail: string): CheckResult =>
+      inScope > 0
+        ? mk(true, detail)
+        : outOfScope > 0
+          ? { check: r.check, level: r.level === 'block' ? 'warn' : r.level, text: r.text, detail: `${detail} (only in tools this goal does not need)` }
+          : mk(false, detail)
     switch (r.check) {
       case 'counts': {
         const bad = sources.filter((s) => s.mismatch)
-        return mk(bad.length > 0, bad.length ? bad.map((s) => `${s.label}: export ${s.records}, console ${s.console}`).join('; ') : 'All export counts match the console counts provided')
+        return scoped(bad.filter((s) => s.in_scope).length, bad.filter((s) => !s.in_scope).length, bad.length ? bad.map((s) => `${s.label}: export ${s.records}, console ${s.console}`).join('; ') : 'All export counts match the console counts provided')
       }
       case 'review_queue':
-        return mk(review.length > 0, `${review.length} possible duplicate${review.length === 1 ? '' : 's'} waiting for review`)
+        {
+          const touches = (r2: ReviewItem) => r2.pair.some((k) => inScopeSrc(k.split(':')[0]))
+          return scoped(review.filter(touches).length, review.filter((x) => !touches(x)).length, `${review.length} possible duplicate${review.length === 1 ? '' : 's'} waiting for review`)
+        }
       case 'orphans':
-        return mk(orphans.length > 0, `${orphans.length} finding${orphans.length === 1 ? '' : 's'} with no matching asset`)
+        return scoped(orphans.filter((o) => inScopeSrc(o.source)).length, orphans.filter((o) => !inScopeSrc(o.source)).length, `${orphans.length} finding${orphans.length === 1 ? '' : 's'} with no matching asset`)
       case 'stale':
         return mk(stale.length > 0, `${stale.length} asset${stale.length === 1 ? '' : 's'} not seen in over ${staleDays} days`)
       case 'edr_coverage':

@@ -2,7 +2,8 @@ import { describe, expect, it } from 'vitest'
 import { buildPlan } from '../src/server/plan'
 import { loadConfig, loadCustomer } from '../src/server/store'
 import { chooseGoal } from '../src/core/ordering'
-import { buildSummary } from '../src/core/summary'
+import { buildActions, buildSummary } from '../src/core/summary'
+import { runData } from '../src/server/data'
 
 const base = loadCustomer('halden')
 const cfg = loadConfig()
@@ -71,5 +72,50 @@ describe('changing the tool list reuses the verified items it already has', () =
     expect(after.custom_sheets).toEqual([])
     expect(after.questions.some((q) => q.tool === 'Snyk')).toBe(false)
     expect(after.access.find((a) => a.input === 'Okta')!.rows.every((r) => r.status === 'verified')).toBe(true)
+  })
+})
+
+describe('each goal only asks for the tools it needs', () => {
+  const identityGoal = cfg.connection_order.goal_profiles.identity_access.example_goal
+
+  it('identity goal: needs Okta and the endpoint tools; Tenable, ServiceNow and Snyk can wait', async () => {
+    const p = await plan(identityGoal)
+    expect(p.scope.needed.sort()).toEqual(['CrowdStrike Falcon', 'Microsoft Defender', 'Okta'])
+    expect(p.scope.later.sort()).toEqual(['ServiceNow ITSM', 'Snyk', 'Tenable Vulnerability Management'])
+    const numbered = p.order.filter((s) => !s.later).flatMap((s) => s.tools.map((t) => t.input))
+    expect(numbered).not.toContain('Tenable VM')
+    expect(p.order.filter((s) => s.later).map((s) => s.tools[0].input).sort()).toEqual(['ServiceNow ITSM', 'Snyk', 'Tenable VM'])
+  })
+
+  it('identity goal: the summary and the requests count only the needed tools', async () => {
+    const p = await plan(identityGoal)
+    const s = buildSummary(p, null)
+    expect(s.tools_total).toBe(3)
+    expect(s.ready_now).toBe(2) // Okta, CrowdStrike; Defender still needs its product confirmed
+    expect(s.later_total).toBe(3)
+    expect(s.blockers.some((b) => b.text.startsWith('Snyk'))).toBe(false)
+    expect(s.blockers.some((b) => b.text.startsWith('ServiceNow'))).toBe(false)
+    const owners = buildActions(p, null).map((a) => a.owner)
+    expect(owners).not.toContain('Vulnerability management lead')
+    expect(owners).not.toContain('Application security lead')
+    expect(owners).toContain('Okta administrator')
+  })
+
+  it('identity goal: data problems only in tools it does not need become warnings, not blockers', async () => {
+    const id = runData({ customer: { ...base, goal: identityGoal } })
+    const level = (r: typeof id, check: string) => r.checks.find((c) => c.check === check)!.level
+    expect(level(id, 'counts')).toBe('warn') // the Tenable gap: Tenable is not needed for this goal
+    expect(level(id, 'orphans')).toBe('warn') // orphan findings are Tenable findings
+    expect(level(id, 'review_queue')).toBe('block') // possible duplicates involve Okta and CrowdStrike
+    const board = runData({ customer: base })
+    expect(level(board, 'counts')).toBe('block')
+    expect(level(board, 'orphans')).toBe('block')
+  })
+
+  it('board goal needs every tool, so nothing changes for the main demo', async () => {
+    const p = await plan(base.goal)
+    expect(p.scope.later).toEqual([])
+    expect(p.order.some((s) => s.later)).toBe(false)
+    expect(buildSummary(p, null).tools_total).toBe(6)
   })
 })

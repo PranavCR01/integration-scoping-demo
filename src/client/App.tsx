@@ -212,7 +212,7 @@ export default function App() {
                   <PlanView plan={plan} labels={labels} onCite={setCite} changed={changed} evidence={evidence} />
                 </div>
               )}
-              {tab === 'owners' && <OwnersView actions={actions} customerName={plan.customer.name} dataRun={!!data} />}
+              {tab === 'owners' && <OwnersView actions={actions} customerName={plan.customer.name} dataRun={!!data} later={plan.coverage.filter((c) => plan.scope?.later.includes(c.tool_key)).map((c) => c.input)} />}
               {tab === 'data' && (
                 <DataView
                   data={data}

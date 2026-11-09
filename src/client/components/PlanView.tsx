@@ -107,7 +107,7 @@ export function PlanView({ plan, labels, onCite, changed, evidence }: Props) {
         }
       >
         <ol className="space-y-2.5">
-          {plan.order.map((s) => (
+          {plan.order.filter((s) => !s.later).map((s) => (
             <li key={s.step} className="flex gap-3">
               <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-teal-700 text-xs font-semibold text-white">{s.step}</span>
               <div className="text-sm">
@@ -121,6 +121,22 @@ export function PlanView({ plan, labels, onCite, changed, evidence }: Props) {
             </li>
           ))}
         </ol>
+        {plan.order.some((s) => s.later) && (
+          <div className="mt-4 border-t border-slate-100 pt-3">
+            <div className="text-xs font-medium uppercase tracking-wide text-slate-500">Not needed for this goal (connect later)</div>
+            <ul className="mt-2 space-y-1.5">
+              {plan.order
+                .filter((s) => s.later)
+                .map((s) => (
+                  <li key={s.tools[0].tool_key} className="flex flex-wrap items-center gap-1.5 text-sm text-slate-500">
+                    <span className="font-medium text-slate-700">{s.tools[0].input}</span>
+                    {s.tools[0].bucket !== 'out_of_box' && <BucketBadge bucket={s.tools[0].bucket} />}
+                    <span>{s.unlocks}</span>
+                  </li>
+                ))}
+            </ul>
+          </div>
+        )}
       </Section>
 
       <Section n={3} title="Access checklist" aside={<span className="text-xs text-slate-500">Ready to paste into an email</span>}>
@@ -130,8 +146,9 @@ export function PlanView({ plan, labels, onCite, changed, evidence }: Props) {
               <div>
                 <div className="font-semibold text-slate-900">{a.input}</div>
                 {a.input !== a.tool && <div className="text-xs text-slate-500">{a.tool}</div>}
-                <div className="mt-1">
+                <div className="mt-1 flex flex-wrap gap-1">
                   <BucketBadge bucket={a.bucket} />
+                  {plan.scope && !plan.scope.needed.includes(a.tool) && <span className="inline-flex items-center rounded-full bg-slate-100 px-2 py-0.5 text-xs font-medium text-slate-600 ring-1 ring-inset ring-slate-200">Not needed for this goal</span>}
                 </div>
                 <div className="mt-2 text-xs text-slate-500">Customer owner</div>
                 <div className="text-sm text-slate-800">{a.owner}</div>

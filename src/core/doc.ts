@@ -48,11 +48,18 @@ export function planBlocks(plan: Plan, labels: Record<string, string>, oobNote: 
   b.push({
     t: 'list',
     ordered: true,
-    items: plan.order.map((s) => {
-      const names = s.tools.map((t) => t.input).join(' and ')
-      return `**${names}:** ${s.unlocks}${s.gate ? ` ${s.gate}` : ''}`
-    }),
+    items: plan.order
+      .filter((s) => !s.later)
+      .map((s) => {
+        const names = s.tools.map((t) => t.input).join(' and ')
+        return `**${names}:** ${s.unlocks}${s.gate ? ` ${s.gate}` : ''}`
+      }),
   })
+  const later = plan.order.filter((s) => s.later)
+  if (later.length) {
+    b.push({ t: 'p', text: '**Not needed for this goal (connect later):**' })
+    b.push({ t: 'list', items: later.map((s) => `${s.tools[0].input}: ${s.unlocks}`) })
+  }
   b.push({ t: 'note', text: 'Ordering rules come from a config file, not the model. **Confirm** against SAFE\'s onboarding playbook.' })
 
   b.push({ t: 'h2', text: '3. Access checklist' })

@@ -4,7 +4,8 @@ import type { Customer } from '../core/types.js'
 import { analyze, type DataReport, type DataRules, type MatchRules, type SourceMapping } from '../core/data.js'
 import { verifyFact } from '../core/verify.js'
 import { allowedFiles } from '../core/plan.js'
-import { matchTool } from '../core/coverage.js'
+import { checkCoverage, matchTool } from '../core/coverage.js'
+import { chooseGoal, goalScope } from '../core/ordering.js'
 import { excerpt, loadConfig, readJson, store, type ConfigOverrides } from './store.js'
 
 export interface DataOptions {
@@ -62,6 +63,18 @@ export function runData(opts: DataOptions): DataReport {
   const consoleCounts = dir ? readJson<Record<string, number>>(`${dir}/console_counts.json`) : {}
   // Console counts describe the synthetic exports; an uploaded file has no console figure yet.
   for (const k of Object.keys(opts.uploads ?? {})) delete consoleCounts[k]
+  // Which sources the customer's goal needs: a source counts when its tool is one of the
+  // customer's tools and the goal needs that tool's role.
+  const cfg = loadConfig(opts.overrides)
+  const coverage = checkCoverage(opts.customer.tools, cfg)
+  const scope = goalScope(coverage, chooseGoal(opts.customer.goal, cfg).key, cfg)
+  const inScopeSources = Object.entries(mappings)
+    .filter(([, m]) => {
+      const c = coverage.find((x) => x.tool_key === m.tool || x.input === m.tool)
+      return !!c && scope.needed.includes(c.tool_key)
+    })
+    .map(([k]) => k)
+
   const report = analyze({
     as_of: meta.as_of,
     synthetic: meta.synthetic && !Object.keys(opts.uploads ?? {}).length,
@@ -73,6 +86,7 @@ export function runData(opts: DataOptions): DataReport {
     rules,
     mapping_checks: mappingChecks(mappings, opts.overrides),
     decisions: opts.decisions,
+    in_scope_sources: inScopeSources,
   })
   report.excerpts = {}
   for (const m of report.mapping) {

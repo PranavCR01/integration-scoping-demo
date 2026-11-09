@@ -5,8 +5,9 @@ import type { Plan, PlanRow } from './types.js'
 import type { DataReport } from './data.js'
 
 export interface Summary {
-  tools_total: number
+  tools_total: number // tools this goal needs
   ready_now: number
+  later_total: number // tools the customer runs that this goal does not need
   safe_items: number // every line in the list that SAFE has to confirm
   customer_questions: number
   people_to_contact: number
@@ -31,12 +32,18 @@ export interface OwnerActions {
   email: { subject: string; body: string } | null
 }
 
+// A tool is in scope when the goal needs its role. Out-of-scope tools are listed in the plan
+// but left out of the counts, the requests and the blockers.
+const inScope = (plan: Plan, toolKey: string | null) => !toolKey || !plan.scope || plan.scope.needed.includes(toolKey)
+
 const plain = (s: string) => s.replace(/`([^`]+)`/g, '$1').replace(/\*\*([^*]+)\*\*/g, '$1')
 const plural = (n: number, one: string, many = `${one}s`) => `${n} ${n === 1 ? one : many}`
 
 export function buildSummary(plan: Plan, data: DataReport | null): Summary {
-  const ready = plan.coverage.filter((c) => c.bucket === 'out_of_box').length
-  const decisions = plan.coverage.filter((c) => c.bucket !== 'out_of_box')
+  const needed = plan.coverage.filter((c) => inScope(plan, c.tool_key))
+  const ready = needed.filter((c) => c.bucket === 'out_of_box').length
+  const later = plan.coverage.length - needed.length
+  const decisions = needed.filter((c) => c.bucket !== 'out_of_box')
   const actions = buildActions(plan, data)
   const customerOwners = actions.filter((a) => a.party === 'customer')
   const customerQuestions = customerOwners.reduce((n, a) => n + a.items.filter((i) => i.kind === 'question' || i.kind === 'data').length, 0)
@@ -51,13 +58,13 @@ export function buildSummary(plan: Plan, data: DataReport | null): Summary {
       text: c.bucket === 'confirm_with_safe' ? `${c.input}: confirm which of the listed products this is` : `${c.input}: confirm whether a connector exists`,
     })
   }
-  const noDocs = plan.access.filter((a) => a.bucket === 'out_of_box' && a.rows.every((r) => r.status === 'confirm'))
+  const noDocs = plan.access.filter((a) => inScope(plan, a.tool) && a.bucket === 'out_of_box' && a.rows.every((r) => r.status === 'confirm'))
   // One line per tool, so the number on the tile matches the lines in the list.
   for (const a of noDocs) blockers.push({ who: 'SAFE', text: `${a.input}: confirm the access SAFE's connector needs (no vendor docs on file here)` })
   const safeItems = blockers.filter((b) => b.who === 'SAFE').length
   for (const c of dataBlocks) {
     if (c.check === 'counts' && data) {
-      for (const x of data.sources.filter((y) => y.mismatch)) blockers.push({ who: 'Customer', text: `Data: ${x.short} console shows ${x.console} ${x.entity}s, our export returned ${x.records}` })
+      for (const x of data.sources.filter((y) => y.mismatch && y.in_scope !== false)) blockers.push({ who: 'Customer', text: `Data: ${x.short} console shows ${x.console} ${x.entity}s, our export returned ${x.records}` })
     } else blockers.push({ who: 'Us', text: `Data: ${c.detail}` })
   }
 
@@ -67,12 +74,15 @@ export function buildSummary(plan: Plan, data: DataReport | null): Summary {
     dataStatus === 'blocked' ? plural(dataBlocks.length, 'data issue') + ' to clear' : dataStatus === 'not_run' ? 'the data checks to run' : '',
   ].filter(Boolean)
   const headline =
-    `${ready} of ${plan.coverage.length} tools can be connected now.` +
+    (later
+      ? `${ready} of ${needed.length} tools this goal needs can be connected now; ${plural(later, 'other tool')} can wait.`
+      : `${ready} of ${plan.coverage.length} tools can be connected now.`) +
     (parts.length ? ` Before ${plan.goal.outcome}: ${parts.length > 1 ? parts.slice(0, -1).join(', ') + ' and ' + parts[parts.length - 1] : parts[0]}.` : ` Nothing stands between ${plan.customer.name} and ${plan.goal.short}.`)
 
   return {
-    tools_total: plan.coverage.length,
+    tools_total: needed.length,
     ready_now: ready,
+    later_total: later,
     safe_items: safeItems,
     customer_questions: customerQuestions,
     people_to_contact: customerOwners.length,
@@ -98,6 +108,7 @@ export function buildActions(plan: Plan, data: DataReport | null): OwnerActions[
 
   // Customer side: one group per tool owner, with the verified access details for their tool.
   for (const a of plan.access) {
+    if (!inScope(plan, a.tool)) continue // not needed for this goal: no request yet
     const g = get(a.owner, 'customer')
     if (!g.tools.includes(a.input)) g.tools.push(a.input)
     const verified = a.rows.filter((r) => r.status === 'verified')
@@ -106,6 +117,7 @@ export function buildActions(plan: Plan, data: DataReport | null): OwnerActions[
     else g.items.push({ kind: 'access', text: `We will confirm the exact access ${a.input} needs and follow up. Please confirm you are the right person to set it up.`, tool: a.input })
   }
   for (const q of plan.questions) {
+    if (!inScope(plan, q.tool)) continue
     const g = get(ownerOf(q.tool), 'customer')
     const name = inputOf(q.tool)
     if (name && !g.tools.includes(name)) g.tools.push(name)
@@ -115,20 +127,21 @@ export function buildActions(plan: Plan, data: DataReport | null): OwnerActions[
   // SAFE side: coverage decisions and access that only SAFE's connector docs can settle.
   const safe = get('SAFE platform team', 'safe')
   for (const c of plan.coverage) {
+    if (!inScope(plan, c.tool_key)) continue
     if (c.bucket === 'confirm_with_safe') safe.items.push({ kind: 'decision', text: `${c.input}: which listed product does the connector cover? Candidates: ${c.candidates.join(', ')}.`, tool: c.input })
     if (c.bucket === 'custom_work') safe.items.push({ kind: 'decision', text: `${c.input}: is there a connector beyond the public list? If not, review the custom scoping sheet.`, tool: c.input })
   }
   for (const a of plan.access) {
-    if (a.bucket === 'out_of_box' && a.rows.every((r) => r.status === 'confirm')) safe.items.push({ kind: 'decision', text: `${a.input}: what access does SAFE's connector need? No vendor docs on file here.`, tool: a.input })
+    if (inScope(plan, a.tool) && a.bucket === 'out_of_box' && a.rows.every((r) => r.status === 'confirm')) safe.items.push({ kind: 'decision', text: `${a.input}: what access does SAFE's connector need? No vendor docs on file here.`, tool: a.input })
   }
-  if (plan.access.some((a) => a.bucket === 'out_of_box' && a.rows.some((r) => r.status === 'verified'))) {
+  if (plan.access.some((a) => inScope(plan, a.tool) && a.bucket === 'out_of_box' && a.rows.some((r) => r.status === 'verified'))) {
     safe.items.push({ kind: 'decision', text: 'For connectors with vendor docs on file: confirm the exact scopes and roles SAFE\'s connector needs (the plan lists what each vendor documents).', tool: null })
   }
 
   // Data checks: count mismatches go to the tool owner; the rest is work on our side.
   if (data) {
     const us = get('Forward deployed engineer (us)', 'us')
-    for (const s of data.sources.filter((x) => x.mismatch)) {
+    for (const s of data.sources.filter((x) => x.mismatch && x.in_scope !== false)) {
       const access = plan.access.find((a) => a.tool === s.tool)
       const g = get(access?.owner ?? plan.project_owner, 'customer')
       g.items.push({ kind: 'data', text: `Your ${access?.input ?? s.tool} console shows ${s.console} ${s.entity}s, but our export returned ${s.records}. Can you help us find which ones are missing?`, tool: access?.input ?? s.tool })

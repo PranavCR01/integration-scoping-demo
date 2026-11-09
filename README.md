@@ -7,7 +7,7 @@
 A tool a Forward Deployed Engineer could use on day one with a new customer. You enter the customer's tools and goal, and it produces a one-page scoping plan the customer can sign off on:
 
 - **Coverage:** which tools SAFE connects to out of the box, which need confirming, and which would be custom work.
-- **Connection order:** what to connect first, and what each connection unlocks for the goal. The goal really shapes the plan: five rule sets (board-ready risk figure, fixing the most exploitable exposures, who has access to what, audit evidence, and general onboarding) each set their own order, wording, questions and summary line. Code picks the rule set from keywords in the goal and shows which words matched.
+- **Connection order:** what to connect first, and what each connection unlocks for the goal. The goal really shapes the plan: five rule sets (board-ready risk figure, fixing the most exploitable exposures, who has access to what, audit evidence, and general onboarding) each set their own order, wording, questions and summary line. Code picks the rule set from keywords in the goal and shows which words matched. Each goal also lists the tool roles it needs: tools it doesn't need are shown under "Not needed for this goal (connect later)" and are left out of the summary counts, the customer requests and the data gate (their data problems show as warnings).
 - **Access checklist:** what access is needed, and from whom on the customer side.
 - **Data checks:** what we check before the data feeds a risk number.
 - **Open questions:** what we still need to ask the customer.

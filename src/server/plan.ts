@@ -4,7 +4,7 @@ import { join } from 'node:path'
 import type { AppConfig, Customer, Draft, Plan } from '../core/types.js'
 import { excerptKey } from '../core/types.js'
 import { checkCoverage } from '../core/coverage.js'
-import { chooseGoal, connectionOrder } from '../core/ordering.js'
+import { chooseGoal, connectionOrder, goalScope } from '../core/ordering.js'
 import { allowedFiles, assemble } from '../core/plan.js'
 import { draftWithModel, MODEL } from './draft.js'
 import { excerpt, loadConfig, ROOT, store, type ConfigOverrides } from './store.js'
@@ -107,6 +107,7 @@ export async function buildPlan(opts: BuildOptions): Promise<Plan> {
   return {
     document: cfg.scoping_template.document,
     goal,
+    scope: goalScope(coverage, goalProfile, cfg),
     project_owner: cfg.tool_profiles.project_owner ?? 'Customer project lead',
     customer,
     generated_at: new Date().toISOString(),

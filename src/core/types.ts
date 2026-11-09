@@ -61,13 +61,14 @@ export interface GoalProfile {
   match_keywords: string[]
   outcome: string // "Before <outcome>: ..." in the summary
   short: string // "What stands between the customer and <short>"
+  needed_roles: string[] // tool roles this goal needs; other tools are 'later'
   steps: OrderStepRule[]
   questions: { key: string; text: string }[]
 }
 
 export interface ConnectionOrderConfig {
   goal_profiles: Record<string, GoalProfile>
-  gates: Record<Bucket, string | null>
+  gates: Record<Bucket | 'later', string | null>
   role_labels: Record<string, string>
 }
 
@@ -239,6 +240,13 @@ export interface OrderStep {
   tools: { input: string; tool_key: string; bucket: Bucket; role: string }[]
   unlocks: string
   gate: string | null
+  later?: boolean // not needed for this goal; shown separately, not numbered
+}
+
+// Which of the customer's tools this goal needs (by tool_key), and which can wait.
+export interface GoalScope {
+  needed: string[]
+  later: string[]
 }
 
 export interface PlanQuestion {
@@ -272,6 +280,7 @@ export interface GoalChoice {
 export interface Plan {
   document: ScopingTemplate['document']
   goal: GoalChoice
+  scope: GoalScope
   project_owner: string
   customer: Customer
   generated_at: string
