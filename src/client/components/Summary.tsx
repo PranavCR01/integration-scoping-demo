@@ -15,12 +15,12 @@ export function SummaryCard({ plan, summary, onOwners }: { plan: Plan; summary: 
         <div className="mt-1.5 text-xs text-slate-500">Goal: {plan.customer.goal} · Plan built for: <span className="font-medium text-slate-700">{plan.goal.label}</span></div>
       </div>
       <div className="grid grid-cols-2 divide-x divide-y divide-slate-100 border-b border-slate-100 sm:grid-cols-4 sm:divide-y-0">
-        <Tile value={`${summary.ready_now} of ${summary.tools_total}`} label={summary.later_total ? `needed tools ready (${summary.later_total} more can wait)` : 'tools ready to connect'} tone="emerald" />
-        <Tile value={summary.safe_items} label="items for SAFE to confirm" tone={summary.safe_items ? 'violet' : 'emerald'} />
-        <Tile value={summary.customer_questions} label={`answers needed from ${plan.customer.name.split(' ')[0]}`} tone={summary.customer_questions ? 'amber' : 'emerald'} />
+        <Tile value={`${summary.ready_now} of ${summary.tools_total}`} label={summary.later_total ? `needed tools ready (${summary.later_total} more can wait)` : summary.tools_total === 1 ? 'tool ready to connect' : 'tools ready to connect'} tone="emerald" />
+        <Tile value={summary.safe_items} label={summary.safe_items === 1 ? 'item for SAFE to confirm' : 'items for SAFE to confirm'} tone={summary.safe_items ? 'violet' : 'emerald'} />
+        <Tile value={summary.customer_questions} label={`${summary.customer_questions === 1 ? 'answer' : 'answers'} needed from ${plan.customer.name.split(' ')[0]}`} tone={summary.customer_questions ? 'amber' : 'emerald'} />
         <Tile
           value={d.status === 'not_run' ? 'Not checked' : d.blockers}
-          label={d.status === 'not_run' ? 'data checks not run yet' : 'data issues blocking use'}
+          label={d.status === 'not_run' ? 'data checks not run yet' : d.blockers === 1 ? 'data issue blocking use' : 'data issues blocking use'}
           tone={d.status === 'ready' ? 'emerald' : d.status === 'blocked' ? 'rose' : 'slate'}
         />
       </div>

@@ -75,8 +75,8 @@ export function buildSummary(plan: Plan, data: DataReport | null): Summary {
   ].filter(Boolean)
   const headline =
     (later
-      ? `${ready} of ${needed.length} tools this goal needs can be connected now; ${plural(later, 'other tool')} can wait.`
-      : `${ready} of ${plan.coverage.length} tools can be connected now.`) +
+      ? `${ready} of ${plural(needed.length, 'tool')} this goal needs can be connected now; ${plural(later, 'other tool')} can wait.`
+      : `${ready} of ${plural(plan.coverage.length, 'tool')} can be connected now.`) +
     (parts.length ? ` Before ${plan.goal.outcome}: ${parts.length > 1 ? parts.slice(0, -1).join(', ') + ' and ' + parts[parts.length - 1] : parts[0]}.` : ` Nothing stands between ${plan.customer.name} and ${plan.goal.short}.`)
 
   return {
