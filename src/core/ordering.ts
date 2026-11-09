@@ -1,13 +1,22 @@
 // Connection order: rules from config/connection_order.json, applied in code.
-import type { AppConfig, CoverageResult, OrderStep } from './types.js'
+import type { AppConfig, CoverageResult, GoalChoice, OrderStep } from './types.js'
 import { normalize } from './coverage.js'
 
-export function pickGoalProfile(goal: string, cfg: AppConfig): string {
+// Pick the rule set whose keywords appear most often in the goal. Ties go to the rule set
+// listed first in config. No keyword at all: the general "default" rules.
+export function chooseGoal(goal: string, cfg: AppConfig): GoalChoice {
   const g = normalize(goal)
+  let best: { key: string; matched: string[] } = { key: 'default', matched: [] }
   for (const [key, p] of Object.entries(cfg.connection_order.goal_profiles)) {
-    if (p.match_keywords.some((k) => g.includes(normalize(k)))) return key
+    const matched = p.match_keywords.filter((k) => g.includes(normalize(k)))
+    if (matched.length > best.matched.length) best = { key, matched }
   }
-  return 'default'
+  const p = cfg.connection_order.goal_profiles[best.key] ?? cfg.connection_order.goal_profiles.default
+  return { key: best.key, label: p.label, outcome: p.outcome, short: p.short, matched: best.matched }
+}
+
+export function pickGoalProfile(goal: string, cfg: AppConfig): string {
+  return chooseGoal(goal, cfg).key
 }
 
 export function roleFor(c: CoverageResult, cfg: AppConfig): { role: string; owner: string } {

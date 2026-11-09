@@ -2,11 +2,13 @@
 
 **Goal:** A board-ready cyber risk figure within 30 days of kickoff.
 
-**Prepared:** Nov 8, 2026 · **Status:** Draft for customer review
+**Plan built for:** Board-ready risk figure
+
+**Prepared:** Nov 9, 2026 · **Status:** Draft for customer review
 
 **Sources:** SAFE public integrations page (captured Nov 4, 2026); vendor API docs listed under each tool. Anything not found in those sources is marked **Confirm**.
 
-**At a glance:** 4 of 6 tools can be connected now. Before the risk figure can be trusted: 2 decisions from SAFE, 8 answers from Halden Outfitters and the data checks to run.
+**At a glance:** 4 of 6 tools can be connected now. Before the risk figure can be trusted: 2 decisions from SAFE, 9 answers from Halden Outfitters and the data checks to run.
 
 ---
 
@@ -23,11 +25,11 @@
 
 ## 2. Connection order (draft rules, editable)
 
-1. **Tenable VM and CrowdStrike Falcon:** Which assets you have and which vulnerabilities affect them. Everything later depends on this.
-2. **Okta:** Who can access which systems and apps.
-3. **ServiceNow ITSM:** Where fixes are tracked once priorities are set.
-4. **Microsoft Defender:** Which assets you have and which vulnerabilities affect them. Everything later depends on this. Connect after the exact product is confirmed.
-5. **Snyk:** More findings that sharpen the overall picture. Connect after SAFE confirms whether a connector exists.
+1. **Tenable VM and CrowdStrike Falcon:** What assets exist and what vulnerabilities they have. Nothing downstream is meaningful without this.
+2. **Okta:** Who has access to what.
+3. **ServiceNow ITSM:** Where fixes get tracked once priorities exist.
+4. **Microsoft Defender:** What assets exist and what vulnerabilities they have. Nothing downstream is meaningful without this. Connect after the exact product is confirmed.
+5. **Snyk:** Additional findings that refine the picture. Connect after SAFE confirms whether a connector exists.
 
 *Ordering rules come from a config file, not the model. Confirm against SAFE's onboarding playbook.*
 
@@ -74,12 +76,13 @@
 
 1. SAFE also lists "Crowdstrike Falcon Exposure Management (Spotlight)". Do you use it in addition to CrowdStrike Falcon?
 2. Which Microsoft Defender product do you license? SAFE lists these: Microsoft 365 Defender, Microsoft Defender for Endpoints, Microsoft Defender for Identity via M365, Azure Defender for Cloud, Defender for Endpoint via M365.
-3. Who owns the admin account for each tool, and who approves API access?
-4. Which systems hold your most critical data or drive the most revenue? These count first in the risk figure.
-5. How far back should vulnerability history go, and after how many days without activity should an asset count as stale?
-6. Do you have an existing asset inventory, such as a CMDB, that we should treat as the source of truth?
-7. Is your Snyk account on the Enterprise plan, and which Snyk region hosts it? API access needs the Enterprise plan, and tokens only work in their own region.
-8. Can you create a dedicated Tenable user account for this integration? Tenable recommends a separate user for each API integration, and each user has one valid API key at a time.
+3. Who will present the risk figure to the board, and when is the first meeting it needs to be ready for?
+4. Who owns the admin account for each tool, and who approves API access?
+5. Which systems hold your most critical data or drive the most revenue? These count first in the risk figure.
+6. How far back should vulnerability history go, and after how many days without activity should an asset count as stale?
+7. Do you have an existing asset inventory, such as a CMDB, that we should treat as the source of truth?
+8. Is your Snyk account on the Enterprise plan, and which Snyk region hosts it? API access needs the Enterprise plan, and tokens only work in their own region.
+9. Can you create a dedicated Tenable user account for this integration? Tenable recommends a separate user for each API integration, and each user has one valid API key at a time.
 
 ---
 

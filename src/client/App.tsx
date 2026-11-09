@@ -130,6 +130,7 @@ export default function App() {
     liveEnabled: meta.live_draft_enabled,
     mode,
     onMode: setMode,
+    goalProfiles: meta.goal_profiles,
   }
   const exportsList = [
     { label: 'Customer plan (PDF)', sub: 'Clean document to share and sign off', onClick: () => downloadPdf(blocks, `${exportName}-scoping-plan.pdf`) },

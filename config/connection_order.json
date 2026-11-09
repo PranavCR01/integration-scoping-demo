@@ -1,24 +1,276 @@
 {
-  "_about": "Ordering rules for 'what to connect first'. Code applies these; the model only rewords the 'unlocks' text. Draft rules: confirm against SAFE's onboarding playbook.",
+  "_about": "One rule set per customer goal. Code picks the rule set from keywords in the goal, then orders the tools by role. Each rule set also adds its own questions and the phrase the summary uses. These are DRAFT rules: confirm against SAFE's onboarding playbook.",
   "goal_profiles": {
     "board_ready_risk_figure": {
       "label": "Board-ready risk figure",
-      "match_keywords": ["board", "risk figure", "risk number", "dollar"],
+      "example_goal": "A board-ready cyber risk figure within 30 days of kickoff.",
+      "match_keywords": [
+        "board",
+        "risk figure",
+        "risk number",
+        "dollar",
+        "quantif",
+        "financial",
+        "cfo"
+      ],
+      "outcome": "the risk figure can be trusted",
+      "short": "a trusted risk figure",
       "steps": [
-        { "step": 1, "roles": ["vulnerabilities", "endpoint"], "unlocks": "What assets exist and what vulnerabilities they have. Nothing downstream is meaningful without this." },
-        { "step": 2, "roles": ["identity"], "unlocks": "Who has access to what." },
-        { "step": 3, "roles": ["ticketing"], "unlocks": "Where fixes get tracked once priorities exist." },
-        { "step": 4, "roles": ["appsec", "cloud", "other"], "unlocks": "Additional findings that refine the picture." }
+        {
+          "step": 1,
+          "roles": [
+            "vulnerabilities",
+            "endpoint"
+          ],
+          "unlocks": "What assets exist and what vulnerabilities they have. Nothing downstream is meaningful without this."
+        },
+        {
+          "step": 2,
+          "roles": [
+            "identity"
+          ],
+          "unlocks": "Who has access to what."
+        },
+        {
+          "step": 3,
+          "roles": [
+            "ticketing"
+          ],
+          "unlocks": "Where fixes get tracked once priorities exist."
+        },
+        {
+          "step": 4,
+          "roles": [
+            "appsec",
+            "cloud",
+            "other"
+          ],
+          "unlocks": "Additional findings that refine the picture."
+        }
+      ],
+      "questions": [
+        {
+          "key": "goal:board_audience",
+          "text": "Who will present the risk figure to the board, and when is the first meeting it needs to be ready for?"
+        }
+      ]
+    },
+    "exposure_remediation": {
+      "label": "Fix the most exploitable exposures",
+      "example_goal": "Find and fix our most exploitable exposures first.",
+      "match_keywords": [
+        "exposure",
+        "exploit",
+        "remediat",
+        "patch",
+        "fix",
+        "prioriti",
+        "vulnerab",
+        "ctem"
+      ],
+      "outcome": "fixes can be prioritized and tracked",
+      "short": "prioritized, tracked fixes",
+      "steps": [
+        {
+          "step": 1,
+          "roles": [
+            "vulnerabilities",
+            "endpoint"
+          ],
+          "unlocks": "What is exposed, and on which machines."
+        },
+        {
+          "step": 2,
+          "roles": [
+            "ticketing"
+          ],
+          "unlocks": "Fixes reach the team that owns them, and closure can be tracked."
+        },
+        {
+          "step": 3,
+          "roles": [
+            "appsec",
+            "cloud"
+          ],
+          "unlocks": "Exposures in code and cloud, prioritized the same way."
+        },
+        {
+          "step": 4,
+          "roles": [
+            "identity",
+            "other"
+          ],
+          "unlocks": "Who owns and can reach each machine."
+        }
+      ],
+      "questions": [
+        {
+          "key": "goal:fix_deadlines",
+          "text": "What deadlines do you set for fixing issues at each severity level?"
+        },
+        {
+          "key": "goal:fix_owners",
+          "text": "Which teams own fixes, and which ticket queue does each team use?"
+        }
+      ]
+    },
+    "identity_access": {
+      "label": "Who has access to what",
+      "example_goal": "Understand who has access to what across our systems.",
+      "match_keywords": [
+        "identity",
+        "access",
+        "account",
+        "privilege",
+        "permission",
+        "sso",
+        "login"
+      ],
+      "outcome": "access risk can be reported",
+      "short": "a clear view of who has access",
+      "steps": [
+        {
+          "step": 1,
+          "roles": [
+            "identity"
+          ],
+          "unlocks": "Who has access to what, and which accounts exist."
+        },
+        {
+          "step": 2,
+          "roles": [
+            "endpoint"
+          ],
+          "unlocks": "Which devices those people use."
+        },
+        {
+          "step": 3,
+          "roles": [
+            "vulnerabilities"
+          ],
+          "unlocks": "Weaknesses on the systems those accounts can reach."
+        },
+        {
+          "step": 4,
+          "roles": [
+            "ticketing"
+          ],
+          "unlocks": "Where follow-up work is tracked."
+        },
+        {
+          "step": 5,
+          "roles": [
+            "appsec",
+            "cloud",
+            "other"
+          ],
+          "unlocks": "Findings from other tools, once the access picture is clear."
+        }
+      ],
+      "questions": [
+        {
+          "key": "goal:key_apps",
+          "text": "Which applications and admin accounts matter most to you?"
+        },
+        {
+          "key": "goal:shared_accounts",
+          "text": "Are there shared or service accounts we should know about before we start?"
+        }
+      ]
+    },
+    "audit_evidence": {
+      "label": "Evidence for an audit",
+      "example_goal": "Pull together evidence for our upcoming security audit.",
+      "match_keywords": [
+        "audit",
+        "compliance",
+        "evidence",
+        "soc 2",
+        "soc2",
+        "iso",
+        "regulator",
+        "nist"
+      ],
+      "outcome": "the evidence is complete",
+      "short": "complete audit evidence",
+      "steps": [
+        {
+          "step": 1,
+          "roles": [
+            "identity",
+            "endpoint"
+          ],
+          "unlocks": "Which accounts and devices the evidence has to cover."
+        },
+        {
+          "step": 2,
+          "roles": [
+            "vulnerabilities"
+          ],
+          "unlocks": "Evidence that weaknesses are being found."
+        },
+        {
+          "step": 3,
+          "roles": [
+            "ticketing"
+          ],
+          "unlocks": "Evidence that they are being fixed, with dates."
+        },
+        {
+          "step": 4,
+          "roles": [
+            "appsec",
+            "cloud",
+            "other"
+          ],
+          "unlocks": "Additional evidence."
+        }
+      ],
+      "questions": [
+        {
+          "key": "goal:framework",
+          "text": "Which framework and audit date are we preparing for?"
+        },
+        {
+          "key": "goal:first_controls",
+          "text": "Which controls does your auditor expect evidence for first?"
+        }
       ]
     },
     "default": {
       "label": "General onboarding",
+      "example_goal": "Get our tools connected to SAFE.",
       "match_keywords": [],
+      "outcome": "the data can be trusted",
+      "short": "trusted data",
       "steps": [
-        { "step": 1, "roles": ["vulnerabilities", "endpoint"], "unlocks": "An inventory of assets and their known weaknesses." },
-        { "step": 2, "roles": ["identity"], "unlocks": "Who has access to what." },
-        { "step": 3, "roles": ["ticketing", "appsec", "cloud", "other"], "unlocks": "Remediation tracking and additional findings." }
-      ]
+        {
+          "step": 1,
+          "roles": [
+            "vulnerabilities",
+            "endpoint"
+          ],
+          "unlocks": "An inventory of assets and their known weaknesses."
+        },
+        {
+          "step": 2,
+          "roles": [
+            "identity"
+          ],
+          "unlocks": "Who has access to what."
+        },
+        {
+          "step": 3,
+          "roles": [
+            "ticketing",
+            "appsec",
+            "cloud",
+            "other"
+          ],
+          "unlocks": "Remediation tracking and additional findings."
+        }
+      ],
+      "questions": []
     }
   },
   "gates": {

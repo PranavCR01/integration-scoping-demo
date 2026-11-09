@@ -72,7 +72,7 @@ export interface QuestionSeed {
   allow: string[] // names the wording may mention
 }
 
-export function questionSeeds(coverage: CoverageResult[], cfg: AppConfig): QuestionSeed[] {
+export function questionSeeds(coverage: CoverageResult[], cfg: AppConfig, goalKey = 'default'): QuestionSeed[] {
   const seeds: QuestionSeed[] = []
   for (const c of coverage) {
     if (c.bucket === 'confirm_with_safe') {
@@ -90,6 +90,9 @@ export function questionSeeds(coverage: CoverageResult[], cfg: AppConfig): Quest
       }
     }
   }
+  // Questions that only matter for this goal come first, then the ones every plan asks.
+  const goal = cfg.connection_order.goal_profiles[goalKey] ?? cfg.connection_order.goal_profiles.default
+  for (const q of goal?.questions ?? []) seeds.push({ key: q.key, tool: null, text: q.text, allow: [] })
   for (const q of cfg.scoping_template.standard_questions) seeds.push({ key: q.key, tool: null, text: q.text, allow: [] })
   return seeds
 }
@@ -100,6 +103,7 @@ export interface AssembleInput {
   order: OrderStep[]
   draft: Draft | null
   ctxFor: (c: CoverageResult) => VerifyContext
+  goalKey: string
 }
 
 export interface Assembled {
@@ -113,7 +117,7 @@ export interface Assembled {
 
 const rowKey = (r: { section: string; tool: string | null; item: string }) => `${r.section}|${r.tool ?? ''}|${r.item}`
 
-export function assemble({ cfg, coverage, order, draft, ctxFor }: AssembleInput): Assembled {
+export function assemble({ cfg, coverage, order, draft, ctxFor, goalKey }: AssembleInput): Assembled {
   const drafts = new Map<string, DraftRow>()
   for (const r of draft?.rows ?? []) drafts.set(rowKey(r), r)
   const log: VerificationSummary['log'] = []
@@ -138,7 +142,7 @@ export function assemble({ cfg, coverage, order, draft, ctxFor }: AssembleInput)
       return { section: exp.section, tool: exp.tool, item: exp.item, label: exp.label, status: 'confirm', text: '', confirm_reason: 'The attached sources do not state this.', held_back: null, citations: [] }
     }
     if (!d || !check) {
-      return { section: exp.section, tool: exp.tool, item: exp.item, label: exp.label, status: 'confirm', text: '', confirm_reason: 'No draft for this item.', held_back: null, citations: [] }
+      return { section: exp.section, tool: exp.tool, item: exp.item, label: exp.label, status: 'confirm', text: '', confirm_reason: 'Not drafted yet for this tool. A new model draft would fill this in, and it would be checked like everything else.', held_back: null, citations: [] }
     }
     let reason = check.reason
     if (!reason && exp.expects.length) {
@@ -173,18 +177,10 @@ export function assemble({ cfg, coverage, order, draft, ctxFor }: AssembleInput)
     }
   }
 
-  // Order wording: the model may reword "what this unlocks"; if the wording fails, keep the config text.
-  const orderOut = order.map((s) => {
-    const d = drafts.get(rowKey({ section: 'order', tool: null, item: String(s.step) }))
-    if (!d) return s
-    rowsTotal++
-    const check = checkRow(d.text, [], ctxFor(byTool.get(s.tools[0].tool_key)!), toolNames)
-    if (!check.ok) {
-      held.push({ row: `order/${s.step}`, draft_text: d.text, reason: check.reason! })
-      return s
-    }
-    return { ...s, unlocks: d.text }
-  })
+  // Order wording comes straight from the chosen goal's rule set in config, so a different
+  // goal gives a different plan. (Older saved drafts reworded it per step number; that
+  // wording is ignored because it would not follow the goal.)
+  const orderOut = order
 
   // Data notes: optional, model-proposed, only shown if every fact verifies.
   const dataNotes: PlanRow[] = []
@@ -200,7 +196,7 @@ export function assemble({ cfg, coverage, order, draft, ctxFor }: AssembleInput)
   // Questions: code writes a safe default for each; the model may reword. Extra questions
   // the model proposes must verify like any other row.
   const questions: PlanQuestion[] = []
-  for (const seed of questionSeeds(coverage, cfg)) {
+  for (const seed of questionSeeds(coverage, cfg, goalKey)) {
     const d = drafts.get(rowKey({ section: 'question', tool: null, item: seed.key }))
     if (!d) {
       questions.push({ key: seed.key, tool: seed.tool, text: seed.text, status: 'verified', held_back: null })
@@ -218,6 +214,8 @@ export function assemble({ cfg, coverage, order, draft, ctxFor }: AssembleInput)
   }
   for (const d of draft?.rows ?? []) {
     if (d.section !== 'question' || !d.item.startsWith('extra')) continue
+    // A question about a tool that is not in this plan does not belong in it.
+    if (d.tool && !byTool.has(d.tool)) continue
     rowsTotal++
     const c = (d.tool && byTool.get(d.tool)) || coverage[0]
     const check = checkRow(d.text, d.facts, ctxFor(c), toolNames)

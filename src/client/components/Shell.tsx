@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react'
-import type { Customer } from '../../core/types'
+import type { AppConfig, Customer, GoalProfile } from '../../core/types'
+import { chooseGoal } from '../../core/ordering'
 
 // ---------- Header ----------
 
@@ -96,6 +97,7 @@ export function Intake({
   onMode,
   cta,
   eyebrow = 'New customer kickoff',
+  goalProfiles = {},
 }: {
   customer: Customer
   customers: Customer[]
@@ -108,6 +110,7 @@ export function Intake({
   onMode: (m: 'saved' | 'live') => void
   cta: string
   eyebrow?: string
+  goalProfiles?: Record<string, GoalProfile>
 }) {
   const [newTool, setNewTool] = useState('')
   const [editGoal, setEditGoal] = useState(false)
@@ -144,6 +147,7 @@ export function Intake({
             <svg viewBox="0 0 16 16" className="mt-1.5 h-3.5 w-3.5 shrink-0 text-slate-300 group-hover:text-slate-500" fill="none" stroke="currentColor" strokeWidth="1.6"><path d="M11 2.5l2.5 2.5L6 12.5H3.5V10z" /></svg>
           </button>
         )}
+        <GoalRules goal={customer.goal} profiles={goalProfiles} onPick={(g) => onChange({ ...customer, goal: g })} />
       </div>
 
       <div className="mt-5">
@@ -285,6 +289,34 @@ export function Modal({ children, onClose }: { children: ReactNode; onClose: () 
     <div className="fixed inset-0 z-40 flex items-start justify-center overflow-y-auto bg-slate-900/30 p-4 pt-20" onClick={onClose}>
       <div className="w-full max-w-2xl rounded-2xl bg-white p-6 shadow-2xl sm:p-8" onClick={(e) => e.stopPropagation()}>
         {children}
+      </div>
+    </div>
+  )
+}
+
+// Shows which rule set the typed goal will use, and offers the other goals as one-click presets.
+function GoalRules({ goal, profiles, onPick }: { goal: string; profiles: Record<string, GoalProfile>; onPick: (g: string) => void }) {
+  if (!Object.keys(profiles).length) return null
+  const choice = chooseGoal(goal, { connection_order: { goal_profiles: profiles } } as unknown as AppConfig)
+  return (
+    <div className="mt-2.5">
+      <div className="text-xs text-slate-500">
+        Plan rules: <span className="font-semibold text-teal-800">{choice.label}</span>
+        {choice.matched.length ? <span> (goal mentions "{choice.matched.join('", "')}")</span> : <span> (no keyword matched)</span>}
+      </div>
+      <div className="mt-2 flex flex-wrap items-center gap-1.5">
+        <span className="text-xs text-slate-400">Try another goal:</span>
+        {Object.entries(profiles)
+          .filter(([k]) => k !== 'default')
+          .map(([k, p]) => (
+            <button
+              key={k}
+              onClick={() => onPick(p.example_goal)}
+              className={`rounded-full border px-2.5 py-0.5 text-xs font-medium ${choice.key === k ? 'border-teal-600 bg-teal-50 text-teal-900' : 'border-slate-200 text-slate-600 hover:border-slate-300 hover:bg-slate-50'}`}
+            >
+              {p.label}
+            </button>
+          ))}
       </div>
     </div>
   )

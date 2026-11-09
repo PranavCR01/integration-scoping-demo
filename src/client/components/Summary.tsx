@@ -12,7 +12,7 @@ export function SummaryCard({ plan, summary, onOwners }: { plan: Plan; summary: 
       <div className="border-b border-slate-100 bg-gradient-to-r from-teal-50 to-white px-5 py-4">
         <div className="text-xs font-semibold uppercase tracking-[0.12em] text-teal-700">Where things stand</div>
         <p className="mt-1.5 max-w-3xl text-lg font-medium leading-snug text-slate-900">{summary.headline}</p>
-        <div className="mt-1.5 text-xs text-slate-500">Goal: {plan.customer.goal}</div>
+        <div className="mt-1.5 text-xs text-slate-500">Goal: {plan.customer.goal} · Plan built for: <span className="font-medium text-slate-700">{plan.goal.label}</span></div>
       </div>
       <div className="grid grid-cols-2 divide-x divide-y divide-slate-100 border-b border-slate-100 sm:grid-cols-4 sm:divide-y-0">
         <Tile value={`${summary.ready_now} of ${summary.tools_total}`} label="tools ready to connect" tone="emerald" />
@@ -20,13 +20,13 @@ export function SummaryCard({ plan, summary, onOwners }: { plan: Plan; summary: 
         <Tile value={summary.customer_questions} label={`answers needed from ${plan.customer.name.split(' ')[0]}`} tone={summary.customer_questions ? 'amber' : 'emerald'} />
         <Tile
           value={d.status === 'not_run' ? 'Not checked' : d.status === 'ready' ? 'Ready' : `${d.blockers} blocking`}
-          label="data before the risk figure"
+          label="blocking data issues"
           tone={d.status === 'ready' ? 'emerald' : d.status === 'blocked' ? 'rose' : 'slate'}
         />
       </div>
       {summary.blockers.length > 0 && (
         <div className="px-5 py-4">
-          <div className="text-xs font-medium uppercase tracking-wide text-slate-500">What stands between {plan.customer.name} and a trusted risk figure</div>
+          <div className="text-xs font-medium uppercase tracking-wide text-slate-500">What stands between {plan.customer.name} and {plan.goal.short}</div>
           <ul className="mt-2 space-y-1.5">
             {summary.blockers.map((b, i) => (
               <li key={i} className="flex items-start gap-2 text-sm text-slate-800">

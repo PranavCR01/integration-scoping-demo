@@ -11,9 +11,10 @@ const id = process.argv[2] ?? 'halden'
 const customer = loadCustomer(id)
 const cfg = loadConfig()
 const coverage = checkCoverage(customer.tools, cfg)
-const order = connectionOrder(coverage, pickGoalProfile(customer.goal, cfg), cfg)
+const goalKey = pickGoalProfile(customer.goal, cfg)
+const order = connectionOrder(coverage, goalKey, cfg)
 const t0 = Date.now()
-const { draft, model, usage } = await draftWithModel(customer, coverage, order, cfg)
+const { draft, model, usage } = await draftWithModel(customer, coverage, order, cfg, goalKey)
 console.log(`draft: ${draft.rows.length} rows from ${model} in ${((Date.now() - t0) / 1000).toFixed(0)} s`, usage)
 mkdirSync('fixtures/drafts', { recursive: true })
 writeFileSync(

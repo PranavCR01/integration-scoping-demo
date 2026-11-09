@@ -66,7 +66,7 @@ export function buildSummary(plan: Plan, data: DataReport | null): Summary {
   ].filter(Boolean)
   const headline =
     `${ready} of ${plan.coverage.length} tools can be connected now.` +
-    (parts.length ? ` Before the risk figure can be trusted: ${parts.length > 1 ? parts.slice(0, -1).join(', ') + ' and ' + parts[parts.length - 1] : parts[0]}.` : ' Nothing is blocking the risk figure.')
+    (parts.length ? ` Before ${plan.goal.outcome}: ${parts.length > 1 ? parts.slice(0, -1).join(', ') + ' and ' + parts[parts.length - 1] : parts[0]}.` : ` Nothing stands between ${plan.customer.name} and ${plan.goal.short}.`)
 
   return {
     tools_total: plan.coverage.length,

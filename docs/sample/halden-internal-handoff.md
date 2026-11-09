@@ -1,6 +1,6 @@
 # Internal handoff: Halden Outfitters (FICTIONAL)
 
-Prepared Nov 8, 2026. Integrations config: SAFE public integrations page (captured Nov 4, 2026). Draft: Saved model draft from 2026-11-05 (claude-opus-5-5). Verified again just now against the current config and sources.
+Prepared Nov 9, 2026. Integrations config: SAFE public integrations page (captured Nov 4, 2026). Draft: Saved model draft from 2026-11-05 (claude-opus-5-5). Verified again just now against the current config and sources.
 
 Verification: 69/70 cited facts verified in code (0 with a corrected line number). 1 drafted item(s) held back.
 
@@ -43,6 +43,7 @@ Verification: 69/70 cited facts verified in code (0 with a corrected line number
 
 ### Customer project lead
 
+- question: Who will present the risk figure to the board, and when is the first meeting it needs to be ready for?
 - question: Who owns the admin account for each tool, and who approves API access?
 - question: Which systems hold your most critical data or drive the most revenue? These count first in the risk figure.
 - question: How far back should vulnerability history go, and after how many days without activity should an asset count as stale?

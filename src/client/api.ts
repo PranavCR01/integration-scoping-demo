@@ -1,4 +1,4 @@
-import type { Customer, IntegrationsConfig, Plan } from '../core/types'
+import type { Customer, GoalProfile, IntegrationsConfig, Plan } from '../core/types'
 import type { DataReport } from '../core/data'
 
 export interface Meta {
@@ -7,6 +7,7 @@ export interface Meta {
   variants: { file: string; config: IntegrationsConfig }[]
   sources: Record<string, string>
   live_draft_enabled: boolean
+  goal_profiles: Record<string, GoalProfile>
 }
 
 async function call<T>(route: string, body?: unknown): Promise<T> {

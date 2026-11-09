@@ -68,6 +68,7 @@ export async function handle(route: string, method: string, body: any): Promise<
           integrations: { label: integrations.label, count: integrations.integrations.length },
           variants,
           sources: readJson<{ files: Record<string, string> }>('config/sources.json').files,
+          goal_profiles: readJson<{ goal_profiles: Record<string, unknown> }>('config/connection_order.json').goal_profiles,
           live_draft_enabled: process.env.ALLOW_LIVE_DRAFT === '1' && !!process.env.ANTHROPIC_API_KEY,
         },
       }

@@ -4,7 +4,7 @@ import { join } from 'node:path'
 import type { AppConfig, Customer, Draft, Plan } from '../core/types.js'
 import { excerptKey } from '../core/types.js'
 import { checkCoverage } from '../core/coverage.js'
-import { connectionOrder, pickGoalProfile } from '../core/ordering.js'
+import { chooseGoal, connectionOrder } from '../core/ordering.js'
 import { allowedFiles, assemble } from '../core/plan.js'
 import { draftWithModel, MODEL } from './draft.js'
 import { excerpt, loadConfig, ROOT, store, type ConfigOverrides } from './store.js'
@@ -23,9 +23,9 @@ export const savedDraftPath = (customerId: string) => `fixtures/drafts/${custome
 export function loadSavedDraft(customer: Customer): SavedDraft | null {
   const p = join(ROOT, savedDraftPath(customer.id))
   if (!existsSync(p)) return null
-  const s = JSON.parse(readFileSync(p, 'utf8')) as SavedDraft
-  const same = [...s.tools].sort().join('|') === [...customer.tools].sort().join('|')
-  return same ? s : null
+  // The draft is reused even when the tool list changes: its items are keyed by tool, so
+  // tools it covers keep their (re-verified) items and new tools simply have none.
+  return JSON.parse(readFileSync(p, 'utf8')) as SavedDraft
 }
 
 export interface BuildOptions {
@@ -39,7 +39,8 @@ export async function buildPlan(opts: BuildOptions): Promise<Plan> {
   const cfg: AppConfig = loadConfig(opts.overrides)
   const { customer } = opts
   const coverage = checkCoverage(customer.tools, cfg)
-  const goalProfile = pickGoalProfile(customer.goal, cfg)
+  const goal = chooseGoal(customer.goal, cfg)
+  const goalProfile = goal.key
   const order = connectionOrder(coverage, goalProfile, cfg)
 
   let draft: Draft | null = null
@@ -52,7 +53,7 @@ export async function buildPlan(opts: BuildOptions): Promise<Plan> {
     note = 'Injected draft (test).'
   } else if (opts.mode === 'live') {
     try {
-      const r = await draftWithModel(customer, coverage, order, cfg)
+      const r = await draftWithModel(customer, coverage, order, cfg, goalProfile)
       draft = r.draft
       source = 'live'
       model = r.model
@@ -68,6 +69,13 @@ export async function buildPlan(opts: BuildOptions): Promise<Plan> {
       source = 'cached'
       model = saved.model
       note += `Saved model draft from ${saved.created_at.slice(0, 10)} (${saved.model}). Verified again just now against the current config and sources.`
+      // Be exact about tools the saved draft has never seen: a new draft only helps if the
+      // tool has vendor docs on file; otherwise its access details stay Confirm regardless.
+      const fresh = coverage.filter((c) => !saved.tools.includes(c.input))
+      const needDraft = fresh.filter((c) => allowedFiles(c, cfg).length > 0).map((c) => c.input)
+      const noDocs = fresh.filter((c) => allowedFiles(c, cfg).length === 0).map((c) => c.input)
+      if (needDraft.length) note += ` ${needDraft.join(', ')} ${needDraft.length === 1 ? 'was' : 'were'} added after the draft was written, so ${needDraft.length === 1 ? 'its' : 'their'} drafted items show Confirm until a new draft is run.`
+      if (noDocs.length) note += ` ${noDocs.join(', ')} ${noDocs.length === 1 ? 'has' : 'have'} no vendor docs on file, so ${noDocs.length === 1 ? 'its' : 'their'} access details show Confirm.`
     } else {
       note += 'No model draft available, so every drafted item shows as Confirm.'
     }
@@ -79,6 +87,7 @@ export async function buildPlan(opts: BuildOptions): Promise<Plan> {
     coverage,
     order,
     draft,
+    goalKey: goalProfile,
     ctxFor: (c) => ({ store, allowedFiles: allowedFiles(c, cfg), canonical: cfg.canonical_schema, canonicalFile }),
   })
 
@@ -97,6 +106,7 @@ export async function buildPlan(opts: BuildOptions): Promise<Plan> {
 
   return {
     document: cfg.scoping_template.document,
+    goal,
     project_owner: cfg.tool_profiles.project_owner ?? 'Customer project lead',
     customer,
     generated_at: new Date().toISOString(),

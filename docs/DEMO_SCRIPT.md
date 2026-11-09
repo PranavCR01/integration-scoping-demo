@@ -55,6 +55,15 @@ Before the call: open https://integration-scoping-demo.vercel.app/, have Halden 
 
 ---
 
+## Optional: a different goal (20 seconds)
+
+**Do:** Click **Edit** in the customer bar, click the **Fix the most exploitable exposures** preset, then **Rebuild plan**.
+
+**Say:**
+> "The goal shapes the plan. For fixing exposures, the ticketing tool moves up to step two, because fixes have to reach the team that owns them, and the questions change to fix deadlines and owners. The rules for each goal live in a config file too."
+
+**Do:** Click **Edit** again, choose **Board-ready risk figure**, and **Rebuild plan** to return to the main story.
+
 ## 3:00 Data readiness (90 seconds)
 
 **Do:** Click the **Data readiness** tab.

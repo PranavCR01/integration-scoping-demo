@@ -7,7 +7,7 @@
 A tool a Forward Deployed Engineer could use on day one with a new customer. You enter the customer's tools and goal, and it produces a one-page scoping plan the customer can sign off on:
 
 - **Coverage:** which tools SAFE connects to out of the box, which need confirming, and which would be custom work.
-- **Connection order:** what to connect first, and what each connection unlocks for the goal.
+- **Connection order:** what to connect first, and what each connection unlocks for the goal. The goal really shapes the plan: five rule sets (board-ready risk figure, fixing the most exploitable exposures, who has access to what, audit evidence, and general onboarding) each set their own order, wording, questions and summary line. Code picks the rule set from keywords in the goal and shows which words matched.
 - **Access checklist:** what access is needed, and from whom on the customer side.
 - **Data checks:** what we check before the data feeds a risk number.
 - **Open questions:** what we still need to ask the customer.
@@ -51,7 +51,7 @@ Every SAFE-specific input is a config file:
 | `config/aliases.json` | How customers write tool names | "Tenable VM" means "Tenable Vulnerability Management" |
 | `config/matching.json` | Ambiguity rules (route variants, bare vendor names) | "via M365" is a route; bare "ServiceNow" is ambiguous |
 | `config/tool_profiles.json` | Role, customer owner, and which vendor docs are on file per tool | Okta, Tenable, Snyk docs |
-| `config/connection_order.json` | Ordering rules per goal, and gates for unconfirmed tools | Draft rules |
+| `config/connection_order.json` | One rule set per goal: keywords, order, step wording, goal questions, summary phrase; plus gates for unconfirmed tools | Five draft rule sets |
 | `config/scoping_template.json` | Plan sections, access items, custom sheet items, standard questions | Based on the example plan |
 | `config/canonical_schema.json` | The common asset and finding format | Small, modeled loosely on OCSF |
 | `config/source_mappings.json` | How each tool's export maps to the common format | Okta and Tenable vuln fields verified; others are placeholders |
@@ -65,6 +65,7 @@ To use SAFE's internal versions, replace a file with one of the same shape and r
 
 - **It doesn't know SAFE's connectors.** It makes no claims about SAFE's internal systems, connector framework or data model. "Not on the public list" means "Custom work, confirm with SAFE", never "SAFE can't do it".
 - **It doesn't guess for tools without docs.** CrowdStrike and ServiceNow access details are Confirm because no vendor docs for them are attached.
+- **Changing the tool list reuses the saved draft only for tools it covers.** Verified items for those tools stay; a new tool's drafted items show Confirm (a fresh model run fills them in, but only tools with vendor docs on file can get real detail).
 - **It doesn't estimate effort.** Effort comes from a config file and is labelled as a placeholder.
 - **The token check has a blind spot.** It catches code-like tokens and numbers, not technical claims written purely as plain English words. Those rely on the prompt rule and on a person reading the draft.
 - **Several field names are placeholders.** The Tenable asset export and CrowdStrike field names in the sample data are not documented in the attached files. They show as "Confirm: placeholder" in the app.

@@ -63,7 +63,7 @@ export function DataView({ data, loading, labels, onRun, onCite, decisions, onDe
       <div className={`rounded-xl border p-4 ${data.ready ? 'border-emerald-200 bg-emerald-50' : 'border-rose-200 bg-rose-50'}`}>
         <div className="flex flex-wrap items-center justify-between gap-2">
           <div className={`text-base font-semibold ${data.ready ? 'text-emerald-900' : 'text-rose-900'}`}>
-            {data.ready ? 'Ready to feed a risk number' : `Not ready to feed a risk number: ${blocking.length} blocking item${blocking.length === 1 ? '' : 's'}`}
+            {data.ready ? 'Data is ready to use' : `Data not ready yet: ${blocking.length} blocking item${blocking.length === 1 ? '' : 's'}`}
           </div>
           <div className="flex flex-wrap gap-1.5">
             {data.synthetic && <Pill tone="amber">Synthetic sample exports (fictional)</Pill>}

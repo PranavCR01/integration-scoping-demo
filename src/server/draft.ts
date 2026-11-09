@@ -37,13 +37,12 @@ export const DraftSchema = z.object({
   ),
 })
 
-export function buildPrompt(customer: Customer, coverage: CoverageResult[], order: OrderStep[], cfg: AppConfig): string {
+export function buildPrompt(customer: Customer, coverage: CoverageResult[], order: OrderStep[], cfg: AppConfig, goalKey = 'default'): string {
   const slots = [
     ...expectedRows(coverage, cfg)
       .filter((r) => !r.confirm)
       .map((r) => ({ section: r.section, tool: r.tool, item: r.item, label: r.label })),
-    ...order.map((s) => ({ section: 'order', tool: null, item: String(s.step), tools: s.tools.map((t) => t.tool_key), unlocks: s.unlocks })),
-    ...questionSeeds(coverage, cfg).map((q) => ({ section: 'question', tool: null, item: q.key, default_text: q.text })),
+    ...questionSeeds(coverage, cfg, goalKey).map((q) => ({ section: 'question', tool: null, item: q.key, default_text: q.text })),
   ]
   const packets = coverage.map((c) => toolPacket(c, cfg)).filter(Boolean)
   return [
@@ -55,7 +54,7 @@ export function buildPrompt(customer: Customer, coverage: CoverageResult[], orde
   ].join('\n\n')
 }
 
-export async function draftWithModel(customer: Customer, coverage: CoverageResult[], order: OrderStep[], cfg: AppConfig): Promise<{ draft: Draft; model: string; usage: unknown }> {
+export async function draftWithModel(customer: Customer, coverage: CoverageResult[], order: OrderStep[], cfg: AppConfig, goalKey = 'default'): Promise<{ draft: Draft; model: string; usage: unknown }> {
   if (!process.env.ANTHROPIC_API_KEY) throw new Error('ANTHROPIC_API_KEY is not set')
   const client = new Anthropic()
   const system = readFileSync(join(ROOT, PROMPT_FILE), 'utf8')
@@ -63,7 +62,7 @@ export async function draftWithModel(customer: Customer, coverage: CoverageResul
     model: MODEL,
     max_tokens: 32000,
     system,
-    messages: [{ role: 'user', content: buildPrompt(customer, coverage, order, cfg) }],
+    messages: [{ role: 'user', content: buildPrompt(customer, coverage, order, cfg, goalKey) }],
     output_config: { effort: 'medium', format: betaZodOutputFormat(DraftSchema) },
     // Server-side refusal fallback: if a safety classifier declines (security topics can
     // trigger them), the API retries on a fallback model inside the same call.

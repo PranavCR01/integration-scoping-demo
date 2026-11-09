@@ -35,6 +35,7 @@ export function planBlocks(plan: Plan, labels: Record<string, string>, oobNote: 
   const b: Block[] = []
   b.push({ t: 'h1', text: `${titlePrefix}: ${plan.customer.name} (FICTIONAL CUSTOMER)` })
   b.push({ t: 'p', text: `**Goal:** ${plan.customer.goal}` })
+  b.push({ t: 'p', text: `**Plan built for:** ${plan.goal.label}` })
   b.push({ t: 'p', text: `**Prepared:** ${fmtDate(plan.generated_at)} · **Status:** ${status}` })
   b.push({ t: 'p', text: `**Sources:** ${plan.config_label}; vendor API docs listed under each tool. Anything not found in those sources is marked **Confirm**.` })
   b.push({ t: 'p', text: `**At a glance:** ${buildSummary(plan, null).headline}` })

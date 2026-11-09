@@ -95,7 +95,17 @@ export function PlanView({ plan, labels, onCite, changed, evidence }: Props) {
         </div>
       </Section>
 
-      <Section n={2} title="Connection order" aside={evidence ? <span className="text-xs text-slate-500">Order from config/connection_order.json; wording drafted by the model</span> : undefined}>
+      <Section
+        n={2}
+        title="Connection order"
+        aside={
+          <span className="text-xs text-slate-500">
+            Rules for: <span className="font-medium text-slate-700">{plan.goal.label}</span>
+            {evidence && (plan.goal.matched.length ? ` (goal mentions "${plan.goal.matched.join('", "')}")` : ' (no goal keyword matched, so general rules)')}
+            {evidence && ' · config/connection_order.json'}
+          </span>
+        }
+      >
         <ol className="space-y-2.5">
           {plan.order.map((s) => (
             <li key={s.step} className="flex gap-3">

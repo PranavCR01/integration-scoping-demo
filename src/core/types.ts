@@ -55,8 +55,18 @@ export interface OrderStepRule {
   unlocks: string
 }
 
+export interface GoalProfile {
+  label: string
+  example_goal: string
+  match_keywords: string[]
+  outcome: string // "Before <outcome>: ..." in the summary
+  short: string // "What stands between the customer and <short>"
+  steps: OrderStepRule[]
+  questions: { key: string; text: string }[]
+}
+
 export interface ConnectionOrderConfig {
-  goal_profiles: Record<string, { label: string; match_keywords: string[]; steps: OrderStepRule[] }>
+  goal_profiles: Record<string, GoalProfile>
   gates: Record<Bucket, string | null>
   role_labels: Record<string, string>
 }
@@ -251,8 +261,17 @@ export interface VerificationSummary {
   held: { row: string; draft_text: string; reason: string }[]
 }
 
+export interface GoalChoice {
+  key: string
+  label: string
+  outcome: string
+  short: string
+  matched: string[] // goal words that picked this rule set (empty: fell back to general)
+}
+
 export interface Plan {
   document: ScopingTemplate['document']
+  goal: GoalChoice
   project_owner: string
   customer: Customer
   generated_at: string
