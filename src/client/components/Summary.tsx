@@ -69,9 +69,22 @@ export function OwnersView({ actions, customerName, dataRun }: { actions: OwnerA
       <p className="text-sm text-slate-600">
         Every open item, grouped by the person who has to act. Emails are built only from verified details and checked questions; nothing new is written for them. {!dataRun && 'Data items appear once the data checks have run.'}
       </p>
-      <div className="grid items-start gap-4 xl:grid-cols-2">
+      {/* Narrow screens: one column in order. Wide screens: two independent columns, cards
+          alternating left and right, so a tall card never leaves a gap beside a short one. */}
+      <div className="space-y-4 xl:hidden">
         {actions.map((a) => (
           <OwnerCard key={`${a.party}-${a.owner}`} a={a} customerName={customerName} />
+        ))}
+      </div>
+      <div className="hidden gap-4 xl:grid xl:grid-cols-2 xl:items-start">
+        {[0, 1].map((col) => (
+          <div key={col} className="space-y-4">
+            {actions
+              .filter((_, i) => i % 2 === col)
+              .map((a) => (
+                <OwnerCard key={`${a.party}-${a.owner}`} a={a} customerName={customerName} />
+              ))}
+          </div>
         ))}
       </div>
     </div>
