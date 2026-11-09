@@ -7,6 +7,7 @@ interface Props {
   onCite: (c: CiteTarget) => void
   changed: Record<string, string>
   evidence: boolean
+  dataAsks?: string[]
 }
 
 function Cites({ row, labels, onCite, evidence }: { row: PlanRow; labels: Record<string, string>; onCite: (c: CiteTarget) => void; evidence: boolean }) {
@@ -49,7 +50,7 @@ function RowBody({ row, labels, onCite, evidence }: { row: PlanRow; labels: Reco
   )
 }
 
-export function PlanView({ plan, labels, onCite, changed, evidence }: Props) {
+export function PlanView({ plan, labels, onCite, changed, evidence, dataAsks = [] }: Props) {
   const customN = plan.custom_sheets.length ? 1 : 0
   return (
     <div className="space-y-4">
@@ -211,6 +212,16 @@ export function PlanView({ plan, labels, onCite, changed, evidence }: Props) {
             <li key={q.key}>{q.text}</li>
           ))}
         </ol>
+        {dataAsks.length > 0 && (
+          <div className="mt-3 border-t border-slate-100 pt-3">
+            <div className="text-xs font-medium uppercase tracking-wide text-slate-500">From the data checks on the sample exports</div>
+            <ul className="mt-1.5 list-disc space-y-1.5 pl-5 text-sm text-slate-700">
+              {dataAsks.map((t) => (
+                <li key={t}>{t}</li>
+              ))}
+            </ul>
+          </div>
+        )}
       </Section>
 
       <p className="px-1 text-xs text-slate-500">{plan.document.footer}</p>

@@ -9,7 +9,7 @@ import { PlanView } from './components/PlanView'
 import { DataView } from './components/DataView'
 import { DocPreview, VerificationView } from './components/Views'
 import { OwnersView, SummaryCard } from './components/Summary'
-import { buildActions, buildSummary } from '../core/summary'
+import { buildActions, buildSummary, customerDataAsks } from '../core/summary'
 import { Drawer } from './components/Drawer'
 import type { CiteTarget } from './components/ui'
 import { CustomerBar, Header, Intake, Landing, Modal } from './components/Shell'
@@ -103,7 +103,7 @@ export default function App() {
 
   const labels = meta?.sources ?? {}
   const exportName = customer ? customer.name.toLowerCase().replace(/[^a-z0-9]+/g, '-') : 'plan'
-  const blocks = plan ? planBlocks(plan, labels, plan.document.oob_access_note, plan.document.footer, plan.document.title_prefix, plan.document.status) : []
+  const blocks = plan ? planBlocks(plan, labels, plan.document.oob_access_note, plan.document.footer, plan.document.title_prefix, plan.document.status, data) : []
   const handoff = plan ? handoffBlocks(plan, data, labels) : []
   const summary = plan ? buildSummary(plan, data) : null
   const actions = plan ? buildActions(plan, data) : []
@@ -209,7 +209,7 @@ export default function App() {
               {tab === 'plan' && (
                 <div className="space-y-4">
                   {summary && <SummaryCard plan={plan} summary={summary} onOwners={() => setTab('owners')} />}
-                  <PlanView plan={plan} labels={labels} onCite={setCite} changed={changed} evidence={evidence} />
+                  <PlanView plan={plan} labels={labels} onCite={setCite} changed={changed} evidence={evidence} dataAsks={plan ? customerDataAsks(plan, data) : []} />
                 </div>
               )}
               {tab === 'owners' && <OwnersView actions={actions} customerName={plan.customer.name} dataRun={!!data} later={plan.coverage.filter((c) => plan.scope?.later.includes(c.tool_key)).map((c) => c.input)} />}

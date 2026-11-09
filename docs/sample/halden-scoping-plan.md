@@ -8,7 +8,7 @@
 
 **Sources:** SAFE public integrations page (captured Nov 4, 2026); vendor API docs listed under each tool. Anything not found in those sources is marked **Confirm**.
 
-**At a glance:** 4 of 6 tools can be connected now. Before the risk figure can be trusted: 4 items for SAFE to confirm, 9 answers from Halden Outfitters and the data checks to run.
+**At a glance:** 4 of 6 tools can be connected now. Before the risk figure can be trusted: 4 items for SAFE to confirm, 11 answers from Halden Outfitters and 3 data issues to clear.
 
 ---
 
@@ -83,6 +83,11 @@
 7. Do you have an existing asset inventory, such as a CMDB, that we should treat as the source of truth?
 8. Is your Snyk account on the Enterprise plan, and which Snyk region hosts it? API access needs the Enterprise plan, and tokens only work in their own region.
 9. Can you create a dedicated Tenable user account for this integration? Tenable recommends a separate user for each API integration, and each user has one valid API key at a time.
+
+**From the data checks on the sample exports:**
+
+- Your Tenable VM console shows 22 assets, but our export returned 20. Can you help us find which ones are missing?
+- 3 assets not seen in over 30 days (legacy-erp-01, print-srv-01, scanner-test-vm): keep, exclude, or investigate?
 
 ---
 

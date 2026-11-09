@@ -161,6 +161,15 @@ export function buildActions(plan: Plan, data: DataReport | null): OwnerActions[
   return out.sort((a, b) => rank[a.party] - rank[b.party] || (a.owner === plan.project_owner ? 1 : 0) - (b.owner === plan.project_owner ? 1 : 0))
 }
 
+// The questions the data checks raise for the customer, worded exactly as in the emails.
+// The plan's open questions and the PDF list these too, so every view asks the same things.
+export function customerDataAsks(plan: Plan, data: DataReport | null): string[] {
+  if (!data) return []
+  return buildActions(plan, data)
+    .filter((a) => a.party === 'customer')
+    .flatMap((a) => a.items.filter((i) => i.kind === 'data').map((i) => i.text))
+}
+
 function buildEmail(plan: Plan, g: OwnerActions): { subject: string; body: string } {
   const tools = g.tools.length ? g.tools.join(' and ') : 'the SAFE rollout'
   const access = g.items.filter((i) => i.kind === 'access')

@@ -2,7 +2,8 @@ import { describe, expect, it } from 'vitest'
 import { buildPlan } from '../src/server/plan'
 import { runData } from '../src/server/data'
 import { loadCustomer } from '../src/server/store'
-import { buildActions, buildSummary } from '../src/core/summary'
+import { buildActions, buildSummary, customerDataAsks } from '../src/core/summary'
+import { planBlocks } from '../src/core/doc'
 
 const customer = loadCustomer('halden')
 const plain = (s: string) => s.replace(/`([^`]+)`/g, '$1').replace(/\*\*([^*]+)\*\*/g, '$1')
@@ -44,5 +45,20 @@ describe('summary and who-owes-what (code-built from the verified plan)', async 
     for (const a of plan.access) expect(acts.some((g) => g.owner === a.owner)).toBe(true)
     const asked = acts.flatMap((g) => g.items.filter((i) => i.kind === 'question')).length
     expect(asked).toBe(plan.questions.length)
+  })
+})
+
+describe('the customer plan asks the same things as the emails', () => {
+  it('every question and data request in the emails also appears in the plan, and the counts match the summary', async () => {
+    const p = await buildPlan({ customer })
+    const d = runData({ customer })
+    const blocks = planBlocks(p, {}, '', '', 'Plan', 'Draft', d)
+    const listed = blocks.flatMap((b) => (b.t === 'list' ? b.items : []))
+    const asked = buildActions(p, d).filter((a) => a.party === 'customer').flatMap((a) => a.items.filter((i) => i.kind === 'question' || i.kind === 'data'))
+    for (const i of asked.filter((i) => i.kind === 'data')) expect(listed).toContain(i.text)
+    expect(customerDataAsks(p, d).length).toBe(2)
+    expect(p.questions.length + customerDataAsks(p, d).length).toBe(buildSummary(p, d).customer_questions)
+    const glance = blocks.find((b) => b.t === 'p' && b.text.startsWith('**At a glance:**'))
+    expect(glance && 'text' in glance && glance.text).toContain(buildSummary(p, d).headline)
   })
 })

@@ -3,7 +3,7 @@
 import type { Plan, PlanRow } from './types.js'
 import { BUCKET_LABEL } from './types.js'
 import type { DataReport } from './data.js'
-import { buildActions, buildSummary } from './summary.js'
+import { buildActions, buildSummary, customerDataAsks } from './summary.js'
 
 export type Block =
   | { t: 'h1' | 'h2' | 'h3' | 'p' | 'note'; text: string }
@@ -31,14 +31,14 @@ export function citeText(row: PlanRow, labels: Record<string, string>): string {
 
 const rowText = (r: PlanRow) => (r.status === 'verified' ? r.text : `**Confirm.** ${r.confirm_reason ?? ''}`.trim())
 
-export function planBlocks(plan: Plan, labels: Record<string, string>, oobNote: string, footer: string, titlePrefix: string, status: string): Block[] {
+export function planBlocks(plan: Plan, labels: Record<string, string>, oobNote: string, footer: string, titlePrefix: string, status: string, data: DataReport | null = null): Block[] {
   const b: Block[] = []
   b.push({ t: 'h1', text: `${titlePrefix}: ${plan.customer.name} (FICTIONAL CUSTOMER)` })
   b.push({ t: 'p', text: `**Goal:** ${plan.customer.goal}` })
   b.push({ t: 'p', text: `**Plan built for:** ${plan.goal.label}` })
   b.push({ t: 'p', text: `**Prepared:** ${fmtDate(plan.generated_at)} · **Status:** ${status}` })
   b.push({ t: 'p', text: `**Sources:** ${plan.config_label}; vendor API docs listed under each tool. Anything not found in those sources is marked **Confirm**.` })
-  b.push({ t: 'p', text: `**At a glance:** ${buildSummary(plan, null).headline}` })
+  b.push({ t: 'p', text: `**At a glance:** ${buildSummary(plan, data).headline}` })
   b.push({ t: 'hr' })
 
   b.push({ t: 'h2', text: '1. Coverage check' })
@@ -85,6 +85,11 @@ export function planBlocks(plan: Plan, labels: Record<string, string>, oobNote: 
 
   b.push({ t: 'h2', text: `${n + 1}. Open questions for ${plan.customer.name}` })
   b.push({ t: 'list', ordered: true, items: plan.questions.map((q) => q.text) })
+  const asks = customerDataAsks(plan, data)
+  if (asks.length) {
+    b.push({ t: 'p', text: '**From the data checks on the sample exports:**' })
+    b.push({ t: 'list', items: asks })
+  }
   b.push({ t: 'hr' })
   b.push({ t: 'note', text: footer })
   return b

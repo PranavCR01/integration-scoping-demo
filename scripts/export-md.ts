@@ -11,6 +11,6 @@ const plan = await buildPlan({ customer })
 const data = runData({ customer })
 const d = cfg.scoping_template.document
 mkdirSync('docs/sample', { recursive: true })
-writeFileSync(`docs/sample/${customer.id}-scoping-plan.md`, toMarkdown(planBlocks(plan, labels, d.oob_access_note, d.footer, d.title_prefix, d.status)))
+writeFileSync(`docs/sample/${customer.id}-scoping-plan.md`, toMarkdown(planBlocks(plan, labels, d.oob_access_note, d.footer, d.title_prefix, d.status, data)))
 writeFileSync(`docs/sample/${customer.id}-internal-handoff.md`, toMarkdown(handoffBlocks(plan, data, labels)))
 console.log('wrote docs/sample/')
