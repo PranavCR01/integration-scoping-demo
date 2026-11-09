@@ -80,7 +80,7 @@ export function planBlocks(plan: Plan, labels: Record<string, string>, oobNote: 
     b.push({ t: 'table', head: ['Item', 'Detail', 'Source'], rows: s.rows.map((r) => [r.label, rowText(r), citeText(r, labels) || (r.status === 'confirm' ? 'None' : '')]) })
   }
   const n = plan.custom_sheets.length ? 5 : 4
-  b.push({ t: 'h2', text: `${n}. Data checks before anything feeds a risk number` })
+  b.push({ t: 'h2', text: `${n}. Data checks before the data is used` })
   b.push({ t: 'list', items: [...plan.data_checks.map((d) => `**${d.label}:** ${d.text}`), ...plan.data_notes.map((r) => `**${r.tool}:** ${r.text} (${citeText(r, labels)})`)] })
 
   b.push({ t: 'h2', text: `${n + 1}. Open questions for ${plan.customer.name}` })

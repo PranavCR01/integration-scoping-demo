@@ -62,7 +62,7 @@
 | Fields to map | From `/orgs/{org_id}/issues`: `id` maps to `finding_id`, `attributes.title` to `title`, `attributes.type` to `type`, `attributes.effective_severity_level` to `severity`, `attributes.status` to `status`, and `attributes.created_at` to `first_seen`. | Snyk REST OpenAPI spec, lines 17815, 18341, 18353, 18442, 18450, 18464, 76022; Our common format (config), lines 17, 19, 20, 21, 22, 23 |
 | How records relate to assets | **Confirm.** Needs input from the customer. | None |
 
-## 5. Data checks before anything feeds a risk number
+## 5. Data checks before the data is used
 
 - **Counts:** Asset and finding totals match what each tool's own console shows.
 - **Duplicates:** The same machine seen by more than one tool is merged once, with the reason and a confidence level for each match. Weak matches go to a person to review.

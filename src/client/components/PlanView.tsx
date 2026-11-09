@@ -183,7 +183,7 @@ export function PlanView({ plan, labels, onCite, changed, evidence }: Props) {
         </Section>
       ))}
 
-      <Section n={4 + customN} title="Data checks before anything feeds a risk number">
+      <Section n={4 + customN} title="Data checks before the data is used">
         <ul className="space-y-1.5 text-sm text-slate-700">
           {plan.data_checks.map((d) => (
             <li key={d.key}>
