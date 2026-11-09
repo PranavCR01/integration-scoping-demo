@@ -18,7 +18,7 @@ Before the call: open https://integration-scoping-demo.vercel.app/, have Halden 
 **Do:** Click **Build scoping plan**. Let the summary card sit on screen.
 
 **Say:**
-> "This is the first thing I'd want as the person accountable for that 30 days. Four of the six tools can be connected now. Two need a decision from SAFE. Halden owes us ten answers. And the data isn't ready to feed a risk number yet: three things are blocking it. Underneath is exactly what stands in the way, and whose move it is: SAFE's, the customer's, or ours."
+> "This is the first thing I'd want as the person accountable for that 30 days. Four of the six tools can be connected now. SAFE has four things to confirm: which Defender product and whether a Snyk connector exists, plus the access CrowdStrike and ServiceNow need. Halden owes us eleven answers. And three data issues are blocking it. Underneath is exactly what stands in the way, and whose move it is: SAFE's, the customer's, or ours."
 
 ## 1:00 Who owes what (45 seconds)
 

@@ -7,7 +7,7 @@ import type { DataReport } from './data.js'
 export interface Summary {
   tools_total: number
   ready_now: number
-  safe_decisions: number
+  safe_items: number // every line in the list that SAFE has to confirm
   customer_questions: number
   people_to_contact: number
   data: { status: 'not_run' | 'ready' | 'blocked'; blockers: number; warnings: number }
@@ -52,7 +52,9 @@ export function buildSummary(plan: Plan, data: DataReport | null): Summary {
     })
   }
   const noDocs = plan.access.filter((a) => a.bucket === 'out_of_box' && a.rows.every((r) => r.status === 'confirm'))
-  if (noDocs.length) blockers.push({ who: 'SAFE', text: `${noDocs.map((a) => a.input).join(' and ')}: confirm the access needed (no vendor docs on file here)` })
+  // One line per tool, so the number on the tile matches the lines in the list.
+  for (const a of noDocs) blockers.push({ who: 'SAFE', text: `${a.input}: confirm the access SAFE's connector needs (no vendor docs on file here)` })
+  const safeItems = blockers.filter((b) => b.who === 'SAFE').length
   for (const c of dataBlocks) {
     if (c.check === 'counts' && data) {
       for (const x of data.sources.filter((y) => y.mismatch)) blockers.push({ who: 'Customer', text: `Data: ${x.short} console shows ${x.console} ${x.entity}s, our export returned ${x.records}` })
@@ -60,7 +62,7 @@ export function buildSummary(plan: Plan, data: DataReport | null): Summary {
   }
 
   const parts = [
-    decisions.length ? plural(decisions.length, 'decision') + ' from SAFE' : '',
+    safeItems ? plural(safeItems, 'item') + ' for SAFE to confirm' : '',
     customerQuestions ? plural(customerQuestions, 'answer') + ` from ${plan.customer.name}` : '',
     dataStatus === 'blocked' ? plural(dataBlocks.length, 'data issue') + ' to clear' : dataStatus === 'not_run' ? 'the data checks to run' : '',
   ].filter(Boolean)
@@ -71,7 +73,7 @@ export function buildSummary(plan: Plan, data: DataReport | null): Summary {
   return {
     tools_total: plan.coverage.length,
     ready_now: ready,
-    safe_decisions: decisions.length,
+    safe_items: safeItems,
     customer_questions: customerQuestions,
     people_to_contact: customerOwners.length,
     data: { status: dataStatus, blockers: dataBlocks.length, warnings: dataWarns.length },

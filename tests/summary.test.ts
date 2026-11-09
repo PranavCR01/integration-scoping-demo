@@ -14,7 +14,9 @@ describe('summary and who-owes-what (code-built from the verified plan)', async 
   it('counts match the plan', () => {
     const s = buildSummary(plan, data)
     expect(s.ready_now).toBe(plan.coverage.filter((c) => c.bucket === 'out_of_box').length)
-    expect(s.safe_decisions).toBe(plan.coverage.filter((c) => c.bucket !== 'out_of_box').length)
+    // the tile counts exactly the SAFE lines in the list underneath it
+    expect(s.safe_items).toBe(s.blockers.filter((b) => b.who === 'SAFE').length)
+    expect(s.safe_items).toBe(4) // Defender, Snyk, CrowdStrike access, ServiceNow access
     expect(s.data.status).toBe('blocked')
     expect(s.data.blockers).toBe(data.checks.filter((c) => c.level === 'block').length)
     expect(buildSummary(plan, null).data.status).toBe('not_run')
