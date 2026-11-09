@@ -212,7 +212,7 @@ export function Landing(props: Parameters<typeof Intake>[0]) {
         <Feature
           icon={<path d="M4 6h16M4 12h10M4 18h6" />}
           title="Coverage and order"
-          text="Which tools SAFE connects to today, what needs a decision, and what to connect first."
+          text="Which tools are on SAFE's integrations list, what needs a decision, and what to connect first."
         />
         <Feature
           icon={<><circle cx="9" cy="8" r="3" /><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5M16 11h5M18.5 8.5v5" /></>}
@@ -222,7 +222,7 @@ export function Landing(props: Parameters<typeof Intake>[0]) {
         <Feature
           icon={<><path d="M4 19V9M10 19V5M16 19v-7M22 19H2" /></>}
           title="Data readiness"
-          text="Duplicates, stale assets and coverage gaps found before any risk figure."
+          text="Duplicates, stale assets and coverage gaps found before the data is used."
         />
       </div>
       <div className="mx-auto mt-5 flex max-w-2xl items-start gap-2 text-sm text-slate-500">
