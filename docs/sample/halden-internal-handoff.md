@@ -100,7 +100,7 @@ Verification: 69/70 cited facts verified in code (0 with a corrected line number
 
 ## Data readiness (synthetic sample data)
 
-**Not ready to feed a risk number.** Blocking items below.
+**Data not ready yet.** Blocking items below.
 
 | Check | Status | Detail |
 |---|---|---|

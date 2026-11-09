@@ -24,7 +24,7 @@ function colWidths(head: string[], rows: string[][]): string[] {
   return pct.map((p) => `${(p * scale).toFixed(1)}%`)
 }
 
-export async function downloadPdf(blocks: Block[], filename: string) {
+export async function downloadPdf(blocks: Block[], filename: string, footerLabel = 'Fictional customer') {
   const pdfMake: any = (await import('pdfmake/build/pdfmake')).default
   const vfs: any = (await import('pdfmake/build/vfs_fonts')).default
   pdfMake.addVirtualFileSystem(vfs)
@@ -42,6 +42,8 @@ export async function downloadPdf(blocks: Block[], filename: string) {
         content.push({
           table: {
             headerRows: 1,
+            keepWithHeaderRows: 1,
+            dontBreakRows: true,
             widths: colWidths(b.head, b.rows),
             body: [b.head.map((h) => ({ text: h, bold: true, fillColor: '#f1f5f9' })), ...b.rows.map((r) => r.map((c) => ({ text: inline(c) })))],
           },
@@ -58,7 +60,7 @@ export async function downloadPdf(blocks: Block[], filename: string) {
       pageMargins: [40, 40, 40, 40],
       defaultStyle: { fontSize: 9.5, lineHeight: 1.2, color: '#1e293b' },
       styles: { h1: { fontSize: 16, bold: true, margin: [0, 0, 0, 8] }, h2: { fontSize: 12, bold: true, margin: [0, 10, 0, 5], color: '#0f766e' }, h3: { fontSize: 10.5, bold: true, margin: [0, 6, 0, 4] } },
-      footer: (page: number, count: number) => ({ text: `Fictional customer · page ${page} of ${count}`, alignment: 'center', fontSize: 7.5, color: '#94a3b8', margin: [0, 10, 0, 0] }),
+      footer: (page: number, count: number) => ({ text: `${footerLabel} · page ${page} of ${count}`, alignment: 'center', fontSize: 7.5, color: '#94a3b8', margin: [0, 10, 0, 0] }),
     })
     .download(filename)
 }

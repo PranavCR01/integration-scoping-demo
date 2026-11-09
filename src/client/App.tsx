@@ -133,9 +133,10 @@ export default function App() {
     goalProfiles: meta.goal_profiles,
   }
   const exportsList = [
-    { label: 'Customer plan (PDF)', sub: 'Clean document to share and sign off', onClick: () => downloadPdf(blocks, `${exportName}-scoping-plan.pdf`) },
+    { label: 'Customer plan (PDF)', sub: 'Clean document for the customer to review', onClick: () => downloadPdf(blocks, `${exportName}-scoping-plan.pdf`) },
     { label: 'Customer plan (Markdown)', sub: 'Same content, editable', onClick: () => downloadText(toMarkdown(blocks), `${exportName}-scoping-plan.md`) },
-    { label: 'Internal handoff (Markdown)', sub: 'Open items, held-back drafts, data readiness', onClick: () => downloadText(toMarkdown(handoff), `${exportName}-internal-handoff.md`) },
+    { label: 'Internal handoff (PDF)', sub: 'Open items, held-back drafts, data readiness', onClick: () => downloadPdf(handoff, `${exportName}-internal-handoff.pdf`, 'Internal handoff · not for the customer · fictional customer') },
+    { label: 'Internal handoff (Markdown)', sub: 'Same content, editable', onClick: () => downloadText(toMarkdown(handoff), `${exportName}-internal-handoff.md`) },
   ]
 
   return (

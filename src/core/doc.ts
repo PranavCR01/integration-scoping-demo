@@ -116,7 +116,7 @@ export function handoffBlocks(plan: Plan, data: DataReport | null, labels: Recor
 
   if (data) {
     b.push({ t: 'h2', text: `Data readiness${data.synthetic ? ' (synthetic sample data)' : ''}` })
-    b.push({ t: 'p', text: data.ready ? 'Ready to feed a risk number.' : '**Not ready to feed a risk number.** Blocking items below.' })
+    b.push({ t: 'p', text: data.ready ? 'Data is ready to use.' : '**Data not ready yet.** Blocking items below.' })
     b.push({ t: 'table', head: ['Check', 'Status', 'Detail'], rows: data.checks.map((c) => [c.text, c.level === 'ok' ? 'OK' : c.level === 'block' ? 'BLOCKING' : 'Warning', c.detail]) })
     b.push({ t: 'p', text: `${data.totals.asset_records} asset records became ${data.totals.merged_assets} assets (${data.totals.cross_tool_merges} merged across tools, ${data.totals.same_tool_duplicates} duplicate inside one tool). ${data.totals.review} possible duplicate(s) need a person.` })
     if (data.review.length) b.push({ t: 'table', head: ['Possible duplicate', 'Evidence', 'Confidence', 'Why it needs a person'], rows: data.review.map((r) => [`${r.a.label} / ${r.b.label}`, `${r.label} (${r.shared})`, r.confidence.toFixed(2), r.why]) })
