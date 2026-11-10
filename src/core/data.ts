@@ -67,6 +67,7 @@ export interface MatchEdge {
   label: string
   confidence: number
   shared: string
+  override?: string // a person merged these although this evidence says they differ
 }
 
 export interface MergedAsset {
@@ -80,6 +81,7 @@ export interface MergedAsset {
   reasons: MatchEdge[]
   same_tool_duplicates: string[]
   findings: number
+  overrides: string[] // conflicting evidence a person chose to merge past
 }
 
 export interface ReviewItem {
@@ -91,6 +93,7 @@ export interface ReviewItem {
   confidence: number
   shared: string
   why: string
+  conflict: string | null // evidence that says these are different machines; merging needs a second confirmation
 }
 
 export interface CheckResult {
@@ -301,8 +304,12 @@ export function analyze(input: DataInput): DataReport {
       weak.push(e)
       continue
     }
-    const c = e.rule === 'person' ? null : conflictBetween(keysOf.get(ri)!, keysOf.get(rj)!, match.conflict_keys)
-    if (c) {
+    const c = conflictBetween(keysOf.get(ri)!, keysOf.get(rj)!, match.conflict_keys)
+    if (c && e.rule === 'person') {
+      // The person's decision stands, but the merge keeps a visible record of what it overrode.
+      e.override = c
+      e.label = `A person merged these despite ${c}`
+    } else if (c) {
       blocked.push({ e, why: `Not merged: ${c}` })
       continue
     }
@@ -346,6 +353,7 @@ export function analyze(input: DataInput): DataReport {
       confidence: reasons.length ? Math.min(...reasons.map((r) => r.confidence)) : 1,
       reasons,
       same_tool_duplicates: [...bySource.entries()].filter(([, c]) => c > 1).map(([s]) => s),
+      overrides: reasons.filter((r) => r.override).map((r) => r.override!),
       findings: recs.reduce((s, r) => s + (findingCount.get(r.source_id) ?? 0), 0),
     }
   })
@@ -357,7 +365,7 @@ export function analyze(input: DataInput): DataReport {
 
   // Review queue: weak matches and blocked conflicts between assets that remain separate.
   const reviewMap = new Map<string, ReviewItem>()
-  const addReview = (e: MatchEdge, why: string) => {
+  const addReview = (e: MatchEdge, why: string, conflict: string | null) => {
     const A = assetOf.get(e.a)!
     const B = assetOf.get(e.b)!
     if (A === B) return
@@ -368,13 +376,13 @@ export function analyze(input: DataInput): DataReport {
     if (different.some(([x, y]) => (inA(x) && inB(y)) || (inA(y) && inB(x)))) return
     const prev = reviewMap.get(k)
     if (prev && prev.confidence >= e.confidence) return
-    reviewMap.set(k, { pair: [e.a, e.b].sort() as [string, string], a: { asset_id: A, label: label(A) }, b: { asset_id: B, label: label(B) }, rule: e.rule, label: e.label, confidence: e.confidence, shared: e.shared, why })
+    reviewMap.set(k, { pair: [e.a, e.b].sort() as [string, string], a: { asset_id: A, label: label(A) }, b: { asset_id: B, label: label(B) }, rule: e.rule, label: e.label, confidence: e.confidence, shared: e.shared, why, conflict })
   }
   for (const w of weak) {
     const c = conflictBetween(keysOf.get(find(w.i))!, keysOf.get(find(w.j))!, match.conflict_keys)
-    addReview(w, c ? `Weak match, and the records have ${c}: likely different machines. A person decides.` : `Below the merge threshold (${match.merge_threshold}). A person decides.`)
+    addReview(w, c ? `Weak match, and the records have ${c}: likely different machines. A person decides.` : `Below the merge threshold (${match.merge_threshold}). A person decides.`, c)
   }
-  for (const b of blocked) addReview(b.e, b.why)
+  for (const b of blocked) addReview(b.e, b.why, b.why.replace(/^Not merged: /, ''))
   const review = [...reviewMap.values()].sort((a, b) => b.confidence - a.confidence)
 
   // Staleness and coverage

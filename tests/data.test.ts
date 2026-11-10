@@ -87,3 +87,21 @@ describe('review decisions by a person', () => {
     expect(scoreAgainstTruth(after, truth).missed_pairs).toBe(0)
   })
 })
+
+describe('merge guard: a person can merge against the evidence, but it is never silent', () => {
+  it('pairs with conflicting evidence say so; merging them anyway marks the asset', () => {
+    const before = runData({ customer })
+    const ipPair = before.review.find((x) => x.shared.includes('10.20.4.17'))!
+    const filePair = before.review.find((x) => x.shared.includes('fileserver-02'))!
+    expect(ipPair.conflict).toMatch(/different serial numbers/)
+    expect(filePair.conflict).toBeNull()
+    const after = runData({ customer, decisions: { [ipPair.pair.join('|')]: 'same', [filePair.pair.join('|')]: 'same' } })
+    const merged = after.assets.find((a) => a.overrides.length)!
+    expect(merged.overrides[0]).toMatch(/C02HAL005/)
+    expect(merged.reasons.some((r) => r.label.startsWith('A person merged these despite different serial numbers'))).toBe(true)
+    // the clean "same" decision carries no override
+    expect(after.assets.filter((a) => a.overrides.length)).toHaveLength(1)
+    // and the truth check still counts it as a wrong merge
+    expect(scoreAgainstTruth(after, truth).wrong_merges).toBeGreaterThan(0)
+  })
+})

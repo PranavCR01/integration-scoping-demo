@@ -132,6 +132,8 @@ export function handoffBlocks(plan: Plan, data: DataReport | null, labels: Recor
     b.push({ t: 'table', head: ['Check', 'Status', 'Detail'], rows: data.checks.map((c) => [c.text, c.level === 'ok' ? 'OK' : c.level === 'block' ? 'BLOCKING' : 'Warning', c.detail]) })
     b.push({ t: 'p', text: `${data.totals.asset_records} asset records became ${data.totals.merged_assets} assets (${data.totals.cross_tool_merges} merged across tools, ${data.totals.same_tool_duplicates} duplicate inside one tool). ${data.totals.review} possible duplicate(s) need a person.` })
     if (data.review.length) b.push({ t: 'table', head: ['Possible duplicate', 'Evidence', 'Confidence', 'Why it needs a person'], rows: data.review.map((r) => [`${r.a.label} / ${r.b.label}`, `${r.label} (${r.shared})`, r.confidence.toFixed(2), r.why]) })
+    const overridden = data.assets.filter((x) => x.overrides.length)
+    if (overridden.length) b.push({ t: 'note', text: `Merged by a person against the evidence: ${overridden.map((x) => `${x.names.join(' / ')} (${x.overrides.join('; ')})`).join('; ')}. Check these before the counts are used.` })
     const ph = data.mapping.filter((m) => m.status !== 'verified')
     b.push({ t: 'h3', text: 'Field mappings to confirm' })
     b.push({ t: 'list', items: ph.length ? ph.map((m) => `${m.source}.${m.from} -> ${m.canonical}: ${m.detail}`) : ['All mappings verified'] })

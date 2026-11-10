@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import Papa from 'papaparse'
-import type { DataReport } from '../../core/data'
+import type { DataReport, MatchEdge, ReviewItem } from '../../core/data'
 import { CiteChip, Pill, Section, Stat, shortLabel, type CiteTarget } from './ui'
 
 interface Props {
@@ -100,32 +100,9 @@ export function DataView({ data, loading, labels, onRun, onCite, decisions, onDe
           <p className="text-sm text-emerald-800">Nothing waiting. {data.decisions_applied ? `${data.decisions_applied} decision(s) applied.` : ''}</p>
         ) : (
           <div className="space-y-2">
-            {data.review.map((r) => {
-              const key = r.pair.join('|')
-              return (
-                <div key={key} className="rounded-lg border border-amber-200 bg-amber-50/60 p-3">
-                  <div className="flex flex-wrap items-center justify-between gap-2">
-                    <div className="text-sm">
-                      <span className="font-semibold text-slate-900">{r.a.label}</span>
-                      <span className="mx-2 text-slate-400">and</span>
-                      <span className="font-semibold text-slate-900">{r.b.label}</span>
-                    </div>
-                    <Pill tone="amber">confidence {r.confidence.toFixed(2)}</Pill>
-                  </div>
-                  <div className="mt-1 text-sm text-slate-700">
-                    {r.label}: <code>{r.shared}</code>. {r.why}
-                  </div>
-                  <div className="mt-2 flex gap-2">
-                    <button onClick={() => onDecide(key, 'same')} className="rounded-md border border-slate-300 bg-white px-2.5 py-1 text-xs font-medium hover:bg-slate-50">
-                      Same machine: merge
-                    </button>
-                    <button onClick={() => onDecide(key, 'different')} className="rounded-md border border-slate-300 bg-white px-2.5 py-1 text-xs font-medium hover:bg-slate-50">
-                      Different machines
-                    </button>
-                  </div>
-                </div>
-              )
-            })}
+            {data.review.map((r) => (
+              <ReviewRow key={r.pair.join('|')} r={r} onDecide={onDecide} />
+            ))}
           </div>
         )}
         {Object.keys(decisions).length > 0 && (
@@ -176,13 +153,18 @@ export function DataView({ data, loading, labels, onRun, onCite, decisions, onDe
                     </div>
                   </td>
                   <td className="py-2 pr-3 text-slate-700">
-                    {a.reasons.length === 0 ? <span className="text-slate-400">Single record</span> : a.reasons.map((r, i) => (
-                      <div key={i}>
-                        {r.label}: <code>{r.shared}</code>
+                    {a.overrides.length > 0 && (
+                      <div className="mb-1">
+                        <Pill tone="rose">Merged by a person against the evidence</Pill>
+                      </div>
+                    )}
+                    {a.reasons.length === 0 ? <span className="text-slate-400">Single record</span> : uniqueReasons(a.reasons).map((r, i) => (
+                      <div key={i} className={r.override ? 'text-rose-800' : undefined}>
+                        {r.label}{r.rule === 'person' ? '' : <>: <code>{r.shared}</code></>}
                       </div>
                     ))}
                   </td>
-                  <td className="py-2 tabular-nums text-slate-700">{a.reasons.length ? a.confidence.toFixed(2) : ''}</td>
+                  <td className="py-2 tabular-nums text-slate-700">{a.overrides.length ? <span className="font-medium text-rose-800">Overridden</span> : a.reasons.length ? a.confidence.toFixed(2) : ''}</td>
                 </tr>
               ))}
             </tbody>
@@ -299,6 +281,60 @@ export function DataView({ data, loading, labels, onRun, onCite, decisions, onDe
         </div>
         {uploadError && <p className="mt-2 text-sm text-rose-700">{uploadError}</p>}
       </Section>
+    </div>
+  )
+}
+
+// Two records in one tool can match on the same evidence twice; show each reason once.
+function uniqueReasons(reasons: MatchEdge[]): MatchEdge[] {
+  const seen = new Set<string>()
+  return reasons.filter((r) => {
+    const k = `${r.label}|${r.shared}`
+    if (seen.has(k)) return false
+    seen.add(k)
+    return true
+  })
+}
+
+// One possible duplicate. When the evidence says the records differ, "merge" asks twice.
+function ReviewRow({ r, onDecide }: { r: ReviewItem; onDecide: (key: string, d: 'same' | 'different' | null) => void }) {
+  const [confirming, setConfirming] = useState(false)
+  const key = r.pair.join('|')
+  return (
+    <div className="rounded-lg border border-amber-200 bg-amber-50/60 p-3">
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <div className="text-sm">
+          <span className="font-semibold text-slate-900">{r.a.label}</span>
+          <span className="mx-2 text-slate-400">and</span>
+          <span className="font-semibold text-slate-900">{r.b.label}</span>
+        </div>
+        <Pill tone="amber">confidence {r.confidence.toFixed(2)}</Pill>
+      </div>
+      <div className="mt-1 text-sm text-slate-700">
+        {r.label}: <code>{r.shared}</code>. {r.why}
+      </div>
+      {confirming ? (
+        <div className="mt-2 rounded-md border border-rose-200 bg-rose-50 p-2.5 text-sm text-rose-900">
+          These records have {r.conflict}. Merging them counts two machines as one. Merge anyway? The merged asset will be marked as merged against the evidence.
+          <div className="mt-2 flex gap-2">
+            <button onClick={() => onDecide(key, 'same')} className="rounded-md bg-rose-700 px-2.5 py-1 text-xs font-semibold text-white hover:bg-rose-800">
+              Yes, merge anyway
+            </button>
+            <button onClick={() => setConfirming(false)} className="rounded-md border border-slate-300 bg-white px-2.5 py-1 text-xs font-medium hover:bg-slate-50">
+              Cancel
+            </button>
+          </div>
+        </div>
+      ) : (
+        <div className="mt-2 flex gap-2">
+          <button onClick={() => (r.conflict ? setConfirming(true) : onDecide(key, 'same'))} className="rounded-md border border-slate-300 bg-white px-2.5 py-1 text-xs font-medium hover:bg-slate-50">
+            Same machine: merge
+          </button>
+          <button onClick={() => onDecide(key, 'different')} className="rounded-md border border-slate-300 bg-white px-2.5 py-1 text-xs font-medium hover:bg-slate-50">
+            Different machines
+          </button>
+        </div>
+      )}
     </div>
   )
 }
