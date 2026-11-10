@@ -31,7 +31,7 @@ export function VerificationView({ plan, labels, onCite }: { plan: Plan; labels:
                 <div className="mt-1 text-slate-500 line-through">
                   <Rich text={h.draft_text} />
                 </div>
-                <div className="mt-1 text-amber-900">{/[.!?]$/.test(h.reason) ? h.reason : `${h.reason}.`}</div>
+                <div className="mt-1 text-amber-900">{sentence(h.reason)}</div>
               </div>
             ))}
           </div>
@@ -63,7 +63,7 @@ export function VerificationView({ plan, labels, onCite }: { plan: Plan; labels:
                         {l.corrected_from ? <Pill>line fixed</Pill> : null}
                       </div>
                     ) : (
-                      <span className="text-xs text-rose-700">{l.detail}</span>
+                      <span className="text-xs text-rose-700">{sentence(l.detail)}</span>
                     )}
                   </td>
                 </tr>
@@ -125,3 +125,6 @@ export function DocPreview({ blocks }: { blocks: Block[] }) {
     </article>
   )
 }
+
+// Reasons are built without a closing full stop; add one for display.
+const sentence = (t: string) => (/[.!?]$/.test(t) ? t : `${t}.`)
