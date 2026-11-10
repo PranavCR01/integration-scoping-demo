@@ -1,13 +1,17 @@
-# Demo script (about 4 minutes: roughly 530 spoken words plus clicks)
+# Demo script (about 4 minutes: roughly 570 spoken words plus clicks)
 
 Before the call: open https://integration-scoping-demo.vercel.app/ and hard-refresh it. Halden Outfitters selected, **Show evidence** off, other tabs closed. Do one full dry run, then reload the page so every decision is cleared.
 
 ---
 
+## Part 0: what the tool is (before you share the screen, 20 seconds)
+
+"I built Integration Scoping, a tool for a forward deployed engineer's first week with a new customer. You give it the customer's tools and their goal. It tells you which tools SAFE connects out of the box, what to connect first, who on the customer side to ask for which access, and whether their data is ready to trust. The AI only writes the wording. Code checks every fact against the vendor's docs and runs every data check."
+
 ## Part 1: the setup (kickoff card)
 
-[Kickoff card on screen]
-"The first week with a new customer decides whether the 30-day promise holds: what to connect, who to ask for access, and what's wrong with the data. This tool does that week. Halden Outfitters is fictional: six security tools, and a board-ready risk figure due in 30 days."
+[Share the screen. Kickoff card on screen]
+"That first week decides whether the 30-day promise holds. Here's a fictional customer, Halden Outfitters: six security tools, and a board-ready risk figure due in 30 days."
 
 ## Part 2: where things stand
 
