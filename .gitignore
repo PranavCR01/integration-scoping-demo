@@ -5,3 +5,4 @@ generated
 .env*
 *.log
 docs/DEMO_SCRIPT.md
+brief.md
