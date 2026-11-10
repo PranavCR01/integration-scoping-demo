@@ -103,6 +103,8 @@ export async function buildPlan(opts: BuildOptions): Promise<Plan> {
   for (const s of asm.custom_sheets) for (const r of s.rows) r.citations.forEach((c) => addEx(c.file, c.line))
   for (const r of asm.data_notes) r.citations.forEach((c) => addEx(c.file, c.line))
   for (const c of coverage) c.evidence.forEach((e) => addEx(e.file, e.line))
+  // Every verified fact can be opened from the Verification tab, including facts on rows that were held back.
+  for (const l of asm.verification.log) if (l.verified && l.file && l.line) addEx(l.file, l.line)
 
   return {
     document: cfg.scoping_template.document,

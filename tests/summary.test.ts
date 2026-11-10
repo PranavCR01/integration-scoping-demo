@@ -62,3 +62,11 @@ describe('the customer plan asks the same things as the emails', () => {
     expect(glance && 'text' in glance && glance.text).toContain(buildSummary(p, d).headline)
   })
 })
+
+describe('every verified fact can be opened in the source drawer', () => {
+  it('has an excerpt for each verified fact, including ones on held-back rows', async () => {
+    const p = await buildPlan({ customer })
+    const missing = p.verification.log.filter((l) => l.verified && l.file && l.line && !p.excerpts[`${l.file}#L${l.line}`])
+    expect(missing.map((l) => `${l.row} ${l.fact.value} ${l.file}#L${l.line}`)).toEqual([])
+  })
+})
