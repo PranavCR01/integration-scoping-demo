@@ -76,7 +76,7 @@ Before the call: open https://integration-scoping-demo.vercel.app/ and hard-refr
 ## Part 9: the goal shapes the plan
 
 [Click **Edit** in the customer bar. Choose **Who has access to what**. Click **Rebuild plan**]
-"Last: the goal drives the plan. For an access review, only Okta and the endpoint tools matter. Tenable, ServiceNow and Snyk move to 'connect later' and drop out of the counts, emails and data gate."
+"Last: the goal drives the plan. For an access review, only Okta and the endpoint tools matter. Tenable, ServiceNow and Snyk move to 'connect later' and drop out of the counts and emails, and their data problems become warnings instead of blockers."
 
 [Back on the summary]
 "So, week one: what to connect, who owes what, and whether the data can be trusted, with every fact traceable and every gap named."
