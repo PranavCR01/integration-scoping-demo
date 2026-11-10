@@ -1,4 +1,4 @@
-# Demo script (about 4 minutes: roughly 590 spoken words plus clicks)
+# Demo script (about 4 minutes: roughly 660 spoken words plus clicks)
 
 Before the call: open https://integration-scoping-demo.vercel.app/ and hard-refresh it. Halden Outfitters selected, **Show evidence** off, other tabs closed. Do one full dry run, then reload the page so every decision is cleared.
 
@@ -12,6 +12,9 @@ Before the call: open https://integration-scoping-demo.vercel.app/ and hard-refr
 
 [Share the screen. Kickoff card on screen]
 "That first week decides whether the 30-day promise holds. Here's a fictional customer, Halden Outfitters: six security tools, and a board-ready risk figure due in 30 days."
+
+[Point at **Plan rules: Board-ready risk figure** under the goal, and the **Try another goal** options]
+"The goal picks a rule set. Code matches its words, here 'board' and 'risk figure'. There are five rule sets, and each one sets which tools are needed, the connection order, the questions, the summary line and what blocks the data. I'll switch it at the end."
 
 ## Part 2: where things stand
 
@@ -80,7 +83,7 @@ Before the call: open https://integration-scoping-demo.vercel.app/ and hard-refr
 ## Part 9: the goal shapes the plan
 
 [Click **Edit** in the customer bar. Choose **Who has access to what**. Click **Rebuild plan**]
-"Last: the goal drives the plan. For an access review, only Okta and the endpoint tools matter. Tenable, ServiceNow and Snyk move to 'connect later' and drop out of the counts and emails, and their data problems become warnings instead of blockers."
+"Last, the goal switch I promised. For an access review, only Okta and the endpoint tools matter, and Okta moves to step one. Tenable, ServiceNow and Snyk move to 'connect later' and drop out of the counts and emails, the questions change, and their data problems become warnings instead of blockers. Those rules are config too."
 
 [Back on the summary]
 "So, week one: what to connect, who owes what, and whether the data can be trusted, with every fact traceable and every gap named."
