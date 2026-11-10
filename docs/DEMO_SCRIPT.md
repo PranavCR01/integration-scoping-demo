@@ -1,109 +1,94 @@
-# Demo script (3 minutes, plus 90 seconds on data and 30 seconds on day one)
+# Demo script (about 4 minutes)
 
-For Tushar: a customer-success leader, not an engineer. Talk about the customer, the timeline and trust. Skip how the code works unless he asks.
-
-Before the call: open https://integration-scoping-demo.vercel.app/, have Halden Outfitters selected, close other tabs. Do one dry run so everything is warm. Leave **Show evidence** off.
+Before the call: open https://integration-scoping-demo.vercel.app/ and hard-refresh it. Halden Outfitters selected, **Show evidence** off, other tabs closed. Do one full dry run, then reload the page so every decision is cleared.
 
 ---
 
-## 0:00 Setup (20 seconds)
+## Part 1: the setup (kickoff card)
 
-**Do:** Nothing yet. The Halden Outfitters kickoff card is showing: the goal, their six tools, and what the tool produces.
+[Kickoff card on screen]
+"When a customer signs, the first week decides whether the 30-day promise holds. Someone has to work out what to connect, who to ask for access, and what's wrong with the data. This tool does that first week. The customer is fictional: Halden Outfitters, six security tools, and one goal: a board-ready risk figure within 30 days."
 
-**Say:**
-> "When a new customer signs, the first week decides whether the 30-day promise holds. Someone has to work out what to connect, who to ask for access, and what could go wrong with the data. I built a small tool for that first week. This is a fictional customer, Halden Outfitters. They run six tools and want a board-ready risk figure in 30 days."
+## Part 2: where things stand
 
-## 0:20 The summary (40 seconds)
+[Click **Build scoping plan**. Point at the headline]
+"This is what a customer-success lead wants first. Four of the six tools can be connected now. Before the risk figure can be trusted, SAFE has four things to confirm, Halden owes us eleven answers, and three data issues need clearing. Every number here is counted by code, not written by the AI."
 
-**Do:** Click **Build scoping plan**. Let the summary card sit on screen.
+[Point at the list under **What stands between**]
+"And each blocker says whose move it is: SAFE's, the customer's, or ours."
 
-**Say:**
-> "This is the first thing I'd want as the person accountable for that 30 days. Four of the six tools can be connected now. SAFE has four things to confirm: which Defender product and whether a Snyk connector exists, plus the access CrowdStrike and ServiceNow need. Halden owes us eleven answers. And three data issues are blocking it. Underneath is exactly what stands in the way, and whose move it is: SAFE's, the customer's, or ours."
+## Part 3: who owes what
 
-## 1:00 Who owes what (45 seconds)
+[Click **See who owes what, with emails ready to send**. On the **Vulnerability management lead** card, click **Preview email**, then **Copy email**]
+"The same items, grouped by the person who has to act. The Tenable owner gets an email ready to send: the access we need, a dedicated account, and why their console shows 22 assets when our export returned 20. It's built only from details checked against Tenable's docs."
 
-**Do:** Click **See who owes what, with emails ready to send**. Point at the **Vulnerability management lead** card. Click **Copy email**, then **Preview email**.
+[Point at the **Endpoint security (EDR) administrator** card]
+"For CrowdStrike I had no vendor docs, so it doesn't guess. It says we'll confirm the access and follow up."
 
-**Say:**
-> "Here it's turned into actions, one card per person. The Tenable owner gets an email that's ready to send: what access we need, a dedicated account, and a question about why their console shows two more assets than the export. Nobody writes this from scratch. And the email only contains details that were checked against Tenable's own documentation. For CrowdStrike, where I didn't have the docs, it doesn't guess. It says we'll confirm and follow up."
+[Point at the **SAFE platform team** card]
+"And these are SAFE's own calls: which Defender product Halden means, and whether a Snyk connector exists beyond the public list."
 
-**Do:** Point at the **SAFE platform team** card.
+## Part 4: the plan and its evidence
 
-**Say:**
-> "And these are the questions for us internally: which Defender product, and whether a Snyk connector exists beyond the public list."
+[Click the **Plan** tab. Scroll past **Coverage check** and **Connection order** to the Snyk scoping sheet. Turn on **Show evidence**. Click the source chip next to **Rate limits**]
+"The plan reads like a customer document. Turn this on and every technical detail shows its source. This opens Snyk's own docs at the exact line: 1,620 requests per minute."
 
-## 1:45 Trust: show the evidence (50 seconds)
+[Close the drawer]
+"The AI writes the sentences, but code checks every fact: endpoints and scopes against the vendor's API spec, quotes against the exact line. If anything fails, the whole line is held back as Confirm, and the AI never gets a second try. I planted 18 kinds of mistakes, and it caught all 18."
 
-**Do:** Click the **Plan** tab. Scroll to **Custom work scoping sheet: Snyk**. Turn on **Show evidence**. Click the source chip next to **Rate limits**. The drawer opens on the exact line.
+## Part 5: verification
 
-**Say:**
-> "By default it reads like a customer document. If someone asks 'where did that come from?', I flip this on. Every technical detail has a source, and the code checks it against the vendor's documentation. The AI writes the sentences, but it isn't trusted on facts. If it invents an endpoint or gets a number wrong, that line is held back and shows as Confirm. I tested that by planting 18 kinds of mistakes, and it caught all of them."
+[Click the **Verification** tab. Point at **Held back**]
+"Seventy facts, sixty-nine verified. This one wasn't planted. The Snyk versioning sentence was mostly right, but the AI filed a header name as an API version, so the line was held back. I'd rather show a Confirm than a fact I can't trace."
 
-**Do:** Close the drawer. Point at **Versioning: Confirm**.
+[Click the source chip next to `YYYY-MM-DD` in the table]
+"The facts that did pass still open their source."
 
-**Say (optional, 15 seconds):**
-> "This one is real, not planted. The AI's sentence was right, but it labelled one of its sources wrong, so the check held the line back. I'd rather show a Confirm than a fact I can't trace."
+"One precise point: verified means it's in the vendor's docs. Whether SAFE's connector needs exactly that access is what SAFE confirms, and the plan asks."
 
-## 2:35 Export (25 seconds)
+## Part 6: data readiness
 
-**Do:** Turn **Show evidence** off. Click **Export**, then **Customer plan (PDF)**.
+[Click the **Data readiness** tab. Point at the red box]
+"Now the data. These are synthetic exports with problems I planted. Three things block: Tenable returned two fewer assets than its console shows, four possible duplicates need a person, and two findings point to machines no tool reports."
 
-**Say:**
-> "One click gives the customer a clean plan to sign off on, and there's an internal handoff for the platform team with every open item."
+[Scroll to **Merged assets**. Point at `ip-10-0-1-15 / web-prod-01`]
+"The scanner and the endpoint tool name this server differently. Same cloud instance ID, so it merges, and it says why."
 
-**Stop here if time is short (3:00).**
+[Scroll up to **Possible duplicates**. On the `hal-lt-005` / `hal-lt-009` pair, click **Same machine: merge**]
+"Weak evidence never merges on its own. These two laptops share only an IP address, and their serial numbers differ. If I try to merge them anyway, it stops me and asks again."
 
----
+[Click **Cancel**, then **Different machines**. Click **Different machines** on `app-01`, **Same machine: merge** on `fileserver-02` and on `hal-lt-008`]
+"A person decides each pair, and the gate updates. Zero wrong merges on the sample data. The two blockers left need Halden's answers, which is exactly what the Tenable email asks."
 
-## Optional: a different goal (20 seconds)
+## Part 7: the two documents
 
-**Do:** Click **Edit** in the customer bar, click the **Fix the most exploitable exposures** preset, then **Rebuild plan**.
+[Click the **Internal handoff** tab. Scroll to **Every Confirm item**]
+"It produces two documents. This one is for SAFE's team: every open item and who resolves it, what the verifier held back, and the data work. Effort is left blank on purpose. I won't invent a timeline without SAFE's own history."
 
-**Say:**
-> "The goal shapes the plan. For fixing exposures, the ticketing tool moves up to step two, because fixes have to reach the team that owns them, and the questions change to fix deadlines and owners. The rules for each goal live in a config file too."
+[Click **Export**, then **Customer plan (PDF)**]
+"The customer gets a clean plan: only verified details and their questions."
 
-**Do:** Click **Edit** again, choose **Board-ready risk figure**, and **Rebuild plan** to return to the main story.
+## Part 8: day one, no code change
 
-## 3:00 Data readiness (90 seconds)
+[Click **SAFE public list · 105 integrations** in the header, then **Use simulated internal list**. Point at the green banner]
+"Everything SAFE-specific is a config file: the integrations list, the ordering rules, the template, the data rules. Say SAFE's internal list includes Snyk. I load it, and Snyk moves from custom work to out of the box, its scoping sheet disappears, and the summary updates. On day one I'd swap in SAFE's real files."
 
-**Do:** Click the **Data readiness** tab.
+## Part 9: the goal shapes the plan
 
-**Say:**
-> "Oliver said two things happen on every deployment: messy data and a tight timeline. These are sample exports, synthetic, with problems I planted on purpose. The headline is the red box: not ready for a risk number yet, and why."
+[Click **Edit** in the customer bar. Choose **Who has access to what**. Click **Rebuild plan**]
+"Last thing: the goal drives the plan. For an access review, only Okta and the endpoint tools are needed. Tenable, ServiceNow and Snyk move to 'connect later' and drop out of the counts and the emails. The ordering, the questions and the data gate all follow the goal, and those rules are config too."
 
-**Do:** Scroll to **Merged assets** and point at `ip-10-0-1-15 / web-prod-01`.
-
-**Say:**
-> "The scanner calls this server by its AWS name, and the endpoint tool calls it web-prod-01. Different names, but the same cloud instance ID, so it merges, and it shows why."
-
-**Do:** Scroll up to **Possible duplicates**. Point at the two `app-01` records.
-
-**Say:**
-> "Two different servers are both called app-01. Merging them would hide a machine from the risk figure. Their instance IDs differ, so it doesn't merge. It asks a person."
-
-**Do:** Click **Different machines** on app-01 and **Same machine: merge** on fileserver-02. Then click **Plan** and point at the summary.
-
-**Say:**
-> "The person decides, and the summary updates. On the sample data it made zero wrong merges, and everything it wasn't sure about went to a person."
-
-## 4:30 Day one (30 seconds)
-
-**Do:** Click the integrations list button in the header ("SAFE public list · 105 integrations"), then **Use simulated internal list**.
-
-**Say:**
-> "Last thing. Everything SAFE-specific lives in config files: the integrations list, the ordering rules, the template, the data model. Say SAFE's internal list includes Snyk. I load that file..."
-
-**Do:** Point at the green banner: "Snyk: Custom work → Out of the box".
-
-**Say:**
-> "...and Snyk moves to out of the box, the summary updates, and the custom work disappears. No code change. On day one I'd swap in SAFE's real list and template, and the tool works your way."
+[Back on the summary]
+"So in week one: what to connect, who owes what, and whether the data can be trusted, with every fact traceable and every gap named."
 
 ---
 
-## If he asks
+## Backup answers (only if asked)
 
-- **"Is this real customer data?"** No. It's a fictional customer and synthetic exports, and only public vendor docs are used.
-- **"How accurate is it?"** It catches the 18 kinds of mistakes I planted, and it made zero wrong merges on the sample data. That's a proof of concept on public docs, not a benchmark. With real customers I'd measure it against SAFE's own gold sets.
-- **"Can it tell me how long onboarding will take?"** Not honestly, without SAFE's own history. Effort comes from a config file and is shown as a placeholder. I didn't want it to invent a timeline.
-- **"Does it know our connectors?"** No. It only knows the public integrations page. That's why it says Confirm, and why the config swap matters.
-- **"Which AI?"** Claude drafts the wording. Code does the matching, the ordering, every check, the summary and the emails.
+- **"Is this real data?"** No. A fictional customer, synthetic exports, and only public vendor docs plus SAFE's public integrations page.
+- **"How accurate is it?"** 18 of 18 planted errors caught, 11 of 11 coverage cases right, zero wrong merges on the sample data. A proof of concept, not a benchmark. With real customers I'd measure it against SAFE's own past scopes.
+- **"Does it know our connectors?"** No. "Not on the public list" means "confirm with SAFE", never "SAFE can't do it". That's why the config swap matters.
+- **"Where do the Tenable facts come from?"** A notes file compiled from Tenable's developer docs, with the source URLs in it. Okta and Snyk are checked against their full API specs.
+- **"Where does 22 in the console come from?"** It's in the sample data. In a real rollout it's the customer's answer to the Tenable email.
+- **"Are the review decisions saved?"** Not yet. They live in the browser. A real version would record who decided and when.
+- **"Which AI?"** Claude writes the wording. Code does the matching, ordering, every check, the counts and the emails.

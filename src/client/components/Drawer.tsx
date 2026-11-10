@@ -1,7 +1,14 @@
+import { useEffect } from 'react'
 import type { Excerpt } from '../../core/types'
 import type { CiteTarget } from './ui'
 
 export function Drawer({ cite, excerpt, label, onClose }: { cite: CiteTarget; excerpt: Excerpt | undefined; label: string; onClose: () => void }) {
+  // Escape closes the drawer, like the close button.
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && onClose()
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [onClose])
   return (
     <div className="fixed inset-0 z-40 flex justify-end bg-slate-900/20" onClick={onClose}>
       <aside className="h-full w-full max-w-2xl overflow-y-auto bg-white shadow-2xl" onClick={(e) => e.stopPropagation()}>
