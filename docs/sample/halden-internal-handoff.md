@@ -2,7 +2,7 @@
 
 Prepared Nov 10, 2026. Integrations config: SAFE public integrations page (captured Nov 4, 2026). Draft: Saved model draft from 2026-11-05 (claude-opus-5-5). Verified again just now against the current config and sources.
 
-Verification: 69/70 cited facts verified in code (0 with a corrected line number). 1 drafted item(s) held back.
+Verification: 69/70 cited facts verified in code (0 with a corrected line number). 1 drafted item held back.
 
 ## Decisions needed from SAFE
 
@@ -110,7 +110,7 @@ Verification: 69/70 cited facts verified in code (0 with a corrected line number
 | Stale assets need a decision: keep, exclude, or investigate | Warning | 3 assets not seen in over 30 days |
 | Endpoint agent coverage is below the agreed threshold (PLACEHOLDER: 90%) | Warning | 87% of 23 active assets have an endpoint agent |
 
-53 asset records became 29 assets (16 merged across tools, 1 duplicate inside one tool). 4 possible duplicate(s) need a person.
+53 asset records became 29 assets (16 merged across tools, 1 duplicate inside one tool). 4 possible duplicates need a person.
 
 | Possible duplicate | Evidence | Confidence | Why it needs a person |
 |---|---|---|---|
@@ -143,7 +143,7 @@ Verification: 69/70 cited facts verified in code (0 with a corrected line number
 - crowdstrike_hosts.os_version -> os: Confirm: placeholder field name. The attached docs do not document this export field.
 - crowdstrike_hosts.last_seen -> last_seen: Confirm: placeholder field name. The attached docs do not document this export field.
 
-*Placeholder settings to agree with the customer: Stale after 30 days; Scanned within 30 days; Endpoint agent coverage is below the agreed threshold (PLACEHOLDER: 90%).*
+*Placeholder settings to agree with the customer: Stale after 30 days; Scanned within 30 days; Endpoint agent coverage target 90%.*
 
 ## Config files in play (swap these for SAFE's internal versions)
 

@@ -100,7 +100,7 @@ export function handoffBlocks(plan: Plan, data: DataReport | null, labels: Recor
   const b: Block[] = []
   b.push({ t: 'h1', text: `Internal handoff: ${plan.customer.name} (FICTIONAL)` })
   b.push({ t: 'p', text: `Prepared ${fmtDate(plan.generated_at)}. Integrations config: ${plan.config_label}. Draft: ${plan.draft_note}` })
-  b.push({ t: 'p', text: `Verification: ${v.facts_verified}/${v.facts_total} cited facts verified in code (${v.facts_corrected} with a corrected line number). ${v.rows_held_back} drafted item(s) held back.` })
+  b.push({ t: 'p', text: `Verification: ${v.facts_verified}/${v.facts_total} cited facts verified in code (${v.facts_corrected} with a corrected line number). ${v.rows_held_back} drafted item${v.rows_held_back === 1 ? '' : 's'} held back.` })
 
   b.push({ t: 'h2', text: 'Decisions needed from SAFE' })
   const needs = plan.coverage.filter((c) => c.bucket !== 'out_of_box')
@@ -130,7 +130,7 @@ export function handoffBlocks(plan: Plan, data: DataReport | null, labels: Recor
     b.push({ t: 'h2', text: `Data readiness${data.synthetic ? ' (synthetic sample data)' : ''}` })
     b.push({ t: 'p', text: data.ready ? 'Data is ready to use.' : '**Data not ready yet.** Blocking items below.' })
     b.push({ t: 'table', head: ['Check', 'Status', 'Detail'], rows: data.checks.map((c) => [c.text, c.level === 'ok' ? 'OK' : c.level === 'block' ? 'BLOCKING' : 'Warning', c.detail]) })
-    b.push({ t: 'p', text: `${data.totals.asset_records} asset records became ${data.totals.merged_assets} assets (${data.totals.cross_tool_merges} merged across tools, ${data.totals.same_tool_duplicates} duplicate inside one tool). ${data.totals.review} possible duplicate(s) need a person.` })
+    b.push({ t: 'p', text: `${data.totals.asset_records} asset records became ${data.totals.merged_assets} assets (${data.totals.cross_tool_merges} merged across tools, ${data.totals.same_tool_duplicates} duplicate${data.totals.same_tool_duplicates === 1 ? "" : "s"} inside one tool). ${data.totals.review} possible duplicate${data.totals.review === 1 ? '' : 's'} ${data.totals.review === 1 ? 'needs' : 'need'} a person.` })
     if (data.review.length) b.push({ t: 'table', head: ['Possible duplicate', 'Evidence', 'Confidence', 'Why it needs a person'], rows: data.review.map((r) => [`${r.a.label} / ${r.b.label}`, `${r.label} (${r.shared})`, r.confidence.toFixed(2), r.why]) })
     const overridden = data.assets.filter((x) => x.overrides.length)
     if (overridden.length) b.push({ t: 'note', text: `Merged by a person against the evidence: ${overridden.map((x) => `${x.names.join(' / ')} (${x.overrides.join('; ')})`).join('; ')}. Check these before the counts are used.` })

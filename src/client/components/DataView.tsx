@@ -97,7 +97,7 @@ export function DataView({ data, loading, labels, onRun, onCite, decisions, onDe
 
       <Section title="Possible duplicates that need a person" aside={<span className="text-xs text-slate-500">Weak evidence never merges on its own</span>}>
         {data.review.length === 0 ? (
-          <p className="text-sm text-emerald-800">Nothing waiting. {data.decisions_applied ? `${data.decisions_applied} decision(s) applied.` : ''}</p>
+          <p className="text-sm text-emerald-800">Nothing waiting. {data.decisions_applied ? `${data.decisions_applied} decision${data.decisions_applied === 1 ? '' : 's'} applied.` : ''}</p>
         ) : (
           <div className="space-y-2">
             {data.review.map((r) => (

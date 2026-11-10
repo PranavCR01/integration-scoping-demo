@@ -444,7 +444,7 @@ export function analyze(input: DataInput): DataReport {
   const placeholders = [
     rules.stale_after_days.placeholder ? `Stale after ${staleDays} days` : '',
     rules.scan_recent_days.placeholder ? `Scanned within ${rules.scan_recent_days.value} days` : '',
-    ...rules.readiness.filter((r) => r.placeholder).map((r) => r.text),
+    ...rules.readiness.filter((r) => r.placeholder && r.check === 'edr_coverage' && r.below !== undefined).map((r) => `Endpoint agent coverage target ${Math.round(r.below! * 100)}%`),
   ].filter(Boolean)
 
   return {
