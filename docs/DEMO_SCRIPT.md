@@ -1,4 +1,4 @@
-# Demo script (about 4 minutes: roughly 570 spoken words plus clicks)
+# Demo script (about 4 minutes: roughly 590 spoken words plus clicks)
 
 Before the call: open https://integration-scoping-demo.vercel.app/ and hard-refresh it. Halden Outfitters selected, **Show evidence** off, other tabs closed. Do one full dry run, then reload the page so every decision is cleared.
 
