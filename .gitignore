@@ -4,3 +4,4 @@ generated
 .vercel
 .env*
 *.log
+docs/DEMO_SCRIPT.md
