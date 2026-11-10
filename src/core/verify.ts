@@ -175,7 +175,7 @@ function checkSpec(fact: Fact, idx: SpecIndex): FactCheck | null {
 export function verifyFact(fact: Fact, ctx: VerifyContext): FactCheck {
   if (FORMAT[fact.kind] && !FORMAT[fact.kind]!.test(fact.value)) {
     const kind = KIND_TEXT[fact.kind] ?? `a ${fact.kind}`
-    return fail(fact, 'BAD_FORMAT', `"${fact.value}" was labelled as ${kind}, but ${kind} must be ${FORMAT_TEXT[fact.kind] ?? 'in the expected format'}. The source was mislabelled, so the item is held back`)
+    return fail(fact, 'BAD_FORMAT', `"${fact.value}" was labelled as ${kind}, but ${kind} must be ${FORMAT_TEXT[fact.kind] ?? 'in the expected format'}. The draft labelled this fact wrongly, so the item is held back`)
   }
   if (fact.kind === 'canonical_field') {
     const v = fact.value.replace(/^(asset|finding)\./, '')

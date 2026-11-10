@@ -80,6 +80,9 @@ describe('review decisions by a person', () => {
     const after = runData({ customer, decisions })
     expect(after.review).toHaveLength(0)
     expect(after.checks.find((c) => c.check === 'review_queue')!.level).toBe('ok')
+    // an OK check reads as OK, not as the problem it would describe
+    expect(after.checks.find((c) => c.check === 'review_queue')!.text).toBe('No possible duplicates are waiting for a person')
+    expect(after.checks.find((c) => c.check === 'edr_coverage')!.text).toMatch(/meets the agreed threshold/)
     expect(scoreAgainstTruth(after, truth).wrong_merges).toBe(0)
     expect(scoreAgainstTruth(after, truth).missed_pairs).toBe(0)
   })

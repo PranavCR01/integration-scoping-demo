@@ -31,7 +31,7 @@ export function VerificationView({ plan, labels, onCite }: { plan: Plan; labels:
                 <div className="mt-1 text-slate-500 line-through">
                   <Rich text={h.draft_text} />
                 </div>
-                <div className="mt-1 text-amber-900">{h.reason}</div>
+                <div className="mt-1 text-amber-900">{/[.!?]$/.test(h.reason) ? h.reason : `${h.reason}.`}</div>
               </div>
             ))}
           </div>

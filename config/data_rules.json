@@ -10,10 +10,10 @@
     "note": "Coverage is measured over machines seen by the vulnerability scanner or the EDR tool. Devices seen only by the identity tool are listed separately and not counted, until the customer agrees which devices are in scope."
   },
   "readiness": [
-    { "check": "counts", "level": "block", "text": "Export counts differ from what the customer's console shows" },
-    { "check": "review_queue", "level": "block", "text": "Possible duplicates are waiting for a person to decide" },
-    { "check": "orphans", "level": "block", "text": "Findings point to assets no tool reports" },
-    { "check": "stale", "level": "warn", "text": "Stale assets need a decision: keep, exclude, or investigate" },
-    { "check": "edr_coverage", "level": "warn", "below": 0.9, "placeholder": true, "text": "Endpoint agent coverage is below the agreed threshold (PLACEHOLDER: 90%)" }
+    { "check": "counts", "level": "block", "text": "Export counts differ from what the customer's console shows", "ok_text": "Export counts match what the customer's console shows" },
+    { "check": "review_queue", "level": "block", "text": "Possible duplicates are waiting for a person to decide", "ok_text": "No possible duplicates are waiting for a person" },
+    { "check": "orphans", "level": "block", "text": "Findings point to assets no tool reports", "ok_text": "Every finding points to an asset a tool reports" },
+    { "check": "stale", "level": "warn", "text": "Stale assets need a decision: keep, exclude, or investigate", "ok_text": "No stale assets" },
+    { "check": "edr_coverage", "level": "warn", "below": 0.9, "placeholder": true, "text": "Endpoint agent coverage is below the agreed threshold (PLACEHOLDER: 90%)", "ok_text": "Endpoint agent coverage meets the agreed threshold (PLACEHOLDER: 90%)" }
   ]
 }

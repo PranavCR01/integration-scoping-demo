@@ -31,7 +31,7 @@ export interface DataRules {
   stale_after_days: { value: number; placeholder: boolean; note: string }
   scan_recent_days: { value: number; placeholder: boolean; note: string }
   coverage: { population_sources: string[]; edr_sources: string[]; scan_sources: string[]; note: string }
-  readiness: { check: string; level: 'block' | 'warn'; text: string; below?: number; placeholder?: boolean }[]
+  readiness: { check: string; level: 'block' | 'warn'; text: string; ok_text?: string; below?: number; placeholder?: boolean }[]
 }
 
 export interface AssetRecord {
@@ -404,7 +404,7 @@ export function analyze(input: DataInput): DataReport {
 
   const edrShare = population.length ? population.filter(hasEdr).length / population.length : 1
   const checks: CheckResult[] = rules.readiness.map((r) => {
-    const mk = (fail: boolean, detail: string): CheckResult => ({ check: r.check, level: fail ? r.level : 'ok', text: r.text, detail })
+    const mk = (fail: boolean, detail: string): CheckResult => ({ check: r.check, level: fail ? r.level : 'ok', text: fail ? r.text : r.ok_text ?? r.text, detail })
     // A problem that only involves tools this goal does not need is shown, but as a warning.
     const scoped = (inScope: number, outOfScope: number, detail: string): CheckResult =>
       inScope > 0

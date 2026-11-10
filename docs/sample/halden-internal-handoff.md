@@ -1,6 +1,6 @@
 # Internal handoff: Halden Outfitters (FICTIONAL)
 
-Prepared Nov 9, 2026. Integrations config: SAFE public integrations page (captured Nov 4, 2026). Draft: Saved model draft from 2026-11-05 (claude-opus-5-5). Verified again just now against the current config and sources.
+Prepared Nov 10, 2026. Integrations config: SAFE public integrations page (captured Nov 4, 2026). Draft: Saved model draft from 2026-11-05 (claude-opus-5-5). Verified again just now against the current config and sources.
 
 Verification: 69/70 cited facts verified in code (0 with a corrected line number). 1 drafted item(s) held back.
 
@@ -83,7 +83,7 @@ Verification: 69/70 cited facts verified in code (0 with a corrected line number
 
 | Item | What the draft said | Why it was held back |
 |---|---|---|
-| custom_sheet/Snyk/versioning | Each request sends a `version` query parameter as a date in `YYYY-MM-DD` format. Snyk recommends `2024-10-15`. Deprecated endpoints return a `Sunset` header with the end-of-support date. | "Sunset" was labelled as an API version, but an API version must be a date such as 2024-10-15 (or the format YYYY-MM-DD). The source was mislabelled, so the item is held back |
+| custom_sheet/Snyk/versioning | Each request sends a `version` query parameter as a date in `YYYY-MM-DD` format. Snyk recommends `2024-10-15`. Deprecated endpoints return a `Sunset` header with the end-of-support date. | "Sunset" was labelled as an API version, but an API version must be a date such as 2024-10-15 (or the format YYYY-MM-DD). The draft labelled this fact wrongly, so the item is held back |
 
 ## Effort
 

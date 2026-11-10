@@ -4,7 +4,7 @@
 
 **Plan built for:** Board-ready risk figure
 
-**Prepared:** Nov 9, 2026 · **Status:** Draft for customer review
+**Prepared:** Nov 10, 2026 · **Status:** Draft for customer review
 
 **Sources:** SAFE public integrations page (captured Nov 4, 2026); vendor API docs listed under each tool. Anything not found in those sources is marked **Confirm**.
 
