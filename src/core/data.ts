@@ -114,7 +114,7 @@ export interface DataReport {
   assets: MergedAsset[]
   review: ReviewItem[]
   stale: { asset_id: string; hostname: string | null; last_seen: string | null; days: number; sources: string[] }[]
-  coverage: { population: number; with_edr: number; scanned_recently: number; no_edr: { asset_id: string; hostname: string | null; sources: string[] }[]; not_scanned: { asset_id: string; hostname: string | null; sources: string[] }[]; identity_only: { asset_id: string; label: string }[] }
+  coverage: { population: number; with_edr: number; scanned_recently: number; no_edr: { asset_id: string; hostname: string | null; sources: string[] }[]; no_edr_pending: { asset_id: string; hostname: string | null; sources: string[] }[]; not_scanned: { asset_id: string; hostname: string | null; sources: string[] }[]; identity_only: { asset_id: string; label: string }[] }
   orphans: { finding_id: string; asset_ref: string; source: string }[]
   checks: CheckResult[]
   ready: boolean
@@ -410,6 +410,7 @@ export function analyze(input: DataInput): DataReport {
     return { key, label: m.label, short: m.short ?? m.tool, entity: m.entity, tool: m.tool, records: n, console: c ?? null, mismatch: c !== undefined && c !== n, uploaded: (input.uploaded ?? []).includes(key), in_scope: inScopeSrc(key) }
   })
 
+  const inReview = new Set(review.flatMap((x) => [x.a.asset_id, x.b.asset_id]))
   const edrShare = population.length ? population.filter(hasEdr).length / population.length : 1
   const checks: CheckResult[] = rules.readiness.map((r) => {
     const mk = (fail: boolean, detail: string): CheckResult => ({ check: r.check, level: fail ? r.level : 'ok', text: fail ? r.text : r.ok_text ?? r.text, detail })
@@ -435,7 +436,10 @@ export function analyze(input: DataInput): DataReport {
       case 'stale':
         return mk(stale.length > 0, `${stale.length} asset${stale.length === 1 ? '' : 's'} not seen in over ${staleDays} days`)
       case 'edr_coverage':
-        return mk(edrShare < (r.below ?? 1), `${Math.round(edrShare * 100)}% of ${population.length} active assets have an endpoint agent`)
+        {
+        const pending = population.filter((a) => !hasEdr(a) && inReview.has(a.asset_id)).length
+        return mk(edrShare < (r.below ?? 1), `${Math.round(edrShare * 100)}% of ${population.length} active assets have an endpoint agent${pending ? ` (${pending} without one ${pending === 1 ? 'is' : 'are'} waiting on a duplicate decision and may have one)` : ''}`)
+      }
       default:
         return mk(false, 'Unknown check in config')
     }
@@ -471,7 +475,10 @@ export function analyze(input: DataInput): DataReport {
       population: population.length,
       with_edr: population.filter(hasEdr).length,
       scanned_recently: population.filter(scannedRecently).length,
-      no_edr: population.filter((a) => !hasEdr(a)).map((a) => ({ asset_id: a.asset_id, hostname: a.hostname, sources: a.sources })),
+      // An asset in an open duplicate pair may gain an agent once the pair is decided, so it is
+      // listed apart and not raised with the customer yet.
+      no_edr: population.filter((a) => !hasEdr(a) && !inReview.has(a.asset_id)).map((a) => ({ asset_id: a.asset_id, hostname: a.hostname, sources: a.sources })),
+      no_edr_pending: population.filter((a) => !hasEdr(a) && inReview.has(a.asset_id)).map((a) => ({ asset_id: a.asset_id, hostname: a.hostname, sources: a.sources })),
       not_scanned: population.filter((a) => !scannedRecently(a)).map((a) => ({ asset_id: a.asset_id, hostname: a.hostname, sources: a.sources })),
       identity_only: identityOnly.map((a) => ({ asset_id: a.asset_id, label: a.hostname ?? a.asset_id })),
     },

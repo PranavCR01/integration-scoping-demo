@@ -65,7 +65,7 @@ Verification: 69/70 cited facts verified in code (0 with a corrected line number
 - data: Decide whether hal-lt-008 (CrowdStrike, Tenable) and hal-lt-008 (Okta) are the same machine. Evidence: device display name equals a hostname.
 - data: Decide whether hal-lt-005 (CrowdStrike, Okta) and hal-lt-009 (CrowdStrike, Okta, Tenable) are the same machine. Evidence: shared IP address only.
 - data: Trace 2 findings that point to assets no export contains (tio-retired-77, tio-retired-78).
-- data: Raise the 3 assets with no endpoint agent with the customer: db-prod-01, fileserver-01, fileserver-02.
+- data: Raise the 2 assets with no endpoint agent with the customer: db-prod-01, fileserver-01.
 
 ## Every Confirm item
 
@@ -108,7 +108,7 @@ Verification: 69/70 cited facts verified in code (0 with a corrected line number
 | Possible duplicates are waiting for a person to decide | BLOCKING | 4 possible duplicates waiting for review |
 | Findings point to assets no tool reports | BLOCKING | 2 findings with no matching asset |
 | Stale assets need a decision: keep, exclude, or investigate | Warning | 3 assets not seen in over 30 days |
-| Endpoint agent coverage is below the agreed threshold (PLACEHOLDER: 90%) | Warning | 87% of 23 active assets have an endpoint agent |
+| Endpoint agent coverage is below the agreed threshold (PLACEHOLDER: 90%) | Warning | 87% of 23 active assets have an endpoint agent (1 without one is waiting on a duplicate decision and may have one) |
 
 53 asset records became 29 assets (16 merged across tools, 1 duplicate inside one tool). 4 possible duplicates need a person.
 

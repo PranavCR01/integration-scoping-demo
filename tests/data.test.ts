@@ -105,3 +105,18 @@ describe('merge guard: a person can merge against the evidence, but it is never 
     expect(scoreAgainstTruth(after, truth).wrong_merges).toBeGreaterThan(0)
   })
 })
+
+describe('no-agent assets waiting on a duplicate decision are not raised yet', () => {
+  it('fileserver-02 is held apart until its pair is decided, then drops off once merged', async () => {
+    const before = runData({ customer })
+    expect(before.coverage.no_edr.map((x) => x.hostname)).not.toContain('fileserver-02')
+    expect(before.coverage.no_edr_pending.map((x) => x.hostname)).toContain('fileserver-02')
+    const { buildPlan } = await import('../src/server/plan')
+    const { buildActions } = await import('../src/core/summary')
+    const us = buildActions(await buildPlan({ customer }), before).find((a) => a.party === 'us')!
+    expect(us.items.find((i) => i.text.startsWith('Raise the'))!.text).not.toContain('fileserver-02')
+    const pair = before.review.find((x) => x.shared.includes('fileserver-02'))!
+    const after = runData({ customer, decisions: { [pair.pair.join('|')]: 'same' } })
+    expect([...after.coverage.no_edr, ...after.coverage.no_edr_pending].map((x) => x.hostname)).not.toContain('fileserver-02')
+  })
+})
