@@ -113,18 +113,29 @@ export function handoffBlocks(plan: Plan, data: DataReport | null, labels: Recor
   }
 
   b.push({ t: 'h2', text: 'Every Confirm item' })
-  const confirms = [
-    ...plan.access.flatMap((a) => a.rows.filter((r) => r.status === 'confirm').map((r) => `${a.tool} / ${r.label}: ${r.confirm_reason}`)),
-    ...plan.custom_sheets.flatMap((s) => s.rows.filter((r) => r.status === 'confirm').map((r) => `${s.tool} sheet / ${r.label}: ${r.confirm_reason}`)),
-  ]
-  b.push({ t: 'list', items: confirms.length ? confirms : ['None'] })
+  // One line per tool and reason, with who can settle it, so nothing open lacks an owner.
+  const open = new Map<string, { tool: string; items: string[]; why: string; who: string }>()
+  const addOpen = (tool: string, item: string, r: PlanRow, custom: boolean) => {
+    const why = r.confirm_reason ?? ''
+    const k = `${tool}|${why}`
+    if (!open.has(k)) open.set(k, { tool, items: [], why: why.replace(/\.$/, ''), who: resolverFor(r, custom) })
+    open.get(k)!.items.push(item)
+  }
+  for (const a of plan.access) for (const r of a.rows) if (r.status === 'confirm') addOpen(a.input, r.label, r, a.bucket === 'custom_work')
+  for (const sh of plan.custom_sheets) for (const r of sh.rows) if (r.status === 'confirm') addOpen(sh.tool, `Scoping sheet: ${r.label}`, r, true)
+  b.push(open.size ? { t: 'table', head: ['Tool', "What's open", 'Why', 'Who resolves it'], rows: [...open.values()].map((o) => [o.tool, o.items.join(', '), o.why, o.who]) } : { t: 'p', text: 'None.' })
 
   b.push({ t: 'h2', text: 'Held back by the verifier' })
   b.push(v.held.length ? { t: 'table', head: ['Item', 'What the draft said', 'Why it was held back'], rows: v.held.map((h) => [h.row, h.draft_text, h.reason]) } : { t: 'p', text: 'Nothing held back.' })
 
   b.push({ t: 'h2', text: 'Effort' })
-  b.push({ t: 'note', text: `${plan.effort.label}.` })
-  b.push({ t: 'table', head: ['Tool', 'Bucket', 'Effort'], rows: plan.effort.rows.map((r) => [r.tool, BUCKET_LABEL[r.bucket], r.value]) })
+  // A table of TBDs says nothing; show the table only once SAFE's own numbers are in the config.
+  if (plan.effort.rows.every((r) => /^tbd$/i.test(r.value.trim()))) {
+    b.push({ t: 'p', text: "Not estimated here. SAFE's own effort per bucket goes in `config/effort_placeholders.json`, and this section becomes a table once it does." })
+  } else {
+    b.push({ t: 'note', text: `${plan.effort.label}.` })
+    b.push({ t: 'table', head: ['Tool', 'Bucket', 'Effort'], rows: plan.effort.rows.map((r) => [r.tool, BUCKET_LABEL[r.bucket], r.value]) })
+  }
 
   if (data) {
     b.push({ t: 'h2', text: `Data readiness${data.synthetic ? ' (synthetic sample data)' : ''}` })
@@ -135,8 +146,14 @@ export function handoffBlocks(plan: Plan, data: DataReport | null, labels: Recor
     const overridden = data.assets.filter((x) => x.overrides.length)
     if (overridden.length) b.push({ t: 'note', text: `Merged by a person against the evidence: ${overridden.map((x) => `${x.names.join(' / ')} (${x.overrides.join('; ')})`).join('; ')}. Check these before the counts are used.` })
     const ph = data.mapping.filter((m) => m.status !== 'verified')
+    const srcLabel = (k: string) => data.sources.find((x) => x.key === k)?.label ?? k
     b.push({ t: 'h3', text: 'Field mappings to confirm' })
-    b.push({ t: 'list', items: ph.length ? ph.map((m) => `${m.source}.${m.from} -> ${m.canonical}: ${m.detail}`) : ['All mappings verified'] })
+    if (!ph.length) b.push({ t: 'p', text: 'All mappings verified.' })
+    else {
+      const reasons = [...new Set(ph.map((m) => m.detail))]
+      b.push({ t: 'note', text: ph.every((m) => m.status === 'placeholder') ? 'Placeholder field names: the attached docs do not document these export fields. Confirm each one before the data is used.' : reasons.length === 1 ? reasons[0] : 'Each row needs confirming before the data is used.' })
+      b.push({ t: 'table', head: reasons.length === 1 ? ['Source', 'Their field', 'Our field'] : ['Source', 'Their field', 'Our field', 'Why'], rows: ph.map((m) => [srcLabel(m.source), m.from, m.canonical, ...(reasons.length === 1 ? [] : [m.detail])]) })
+    }
     if (data.settings.placeholders.length) b.push({ t: 'note', text: `Placeholder settings to agree with the customer: ${data.settings.placeholders.join('; ')}.` })
   }
 
@@ -165,4 +182,14 @@ export function toMarkdown(blocks: Block[]): string {
     }
   }
   return out.join('\n\n') + '\n'
+}
+
+// Who can settle a Confirm item, from the reason code wrote for it.
+function resolverFor(r: PlanRow, custom: boolean): string {
+  const why = r.confirm_reason ?? ''
+  if (r.held_back || why.startsWith('Not drafted yet')) return 'Us (a new model draft, checked again)'
+  if (why.startsWith('Waiting on the exact product')) return 'Customer (which product), then SAFE'
+  const input = why.match(/^Needs input from the (.+?)\.?$/)
+  if (input) return input[1].replace(/^./, (c) => c.toUpperCase())
+  return custom ? 'SAFE (whether a connector exists, and what it needs)' : "SAFE (what its connector needs)"
 }

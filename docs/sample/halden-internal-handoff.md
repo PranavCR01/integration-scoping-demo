@@ -69,15 +69,14 @@ Verification: 69/70 cited facts verified in code (0 with a corrected line number
 
 ## Every Confirm item
 
-- CrowdStrike Falcon / How we connect: No vendor docs on file for this tool, so nothing is guessed.
-- CrowdStrike Falcon / Permissions or scopes: No vendor docs on file for this tool, so nothing is guessed.
-- ServiceNow ITSM / How we connect: No vendor docs on file for this tool, so nothing is guessed.
-- ServiceNow ITSM / Permissions or scopes: No vendor docs on file for this tool, so nothing is guessed.
-- Microsoft Defender / How we connect: Waiting on the exact product the customer licenses.
-- Microsoft Defender / Permissions or scopes: Waiting on the exact product the customer licenses.
-- Snyk / Permissions or scopes: The attached sources do not state this.
-- Snyk sheet / Versioning: The draft for this item could not be verified against the sources, so it was held back.
-- Snyk sheet / How records relate to assets: Needs input from the customer.
+| Tool | What's open | Why | Who resolves it |
+|---|---|---|---|
+| CrowdStrike Falcon | How we connect, Permissions or scopes | No vendor docs on file for this tool, so nothing is guessed | SAFE (what its connector needs) |
+| ServiceNow ITSM | How we connect, Permissions or scopes | No vendor docs on file for this tool, so nothing is guessed | SAFE (what its connector needs) |
+| Microsoft Defender | How we connect, Permissions or scopes | Waiting on the exact product the customer licenses | Customer (which product), then SAFE |
+| Snyk | Permissions or scopes | The attached sources do not state this | SAFE (whether a connector exists, and what it needs) |
+| Snyk | Scoping sheet: Versioning | The draft for this item could not be verified against the sources, so it was held back | Us (a new model draft, checked again) |
+| Snyk | Scoping sheet: How records relate to assets | Needs input from the customer | Customer |
 
 ## Held back by the verifier
 
@@ -87,16 +86,7 @@ Verification: 69/70 cited facts verified in code (0 with a corrected line number
 
 ## Effort
 
-*Placeholder from config, not an estimate.*
-
-| Tool | Bucket | Effort |
-|---|---|---|
-| Okta | Out of the box | TBD |
-| Tenable Vulnerability Management | Out of the box | TBD |
-| CrowdStrike Falcon | Out of the box | TBD |
-| ServiceNow ITSM | Out of the box | TBD |
-| Microsoft Defender | Confirm with SAFE | TBD |
-| Snyk | Custom work | TBD |
+Not estimated here. SAFE's own effort per bucket goes in `config/effort_placeholders.json`, and this section becomes a table once it does.
 
 ## Data readiness (synthetic sample data)
 
@@ -121,27 +111,31 @@ Verification: 69/70 cited facts verified in code (0 with a corrected line number
 
 ### Field mappings to confirm
 
-- tenable_assets.id -> source_id: Confirm: placeholder field name. The attached docs do not document this export field.
-- tenable_assets.fqdns -> fqdn: Confirm: placeholder field name. The attached docs do not document this export field.
-- tenable_assets.hostnames -> hostname: Confirm: placeholder field name. The attached docs do not document this export field.
-- tenable_assets.ipv4s -> ipv4: Confirm: placeholder field name. The attached docs do not document this export field.
-- tenable_assets.macs -> mac: Confirm: placeholder field name. The attached docs do not document this export field.
-- tenable_assets.cloud_instance_id -> cloud_instance_id: Confirm: placeholder field name. The attached docs do not document this export field.
-- tenable_assets.operating_systems -> os: Confirm: placeholder field name. The attached docs do not document this export field.
-- tenable_assets.last_seen -> last_seen: Confirm: placeholder field name. The attached docs do not document this export field.
-- tenable_vulns.definition.name -> title: Confirm: placeholder field name. The attached docs do not document this export field.
-- tenable_vulns.severity -> severity: Confirm: placeholder field name. The attached docs do not document this export field.
-- tenable_vulns.state -> status: Confirm: placeholder field name. The attached docs do not document this export field.
-- tenable_vulns.first_found -> first_seen: Confirm: placeholder field name. The attached docs do not document this export field.
-- tenable_vulns.last_found -> last_seen: Confirm: placeholder field name. The attached docs do not document this export field.
-- crowdstrike_hosts.device_id -> source_id: Confirm: placeholder field name. The attached docs do not document this export field.
-- crowdstrike_hosts.hostname -> hostname: Confirm: placeholder field name. The attached docs do not document this export field.
-- crowdstrike_hosts.local_ip -> ipv4: Confirm: placeholder field name. The attached docs do not document this export field.
-- crowdstrike_hosts.mac_address -> mac: Confirm: placeholder field name. The attached docs do not document this export field.
-- crowdstrike_hosts.instance_id -> cloud_instance_id: Confirm: placeholder field name. The attached docs do not document this export field.
-- crowdstrike_hosts.serial_number -> serial_number: Confirm: placeholder field name. The attached docs do not document this export field.
-- crowdstrike_hosts.os_version -> os: Confirm: placeholder field name. The attached docs do not document this export field.
-- crowdstrike_hosts.last_seen -> last_seen: Confirm: placeholder field name. The attached docs do not document this export field.
+*Placeholder field names: the attached docs do not document these export fields. Confirm each one before the data is used.*
+
+| Source | Their field | Our field |
+|---|---|---|
+| Tenable VM asset export | id | source_id |
+| Tenable VM asset export | fqdns | fqdn |
+| Tenable VM asset export | hostnames | hostname |
+| Tenable VM asset export | ipv4s | ipv4 |
+| Tenable VM asset export | macs | mac |
+| Tenable VM asset export | cloud_instance_id | cloud_instance_id |
+| Tenable VM asset export | operating_systems | os |
+| Tenable VM asset export | last_seen | last_seen |
+| Tenable VM vulnerability export | definition.name | title |
+| Tenable VM vulnerability export | severity | severity |
+| Tenable VM vulnerability export | state | status |
+| Tenable VM vulnerability export | first_found | first_seen |
+| Tenable VM vulnerability export | last_found | last_seen |
+| CrowdStrike Falcon host list | device_id | source_id |
+| CrowdStrike Falcon host list | hostname | hostname |
+| CrowdStrike Falcon host list | local_ip | ipv4 |
+| CrowdStrike Falcon host list | mac_address | mac |
+| CrowdStrike Falcon host list | instance_id | cloud_instance_id |
+| CrowdStrike Falcon host list | serial_number | serial_number |
+| CrowdStrike Falcon host list | os_version | os |
+| CrowdStrike Falcon host list | last_seen | last_seen |
 
 *Placeholder settings to agree with the customer: Stale after 30 days; Scanned within 30 days; Endpoint agent coverage target 90%.*
 

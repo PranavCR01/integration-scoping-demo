@@ -3,7 +3,7 @@ import { buildPlan } from '../src/server/plan'
 import { runData } from '../src/server/data'
 import { loadCustomer } from '../src/server/store'
 import { buildActions, buildSummary, customerDataAsks } from '../src/core/summary'
-import { planBlocks } from '../src/core/doc'
+import { handoffBlocks, planBlocks } from '../src/core/doc'
 
 const customer = loadCustomer('halden')
 const plain = (s: string) => s.replace(/`([^`]+)`/g, '$1').replace(/\*\*([^*]+)\*\*/g, '$1')
@@ -68,5 +68,25 @@ describe('every verified fact can be opened in the source drawer', () => {
     const p = await buildPlan({ customer })
     const missing = p.verification.log.filter((l) => l.verified && l.file && l.line && !p.excerpts[`${l.file}#L${l.line}`])
     expect(missing.map((l) => `${l.row} ${l.fact.value} ${l.file}#L${l.line}`)).toEqual([])
+  })
+})
+
+describe('internal handoff layout', () => {
+  it('every Confirm item has an owner, effort is one line while all TBD, mappings are a table', async () => {
+    const p = await buildPlan({ customer })
+    const d = runData({ customer })
+    const blocks = handoffBlocks(p, d, {})
+    const after = (h: string) => blocks[blocks.findIndex((b) => 'text' in b && b.text === h) + 1]
+    const confirm = after('Every Confirm item')
+    expect(confirm.t).toBe('table')
+    if (confirm.t === 'table') {
+      expect(confirm.rows.every((r) => r[3].length > 0)).toBe(true)
+      const total = p.access.flatMap((a) => a.rows).concat(p.custom_sheets.flatMap((s) => s.rows)).filter((r) => r.status === 'confirm').length
+      expect(confirm.rows.reduce((n, r) => n + r[1].split(', ').length, 0)).toBe(total) // nothing dropped by grouping
+    }
+    expect(after('Effort')).toMatchObject({ t: 'p' })
+    expect(blocks.some((b) => b.t === 'table' && b.head.includes('Effort'))).toBe(false)
+    const mapIdx = blocks.findIndex((b) => 'text' in b && b.text === 'Field mappings to confirm')
+    expect(blocks[mapIdx + 2]).toMatchObject({ t: 'table', head: ['Source', 'Their field', 'Our field'] })
   })
 })
