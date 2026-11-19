@@ -94,7 +94,7 @@ describe('internal handoff layout', () => {
     expect(blocks[mapIdx + 2]).toMatchObject({ t: 'list' })
     const lists = blocks.filter((b) => b.t === 'list').flatMap((b) => (b.t === 'list' ? b.items : []))
     // access lines are short (verified values only), not the full drafted sentence
-    expect(lists.some((x) => x.startsWith('access: How we connect: X-APIKeys, accessKey, secretKey'))).toBe(true)
+    expect(lists.some((x) => x.startsWith('access: How we connect: X-APIKeys, accessKey (+'))).toBe(true)
   })
 })
 
@@ -112,7 +112,8 @@ describe('summary sentence and card lines (code-written)', () => {
     const items = buildActions(p, null).flatMap((a) => a.items).filter((i) => i.kind === 'access' && i.short)
     expect(items.length).toBeGreaterThan(0)
     for (const i of items) {
-      const values = i.short!.split(': ').slice(1).join(': ').split(', ').filter(Boolean)
+      const values = i.short!.split(': ').slice(1).join(': ').replace(/ \(\+\d+ more in the email\)$/, '').split(', ').filter(Boolean)
+      expect(values.length).toBeLessThanOrEqual(2)
       for (const v of values) expect(verifiedValues.has(v), v).toBe(true)
       expect(i.text.length).toBeGreaterThan(i.short!.length)
     }

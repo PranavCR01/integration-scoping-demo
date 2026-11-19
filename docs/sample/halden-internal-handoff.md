@@ -8,13 +8,13 @@ Verification: 69/70 cited facts verified in code. 1 drafted item held back.
 
 ### Okta administrator (Okta)
 
-- access: How we connect: Authorization, SSWS, Bearer
-- access: Permissions or scopes: okta.users.read, okta.groups.read, okta.apps.read, okta.devices.read, okta.logs.read
+- access: How we connect: Authorization, SSWS (+1 more in the email)
+- access: Permissions or scopes: okta.users.read, okta.groups.read (+3 more in the email)
 
 ### Vulnerability management lead (Tenable VM)
 
-- access: How we connect: X-APIKeys, accessKey, secretKey, https://cloud.tenable.com
-- access: Permissions or scopes: Basic, VM.VM_EXPLORE.VM_EXPLORE.EXPORT, Can View, All Assets
+- access: How we connect: X-APIKeys, accessKey (+2 more in the email)
+- access: Permissions or scopes: Basic, VM.VM_EXPLORE.VM_EXPLORE.EXPORT (+2 more in the email)
 - question: Can you create a dedicated Tenable user account for this integration? Tenable recommends a separate user for each API integration, and each user has one valid API key at a time.
 - data: Your Tenable VM console shows 22 assets, but our export returned 20. Can you help us find which ones are missing?
 

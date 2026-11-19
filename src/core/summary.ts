@@ -96,11 +96,20 @@ function rowLine(r: PlanRow): string {
   return `${r.label}: ${plain(r.text)}`
 }
 
-// A card line made only from values code verified (headers, scopes, roles, URLs), so no
-// new technical wording is written. Quoted doc sentences are left to the full text.
+// A card line made only from values code verified, so no new technical wording is written.
+// It keeps the 2 most useful values (auth schemes and headers first, then scopes and roles,
+// then URLs; quoted doc sentences never) and says how many more the email has.
+const CARD_VALUES = 2
+const KIND_RANK: Partial<Record<string, number>> = { auth: 0, scope: 1, permission: 1, base_url: 2 }
 function rowShort(r: PlanRow): string {
-  const values = [...new Set(r.citations.filter((c) => c.kind !== 'doc').map((c) => c.value))]
-  return values.length ? `${r.label}: ${values.join(', ')}` : r.label
+  const ranked = r.citations
+    .filter((c) => c.kind !== 'doc')
+    .map((c, i) => ({ v: c.value, rank: KIND_RANK[c.kind] ?? 3, i }))
+    .sort((a, b) => a.rank - b.rank || a.i - b.i)
+  const values = [...new Set(ranked.map((x) => x.v))]
+  if (!values.length) return r.label
+  const more = values.length - CARD_VALUES
+  return `${r.label}: ${values.slice(0, CARD_VALUES).join(', ')}${more > 0 ? ` (+${more} more in the email)` : ''}`
 }
 
 export function buildActions(plan: Plan, data: DataReport | null): OwnerActions[] {
