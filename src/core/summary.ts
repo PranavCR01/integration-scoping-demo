@@ -166,12 +166,15 @@ export function buildActions(plan: Plan, data: DataReport | null): OwnerActions[
       const g = get(access?.owner ?? plan.project_owner, 'customer')
       g.items.push({ kind: 'data', text: `Your ${access?.input ?? s.tool} console shows ${s.console} ${s.entity}s, but our export returned ${s.records}. Can you help us find which ones are missing?`, tool: access?.input ?? s.tool })
     }
-    if (data.stale.length) {
-      get(plan.project_owner, 'customer').items.push({ kind: 'data', text: `${plural(data.stale.length, 'asset')} not seen in over ${data.settings.stale_after_days} days (${data.stale.map((s) => s.hostname).join(', ')}): keep, exclude, or investigate?`, tool: null })
+    // Like the count mismatch: only ask about stale machines from tools this goal needs.
+    const inScopeSrc = new Set(data.sources.filter((x) => x.in_scope !== false).map((x) => x.key))
+    const stale = data.stale.filter((s) => s.sources.some((src) => inScopeSrc.has(src)))
+    if (stale.length) {
+      get(plan.project_owner, 'customer').items.push({ kind: 'data', text: `${plural(stale.length, 'asset')} not seen in over ${data.settings.stale_after_days} days (${stale.map((s) => s.hostname).join(', ')}): keep, exclude, or investigate?`, tool: null })
     }
     if (data.review.length) us.items.push({ kind: 'data', text: `Review ${plural(data.review.length, 'possible duplicate')} on the Data readiness tab (${data.review.map((r) => r.a.label.replace(/ \(.*\)$/, '')).filter((x, i, xs) => xs.indexOf(x) === i).join(', ')}).`, tool: null })
-    if (data.orphans.length) us.items.push({ kind: 'data', text: `Trace ${plural(data.orphans.length, 'finding')} that point to assets no export contains (${data.orphans.map((o) => o.asset_ref).join(', ')}).`, tool: null })
-    if (data.coverage.no_edr.length) us.items.push({ kind: 'data', text: `Raise the ${plural(data.coverage.no_edr.length, 'asset')} with no endpoint agent with the customer: ${data.coverage.no_edr.map((a) => a.hostname).join(', ')}.`, tool: null })
+    if (data.orphans.length) us.items.push({ kind: 'data', text: `Trace ${data.orphans.length === 1 ? 'the finding that points to an asset' : `${data.orphans.length} findings that point to assets`} no export contains (${data.orphans.map((o) => o.asset_ref).join(', ')}).`, tool: null })
+    if (data.coverage.no_edr.length) us.items.push({ kind: 'data', text: `Raise ${data.coverage.no_edr.length === 1 ? 'the asset' : `the ${data.coverage.no_edr.length} assets`} with no endpoint agent with the customer: ${data.coverage.no_edr.map((a) => a.hostname).join(', ')}.`, tool: null })
     if (!us.items.length) groups.delete('us|Forward deployed engineer (us)')
   }
 

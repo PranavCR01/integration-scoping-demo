@@ -1,7 +1,7 @@
 {
   "_about": "What Halden says each tool console shows (FICTIONAL). Compared against the export record counts.",
-  "tenable_assets": 22,
-  "crowdstrike_hosts": 21,
-  "okta_devices": 12,
-  "tenable_vulns": 52
+  "tenable_assets": 11,
+  "crowdstrike_hosts": 8,
+  "okta_devices": 3,
+  "tenable_vulns": 22
 }

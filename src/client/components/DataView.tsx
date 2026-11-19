@@ -176,14 +176,22 @@ export function DataView({ data, loading, labels, onRun, onCite, decisions, onDe
             <div className="mt-1 flex flex-wrap gap-1">{data.coverage.no_edr.map((a) => <Pill key={a.asset_id}>{a.hostname}</Pill>)}</div>
             {data.coverage.no_edr_pending.length > 0 && (
               <div className="mt-1.5 text-xs text-slate-500">
-                Waiting on a duplicate decision, not raised yet:{' '}
+                Waiting on a duplicate decision:{' '}
                 {data.coverage.no_edr_pending.map((a) => (
                   <Pill key={a.asset_id} tone="amber">{a.hostname}</Pill>
                 ))}
               </div>
             )}
-            <div className="mt-3 font-medium text-slate-900">Not scanned in the last {data.settings.scan_recent_days} days ({data.coverage.not_scanned.length})</div>
+            <div className="mt-3 font-medium text-slate-900">Not scanned in the last {data.settings.scan_recent_days} days ({data.coverage.not_scanned.length + data.coverage.not_scanned_pending.length})</div>
             <div className="mt-1 flex flex-wrap gap-1">{data.coverage.not_scanned.map((a) => <Pill key={a.asset_id}>{a.hostname}</Pill>)}</div>
+            {data.coverage.not_scanned_pending.length > 0 && (
+              <div className="mt-1.5 text-xs text-slate-500">
+                Waiting on a duplicate decision:{' '}
+                {data.coverage.not_scanned_pending.map((a) => (
+                  <Pill key={a.asset_id} tone="amber">{a.hostname}</Pill>
+                ))}
+              </div>
+            )}
             {data.coverage.identity_only.length > 0 && (
               <>
                 <div className="mt-3 font-medium text-slate-900">Seen only by the identity tool (not counted until agreed in scope)</div>

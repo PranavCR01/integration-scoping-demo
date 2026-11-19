@@ -74,8 +74,8 @@
 
 **From the data checks on the sample exports:**
 
-- Your Tenable VM console shows 22 assets, but our export returned 20. Can you help us find which ones are missing?
-- 3 assets not seen in over 30 days (legacy-erp-01, print-srv-01, scanner-test-vm): keep, exclude, or investigate?
+- Your Tenable VM console shows 11 assets, but our export returned 9. Can you help us find which ones are missing?
+- 1 asset not seen in over 30 days (legacy-erp-01): keep, exclude, or investigate?
 
 ---
 

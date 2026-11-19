@@ -57,16 +57,16 @@ What this does not cover: claims written as plain English words with no code-lik
 
 ## 3. Duplicate detection on synthetic data
 
-53 asset records from 3 tools, which are 27 real machines in the truth file.
+20 asset records from 3 tools, which are 12 real machines in the truth file.
 
 | Measure | Value |
 |---|---|
-| Same-machine record pairs in the truth file | 36 |
-| Pairs merged automatically | 33 |
-| Correct automatic merges | 33 |
+| Same-machine record pairs in the truth file | 10 |
+| Pairs merged automatically | 9 |
+| Correct automatic merges | 9 |
 | **Wrong automatic merges** | **0** |
-| Same-machine pairs not merged | 3 (all 3 sent to the review queue) |
-| Review queue items | 4 (2 truly the same machine, 2 truly different) |
+| Same-machine pairs not merged | 1 (all 1 sent to the review queue) |
+| Review queue items | 2 (1 truly the same machine, 1 truly different) |
 
 The design choice: weak evidence (same hostname only, shared IP only, a device name equal to a hostname) never merges on its own. It goes to a person. That trades some manual review for zero silent wrong merges, which matters because a wrong merge hides a machine from the risk figure.
 

@@ -16,7 +16,7 @@ Verification: 56/57 cited facts verified in code. 1 drafted item held back.
 - access: How we connect: X-APIKeys, accessKey (+2 more in the email)
 - access: Permissions or scopes: Basic, VM.VM_EXPLORE.VM_EXPLORE.EXPORT (+2 more in the email)
 - question: Can you create a dedicated Tenable user account for this integration? Tenable recommends a separate user for each API integration, and each user has one valid API key at a time.
-- data: Your Tenable VM console shows 22 assets, but our export returned 20. Can you help us find which ones are missing?
+- data: Your Tenable VM console shows 11 assets, but our export returned 9. Can you help us find which ones are missing?
 
 ### Application security lead (Snyk)
 
@@ -29,7 +29,7 @@ Verification: 56/57 cited facts verified in code. 1 drafted item held back.
 - question: Which systems hold your most critical data or drive the most revenue? These count first in the risk figure.
 - question: How far back should vulnerability history go, and after how many days without activity should an asset count as stale?
 - question: Who owns the admin account for each tool, and who approves API access?
-- data: 3 assets not seen in over 30 days (legacy-erp-01, print-srv-01, scanner-test-vm): keep, exclude, or investigate?
+- data: 1 asset not seen in over 30 days (legacy-erp-01): keep, exclude, or investigate?
 
 ### SAFE platform team
 
@@ -39,9 +39,9 @@ Verification: 56/57 cited facts verified in code. 1 drafted item held back.
 
 ### Forward deployed engineer (us)
 
-- data: Review 4 possible duplicates on the Data readiness tab (app-01, fileserver-02, hal-lt-008, hal-lt-005).
-- data: Trace 2 findings that point to assets no export contains (tio-retired-77, tio-retired-78).
-- data: Raise the 2 assets with no endpoint agent with the customer: db-prod-01, fileserver-01.
+- data: Review 2 possible duplicates on the Data readiness tab (app-01, fileserver-02).
+- data: Trace the finding that points to an asset no export contains (tio-retired-77).
+- data: Raise the asset with no endpoint agent with the customer: db-prod-01.
 
 *Access lines are short here. The full verified wording is in the customer plan, section 3, and in each email.*
 
@@ -67,20 +67,18 @@ Verification: 56/57 cited facts verified in code. 1 drafted item held back.
 
 | Check | Status | Detail |
 |---|---|---|
-| Export counts differ from what the customer's console shows | BLOCKING | Tenable VM asset export: export 20, console 22 |
-| Possible duplicates are waiting for a person to decide | BLOCKING | 4 possible duplicates waiting for review |
-| Findings point to assets no tool reports | BLOCKING | 2 findings with no matching asset |
-| Stale assets need a decision: keep, exclude, or investigate | Warning | 3 assets not seen in over 30 days |
-| Endpoint agent coverage is below the agreed threshold (PLACEHOLDER: 90%) | Warning | 87% of 23 active assets have an endpoint agent (1 without one is waiting on a duplicate decision and may have one) |
+| Export counts differ from what the customer's console shows | BLOCKING | Tenable VM asset export: export 9, console 11 |
+| Possible duplicates are waiting for a person to decide | BLOCKING | 2 possible duplicates waiting for review |
+| Findings point to assets no tool reports | BLOCKING | 1 finding with no matching asset |
+| Stale assets need a decision: keep, exclude, or investigate | Warning | 1 asset not seen in over 30 days |
+| Endpoint agent coverage is below target (placeholder: 90%) | Warning | 73% of 11 active assets have an endpoint agent (2 without one are waiting on a duplicate decision and may have one) |
 
-53 asset records became 29 assets (16 merged across tools, 1 duplicate inside one tool). 4 possible duplicates need a person.
+20 asset records became 13 assets (5 merged across tools, 0 duplicates inside one tool). 2 possible duplicates need a person.
 
 | Possible duplicate | Evidence | Why it needs a person |
 |---|---|---|
-| app-01 (CrowdStrike, Tenable) / app-01 (CrowdStrike) | Same hostname, nothing else in common (hostname=app-01) | Weak match, and the records have different cloud instance IDs (i-0a1b2c3d4e5f60101 vs i-0a1b2c3d4e5f60202): likely different machines. A person decides. |
+| app-01 (Tenable) / app-01 (CrowdStrike) | Same hostname, nothing else in common (hostname=app-01) | Weak match, and the records have different cloud instance IDs (i-0a1b2c3d4e5f60101 vs i-0a1b2c3d4e5f60202): likely different machines. A person decides. |
 | fileserver-02 (Tenable) / fileserver-02 (CrowdStrike) | Same hostname, nothing else in common (hostname=fileserver-02) | Not enough on its own to merge. A person decides. |
-| hal-lt-008 (CrowdStrike, Tenable) / hal-lt-008 (Okta) | Device display name equals a hostname (display_name=hal-lt-008) | Not enough on its own to merge. A person decides. |
-| hal-lt-005 (CrowdStrike, Okta) / hal-lt-009 (CrowdStrike, Okta, Tenable) | Shared IP address only (IPs get reassigned) (ipv4=10.20.4.17) | Weak match, and the records have different serial numbers (C02HAL005 vs C02HAL009): likely different machines. A person decides. |
 
 ### Field mappings to confirm
 

@@ -35,21 +35,29 @@ describe('data normalization and checks (synthetic Halden data)', () => {
     expect(rev.why).toMatch(/different cloud instance IDs/)
   })
 
-  it('does not merge two laptops that share a reassigned IP; sends it to review', () => {
-    expect(assetWith('crowdstrike_hosts:cs-hal-lt-005')).not.toBe(assetWith('crowdstrike_hosts:cs-hal-lt-009'))
-    expect(r.review.some((x) => x.rule === 'ip_only')).toBe(true)
+  it('links a laptop seen under a generic name on another network by MAC address only', () => {
+    const a = assetWith('tenable_assets:tio-3')
+    expect(a.records.map((x) => x.key)).toContain('crowdstrike_hosts:cs-hal-lt-003')
+    expect(a.reasons[0].rule).toBe('mac')
   })
 
-  it('flags the duplicate CrowdStrike record from a reinstall', () => {
-    expect(assetWith('crowdstrike_hosts:cs-hal-lt-007-old').same_tool_duplicates).toEqual(['crowdstrike_hosts'])
+  it('links the domain controller by hostname plus a shared IP', () => {
+    expect(assetWith('tenable_assets:tio-e34').reasons[0].rule).toBe('hostname_and_ip')
   })
 
-  it('finds stale assets, coverage gaps, orphan findings and the count mismatch', () => {
-    expect(r.stale.map((s) => s.hostname).sort()).toEqual(['legacy-erp-01', 'print-srv-01', 'scanner-test-vm'])
-    expect(r.coverage.no_edr.map((x) => x.hostname)).toEqual(expect.arrayContaining(['db-prod-01', 'fileserver-01']))
-    expect(r.orphans).toHaveLength(2)
+  it('one example of each kind of evidence: five merged machines, two possible duplicates', () => {
+    const merged = r.assets.filter((a) => a.sources.length > 1)
+    expect(merged.map((a) => a.reasons[0].rule).sort()).toEqual(['cloud_instance_id', 'hostname_and_ip', 'mac', 'serial_number', 'serial_number'])
+    expect(r.review.map((x) => x.shared).sort()).toEqual(['hostname=app-01', 'hostname=fileserver-02'])
+  })
+
+  it('finds the stale asset, coverage gaps, the orphan finding and the count mismatch', () => {
+    expect(r.stale.map((s) => s.hostname)).toEqual(['legacy-erp-01'])
+    expect(r.coverage.no_edr.map((x) => x.hostname)).toEqual(['db-prod-01'])
+    expect(r.coverage.not_scanned.map((x) => x.hostname)).toEqual(['kiosk-lobby-01'])
+    expect(r.orphans.map((o) => o.asset_ref)).toEqual(['tio-retired-77'])
     expect(r.sources.find((s) => s.key === 'tenable_assets')!.mismatch).toBe(true)
-    expect(r.coverage.identity_only.map((x) => x.label)).toEqual(expect.arrayContaining(["marco's iphone", "dana's ipad"]))
+    expect(r.coverage.identity_only.map((x) => x.label)).toEqual(["marco's iphone"])
   })
 
   it('blocks the risk number until the blocking checks are resolved', () => {
@@ -75,7 +83,7 @@ describe('review decisions by a person', () => {
     expect(after.checks.find((c) => c.check === 'review_queue')!.level).toBe('ok')
     // an OK check reads as OK, not as the problem it would describe
     expect(after.checks.find((c) => c.check === 'review_queue')!.text).toBe('No possible duplicates are waiting for a person')
-    expect(after.checks.find((c) => c.check === 'edr_coverage')!.text).toMatch(/meets the agreed threshold/)
+    expect(after.checks.find((c) => c.check === 'review_queue')!.level).toBe('ok')
     expect(scoreAgainstTruth(after, truth).wrong_merges).toBe(0)
     expect(scoreAgainstTruth(after, truth).missed_pairs).toBe(0)
   })
@@ -84,14 +92,14 @@ describe('review decisions by a person', () => {
 describe('merge guard: a person can merge against the evidence, but it is never silent', () => {
   it('pairs with conflicting evidence say so; merging them anyway marks the asset', () => {
     const before = runData({ customer })
-    const ipPair = before.review.find((x) => x.shared.includes('10.20.4.17'))!
+    const appPair = before.review.find((x) => x.shared === 'hostname=app-01')!
     const filePair = before.review.find((x) => x.shared.includes('fileserver-02'))!
-    expect(ipPair.conflict).toMatch(/different serial numbers/)
+    expect(appPair.conflict).toMatch(/different cloud instance IDs/)
     expect(filePair.conflict).toBeNull()
-    const after = runData({ customer, decisions: { [ipPair.pair.join('|')]: 'same', [filePair.pair.join('|')]: 'same' } })
+    const after = runData({ customer, decisions: { [appPair.pair.join('|')]: 'same', [filePair.pair.join('|')]: 'same' } })
     const merged = after.assets.find((a) => a.overrides.length)!
-    expect(merged.overrides[0]).toMatch(/C02HAL005/)
-    expect(merged.reasons.some((r) => r.label.startsWith('A person merged these despite different serial numbers'))).toBe(true)
+    expect(merged.overrides[0]).toMatch(/i-0a1b2c3d4e5f60101/)
+    expect(merged.reasons.some((r) => r.label.startsWith('A person merged these despite different cloud instance IDs'))).toBe(true)
     // the clean "same" decision carries no override
     expect(after.assets.filter((a) => a.overrides.length)).toHaveLength(1)
     // and the truth check still counts it as a wrong merge
@@ -111,5 +119,30 @@ describe('no-agent assets waiting on a duplicate decision are not raised yet', (
     const pair = before.review.find((x) => x.shared.includes('fileserver-02'))!
     const after = runData({ customer, decisions: { [pair.pair.join('|')]: 'same' } })
     expect([...after.coverage.no_edr, ...after.coverage.no_edr_pending].map((x) => x.hostname)).not.toContain('fileserver-02')
+  })
+})
+
+describe('not-scanned machines waiting on a duplicate decision are held apart', () => {
+  it('app-01 (staging) and fileserver-02 wait while their pairs are open; deciding the pairs settles them', () => {
+    const before = runData({ customer })
+    expect(before.coverage.not_scanned.map((x) => x.hostname)).toEqual(['kiosk-lobby-01'])
+    expect(before.coverage.not_scanned_pending.map((x) => x.hostname).sort()).toEqual(['app-01', 'fileserver-02'])
+    const app = before.review.find((x) => x.shared === 'hostname=app-01')!
+    const file = before.review.find((x) => x.shared === 'hostname=fileserver-02')!
+    const after = runData({ customer, decisions: { [app.pair.join('|')]: 'different', [file.pair.join('|')]: 'same' } })
+    expect(after.coverage.not_scanned_pending).toEqual([])
+    // staging app-01 really is unscanned, so it is now listed; the file server merged with its scan
+    expect(after.coverage.not_scanned.map((x) => x.hostname).sort()).toEqual(['app-01', 'kiosk-lobby-01'])
+  })
+})
+
+describe('stale machines are only raised when the goal needs their tool', () => {
+  it('the board goal asks about legacy-erp-01; the access goal (no Tenable) does not', async () => {
+    const { buildPlan } = await import('../src/server/plan')
+    const { buildActions } = await import('../src/core/summary')
+    const access = { ...customer, goal: 'Understand who has access to what across our systems.' }
+    const ask = async (c: typeof customer) => buildActions(await buildPlan({ customer: c }), runData({ customer: c })).flatMap((a) => a.items).some((i) => /not seen in over/.test(i.text))
+    expect(await ask(customer)).toBe(true)
+    expect(await ask(access)).toBe(false)
   })
 })

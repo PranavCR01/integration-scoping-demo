@@ -114,7 +114,7 @@ export interface DataReport {
   assets: MergedAsset[]
   review: ReviewItem[]
   stale: { asset_id: string; hostname: string | null; last_seen: string | null; days: number; sources: string[] }[]
-  coverage: { population: number; with_edr: number; scanned_recently: number; no_edr: { asset_id: string; hostname: string | null; sources: string[] }[]; no_edr_pending: { asset_id: string; hostname: string | null; sources: string[] }[]; not_scanned: { asset_id: string; hostname: string | null; sources: string[] }[]; identity_only: { asset_id: string; label: string }[] }
+  coverage: { population: number; with_edr: number; scanned_recently: number; no_edr: { asset_id: string; hostname: string | null; sources: string[] }[]; no_edr_pending: { asset_id: string; hostname: string | null; sources: string[] }[]; not_scanned_pending: { asset_id: string; hostname: string | null; sources: string[] }[]; not_scanned: { asset_id: string; hostname: string | null; sources: string[] }[]; identity_only: { asset_id: string; label: string }[] }
   orphans: { finding_id: string; asset_ref: string; source: string }[]
   checks: CheckResult[]
   ready: boolean
@@ -478,7 +478,10 @@ export function analyze(input: DataInput): DataReport {
       // listed apart and not raised with the customer yet.
       no_edr: population.filter((a) => !hasEdr(a) && !inReview.has(a.asset_id)).map((a) => ({ asset_id: a.asset_id, hostname: a.hostname, sources: a.sources })),
       no_edr_pending: population.filter((a) => !hasEdr(a) && inReview.has(a.asset_id)).map((a) => ({ asset_id: a.asset_id, hostname: a.hostname, sources: a.sources })),
-      not_scanned: population.filter((a) => !scannedRecently(a)).map((a) => ({ asset_id: a.asset_id, hostname: a.hostname, sources: a.sources })),
+      // Same rule as the agent list: a machine in an open duplicate pair may turn out to be
+      // scanned under its other record, so it waits for the decision.
+      not_scanned: population.filter((a) => !scannedRecently(a) && !inReview.has(a.asset_id)).map((a) => ({ asset_id: a.asset_id, hostname: a.hostname, sources: a.sources })),
+      not_scanned_pending: population.filter((a) => !scannedRecently(a) && inReview.has(a.asset_id)).map((a) => ({ asset_id: a.asset_id, hostname: a.hostname, sources: a.sources })),
       identity_only: identityOnly.map((a) => ({ asset_id: a.asset_id, label: a.hostname ?? a.asset_id })),
     },
     orphans,
