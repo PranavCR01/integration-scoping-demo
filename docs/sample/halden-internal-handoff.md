@@ -27,8 +27,8 @@ Verification: 56/57 cited facts verified in code. 1 drafted item held back.
 
 - question: Who will present the risk figure to the board, and when is the first meeting it needs to be ready for?
 - question: Which systems hold your most critical data or drive the most revenue? These count first in the risk figure.
-- question: Who owns the admin account for each tool, and who approves API access?
 - question: How far back should vulnerability history go, and after how many days without activity should an asset count as stale?
+- question: Who owns the admin account for each tool, and who approves API access?
 - data: 3 assets not seen in over 30 days (legacy-erp-01, print-srv-01, scanner-test-vm): keep, exclude, or investigate?
 
 ### SAFE platform team

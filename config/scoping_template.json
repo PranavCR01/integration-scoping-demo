@@ -115,10 +115,6 @@
     {
       "key": "owners",
       "text": "Who owns each tool's admin account, and who approves API access?"
-    },
-    {
-      "key": "lookback",
-      "text": "What lookback window should vulnerability history use, and after how many days should an asset count as stale?"
     }
   ],
   "hidden_data_notes": [

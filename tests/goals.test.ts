@@ -132,6 +132,29 @@ describe('each goal only asks for the tools it needs', () => {
     expect(level(board, 'orphans')).toBe('block')
   })
 
+  it('identity goal: the plan asks only about needed tools, and its count matches the tile', async () => {
+    const { planBlocks, LATER_SHEET } = await import('../src/core/doc')
+    const { goalQuestions, customerDataAsks } = await import('../src/core/summary')
+    const p = await plan(identityGoal)
+    const d = runData({ customer: { ...base, goal: identityGoal } })
+    const keys = goalQuestions(p).map((q) => q.key)
+    expect(keys).not.toContain('extra_1') // Snyk plan and region
+    expect(keys).not.toContain('extra_2') // dedicated Tenable user
+    expect(keys).not.toContain('lookback') // vulnerability history: board goal only
+    expect(goalQuestions(p).length + customerDataAsks(p, d).length).toBe(buildSummary(p, d).customer_questions)
+    const blocks = planBlocks(p, {}, '', '', 'Plan', 'Draft', d)
+    const sheetAt = blocks.findIndex((b) => 'text' in b && b.text.startsWith('4. Custom work scoping sheet: Snyk'))
+    expect(blocks[sheetAt + 1]).toEqual({ t: 'p', text: LATER_SHEET })
+    expect(blocks.some((b) => b.t === 'table' && b.head[0] === 'Item')).toBe(false) // no sheet table
+  })
+
+  it('board goal asks about vulnerability history; the general fallback does too', async () => {
+    const board = await plan(base.goal)
+    const general = await plan('Get our tools connected to SAFE.')
+    expect(board.questions.map((q) => q.key)).toContain('lookback')
+    expect(general.questions.map((q) => q.key)).toContain('lookback')
+  })
+
   it('board goal needs every tool, so nothing waits', async () => {
     const p = await plan(base.goal)
     expect(p.scope.later).toEqual([])

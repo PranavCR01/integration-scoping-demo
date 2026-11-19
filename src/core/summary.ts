@@ -35,7 +35,11 @@ export interface OwnerActions {
 
 // A tool is in scope when the goal needs its role. Out-of-scope tools are listed in the plan
 // but left out of the counts, the requests and the blockers.
-const inScope = (plan: Plan, toolKey: string | null) => !toolKey || !plan.scope || plan.scope.needed.includes(toolKey)
+export const inScope = (plan: Plan, toolKey: string | null) => !toolKey || !plan.scope || plan.scope.needed.includes(toolKey)
+
+// The questions this goal asks: a question about a tool the goal does not need waits, like
+// that tool's access request. Every view (plan, PDF, cards, counts) uses this one list.
+export const goalQuestions = (plan: Plan) => plan.questions.filter((q) => inScope(plan, q.tool))
 
 const plain = (s: string) => s.replace(/`([^`]+)`/g, '$1').replace(/\*\*([^*]+)\*\*/g, '$1')
 const plural = (n: number, one: string, many = `${one}s`) => `${n} ${n === 1 ? one : many}`
@@ -133,8 +137,7 @@ export function buildActions(plan: Plan, data: DataReport | null): OwnerActions[
     // decision, and the project lead's owners question already asks who runs it.
     for (const r of verified) g.items.push({ kind: 'access', text: rowLine(r), short: rowShort(r), tool: a.input })
   }
-  for (const q of plan.questions) {
-    if (!inScope(plan, q.tool)) continue
+  for (const q of goalQuestions(plan)) {
     const g = get(ownerOf(q.tool), 'customer')
     const name = inputOf(q.tool)
     if (name && !g.tools.includes(name)) g.tools.push(name)

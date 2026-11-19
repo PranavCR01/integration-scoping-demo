@@ -1,5 +1,6 @@
 import type { Plan, PlanRow } from '../../core/types'
-import { accessLines, LATER_ACCESS } from '../../core/doc'
+import { accessLines, LATER_ACCESS, LATER_SHEET } from '../../core/doc'
+import { goalQuestions, inScope } from '../../core/summary'
 import { BucketBadge, CiteChip, ConfirmTag, Rich, Section, shortLabel, type CiteTarget } from './ui'
 
 interface Props {
@@ -175,6 +176,10 @@ export function PlanView({ plan, labels, onCite, changed, evidence, dataAsks = [
 
       {plan.custom_sheets.map((s) => (
         <Section key={s.tool} n={4} title={`Custom work scoping sheet: ${s.tool}`} aside={<BucketBadge bucket="custom_work" />}>
+          {!inScope(plan, s.tool) ? (
+            <p className="text-sm text-slate-500">{LATER_SHEET}</p>
+          ) : (
+          <>
           <p className="mb-3 text-sm text-amber-900">
             {s.tool} is not on SAFE's public list. <strong>Confirm</strong> with SAFE whether a connector exists before building one.
           </p>
@@ -186,6 +191,8 @@ export function PlanView({ plan, labels, onCite, changed, evidence, dataAsks = [
               </div>
             ))}
           </div>
+          </>
+          )}
         </Section>
       ))}
 
@@ -213,7 +220,7 @@ export function PlanView({ plan, labels, onCite, changed, evidence, dataAsks = [
 
       <Section n={5 + customN} title={`Open questions for ${plan.customer.name}`}>
         <ol className="list-decimal space-y-1.5 pl-5 text-sm text-slate-700">
-          {plan.questions.map((q) => (
+          {goalQuestions(plan).map((q) => (
             <li key={q.key}>{q.text}</li>
           ))}
         </ol>

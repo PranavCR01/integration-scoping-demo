@@ -65,6 +65,10 @@
         {
           "key": "crown_jewels",
           "text": "Which systems hold your most critical data or revenue? This decides what counts first in the risk figure."
+        },
+        {
+          "key": "lookback",
+          "text": "What lookback window should vulnerability history use, and after how many days should an asset count as stale?"
         }
       ]
     },
@@ -178,7 +182,12 @@
           "unlocks": "Remediation tracking and additional findings."
         }
       ],
-      "questions": []
+      "questions": [
+        {
+          "key": "lookback",
+          "text": "What lookback window should vulnerability history use, and after how many days should an asset count as stale?"
+        }
+      ]
     }
   },
   "gates": {

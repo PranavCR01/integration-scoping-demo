@@ -67,8 +67,8 @@
 
 1. Who will present the risk figure to the board, and when is the first meeting it needs to be ready for?
 2. Which systems hold your most critical data or drive the most revenue? These count first in the risk figure.
-3. Who owns the admin account for each tool, and who approves API access?
-4. How far back should vulnerability history go, and after how many days without activity should an asset count as stale?
+3. How far back should vulnerability history go, and after how many days without activity should an asset count as stale?
+4. Who owns the admin account for each tool, and who approves API access?
 5. Is your Snyk account on the Enterprise plan, and which Snyk region hosts it? API access needs the Enterprise plan, and tokens only work in their own region.
 6. Can you create a dedicated Tenable user account for this integration? Tenable recommends a separate user for each API integration, and each user has one valid API key at a time.
 

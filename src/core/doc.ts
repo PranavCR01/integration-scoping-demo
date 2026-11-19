@@ -3,7 +3,7 @@
 import type { Plan, PlanRow } from './types.js'
 import { BUCKET_LABEL } from './types.js'
 import type { DataReport } from './data.js'
-import { buildActions, buildSummary, customerDataAsks } from './summary.js'
+import { buildActions, buildSummary, customerDataAsks, goalQuestions, inScope } from './summary.js'
 
 export type Block =
   | { t: 'h1' | 'h2' | 'h3' | 'p' | 'note'; text: string }
@@ -30,6 +30,7 @@ export function citeText(row: PlanRow, labels: Record<string, string>): string {
 }
 
 export const LATER_ACCESS = 'Not needed for this goal. Access details appear when the goal needs it.'
+export const LATER_SHEET = 'Not needed for this goal. The scoping sheet appears when the goal needs this tool.'
 
 // What the access checklist shows for one tool: nothing per row for a tool the goal does not
 // need, and one line instead of several when every row is Confirm for the same reason.
@@ -88,6 +89,10 @@ export function planBlocks(plan: Plan, labels: Record<string, string>, oobNote: 
 
   for (const s of plan.custom_sheets) {
     b.push({ t: 'h2', text: `4. Custom work scoping sheet: ${s.tool}` })
+    if (!inScope(plan, s.tool)) {
+      b.push({ t: 'p', text: LATER_SHEET })
+      continue
+    }
     b.push({ t: 'note', text: `${s.tool} is not on SAFE's public list. **Confirm** with SAFE whether a connector exists before building one.` })
     b.push({ t: 'table', head: ['Item', 'Detail', 'Source'], rows: s.rows.map((r) => [r.label, rowText(r), citeText(r, labels) || (r.status === 'confirm' ? 'None' : '')]) })
   }
@@ -96,7 +101,7 @@ export function planBlocks(plan: Plan, labels: Record<string, string>, oobNote: 
   b.push({ t: 'list', items: [...plan.data_checks.map((d) => `**${d.label}:** ${d.text}`), ...plan.data_notes.map((r) => `**${r.tool}:** ${r.text} (${citeText(r, labels)})`)] })
 
   b.push({ t: 'h2', text: `${n + 1}. Open questions for ${plan.customer.name}` })
-  b.push({ t: 'list', ordered: true, items: plan.questions.map((q) => q.text) })
+  b.push({ t: 'list', ordered: true, items: goalQuestions(plan).map((q) => q.text) })
   const asks = customerDataAsks(plan, data)
   if (asks.length) {
     b.push({ t: 'p', text: '**From the data checks on the sample exports:**' })
@@ -126,6 +131,7 @@ export function handoffBlocks(plan: Plan, data: DataReport | null, labels: Recor
   const open = new Map<string, { tool: string; items: string[]; why: string; who: string }>()
   // Coverage decisions are open items too, though no plan row holds them.
   for (const c of plan.coverage) {
+    if (!inScope(plan, c.tool_key)) continue
     if (c.bucket === 'custom_work') open.set(`${c.input}|coverage`, { tool: c.input, items: ['Whether a connector exists'], why: c.why.replace(/\.$/, ''), who: 'SAFE' })
     if (c.bucket === 'confirm_with_safe') open.set(`${c.input}|coverage`, { tool: c.input, items: ['Which product this is'], why: c.why.replace(/\.$/, ''), who: 'Customer (which product), then SAFE' })
   }
@@ -135,8 +141,8 @@ export function handoffBlocks(plan: Plan, data: DataReport | null, labels: Recor
     if (!open.has(k)) open.set(k, { tool, items: [], why: why.replace(/\.$/, ''), who: resolverFor(r, custom) })
     open.get(k)!.items.push(item)
   }
-  for (const a of plan.access) for (const r of a.rows) if (r.status === 'confirm') addOpen(a.input, r.label, r, a.bucket === 'custom_work')
-  for (const sh of plan.custom_sheets) for (const r of sh.rows) if (r.status === 'confirm') addOpen(sh.tool, `Scoping sheet: ${r.label}`, r, true)
+  for (const a of plan.access) if (inScope(plan, a.tool)) for (const r of a.rows) if (r.status === 'confirm') addOpen(a.input, r.label, r, a.bucket === 'custom_work')
+  for (const sh of plan.custom_sheets) if (inScope(plan, sh.tool)) for (const r of sh.rows) if (r.status === 'confirm') addOpen(sh.tool, `Scoping sheet: ${r.label}`, r, true)
   b.push(open.size ? { t: 'table', head: ['Tool', "What's open", 'Why', 'Who resolves it'], rows: [...open.values()].map((o) => [o.tool, o.items.join(', '), o.why, o.who]) } : { t: 'p', text: 'None.' })
 
   b.push({ t: 'h2', text: 'Held back by the verifier' })
