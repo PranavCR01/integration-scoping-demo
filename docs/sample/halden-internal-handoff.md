@@ -141,14 +141,16 @@ Not estimated here. SAFE's own effort per bucket goes in `config/effort_placehol
 
 ## Config files in play (swap these for SAFE's internal versions)
 
-- config/integrations.json
-- config/aliases.json
-- config/matching.json
-- config/tool_profiles.json
-- config/connection_order.json
-- config/scoping_template.json
-- config/canonical_schema.json
-- config/source_mappings.json
-- config/match_rules.json
-- config/data_rules.json
-- config/effort_placeholders.json
+| Config file | SAFE's version needed on day one |
+|---|---|
+| config/integrations.json | SAFE's full connector list, including connectors not on the public website |
+| config/aliases.json | The names customers actually use for each tool, from past onboardings |
+| config/matching.json | SAFE's rules for vague names, such as which ServiceNow or Defender product a customer means |
+| config/tool_profiles.json | Each tool's role, who usually owns it on the customer side, and SAFE's connector docs to check against instead of vendor docs |
+| config/connection_order.json | SAFE's onboarding playbook: what to connect first for each kind of customer goal |
+| config/scoping_template.json | SAFE's scoping template: plan sections, what to find out per tool, and standard kickoff questions |
+| config/canonical_schema.json | SAFE's data model for assets and findings |
+| config/source_mappings.json | SAFE's field mappings from each tool's export into that data model |
+| config/match_rules.json | SAFE's rules for deciding two records are the same machine |
+| config/data_rules.json | SAFE's standard thresholds: stale window, scan window, coverage target, and what blocks the data |
+| config/effort_placeholders.json | SAFE's typical effort per integration type, if it tracks one |
