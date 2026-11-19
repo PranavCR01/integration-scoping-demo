@@ -380,7 +380,7 @@ export function analyze(input: DataInput): DataReport {
   }
   for (const w of weak) {
     const c = conflictBetween(keysOf.get(find(w.i))!, keysOf.get(find(w.j))!, match.conflict_keys)
-    addReview(w, c ? `Weak match, and the records have ${c}: likely different machines. A person decides.` : `Below the merge threshold (${match.merge_threshold}). A person decides.`, c)
+    addReview(w, c ? `Weak match, and the records have ${c}: likely different machines. A person decides.` : `Not enough on its own to merge. A person decides.`, c)
   }
   for (const b of blocked) addReview(b.e, b.why, b.why.replace(/^Not merged: /, ''))
   const review = [...reviewMap.values()].sort((a, b) => b.confidence - a.confidence)

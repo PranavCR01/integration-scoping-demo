@@ -1,6 +1,6 @@
 # Internal handoff: Halden Outfitters (FICTIONAL)
 
-Prepared Nov 10, 2026. Integrations config: SAFE public integrations page (captured Nov 4, 2026). Draft: Saved model draft from 2026-11-05 (claude-opus-5-5). Verified again just now against the current config and sources.
+Prepared Nov 19, 2026. Integrations config: SAFE public integrations page (captured Nov 4, 2026). Draft: Saved model draft from 2026-11-05 (claude-opus-5-5). Verified again just now against the current config and sources.
 
 Verification: 69/70 cited facts verified in code (0 with a corrected line number). 1 drafted item held back.
 
@@ -102,12 +102,12 @@ Not estimated here. SAFE's own effort per bucket goes in `config/effort_placehol
 
 53 asset records became 29 assets (16 merged across tools, 1 duplicate inside one tool). 4 possible duplicates need a person.
 
-| Possible duplicate | Evidence | Confidence | Why it needs a person |
-|---|---|---|---|
-| app-01 (CrowdStrike, Tenable) / app-01 (CrowdStrike) | Same hostname, nothing else in common (hostname=app-01) | 0.60 | Weak match, and the records have different cloud instance IDs (i-0a1b2c3d4e5f60101 vs i-0a1b2c3d4e5f60202): likely different machines. A person decides. |
-| fileserver-02 (Tenable) / fileserver-02 (CrowdStrike) | Same hostname, nothing else in common (hostname=fileserver-02) | 0.60 | Below the merge threshold (0.7). A person decides. |
-| hal-lt-008 (CrowdStrike, Tenable) / hal-lt-008 (Okta) | Device display name equals a hostname (display_name=hal-lt-008) | 0.50 | Below the merge threshold (0.7). A person decides. |
-| hal-lt-005 (CrowdStrike, Okta) / hal-lt-009 (CrowdStrike, Okta, Tenable) | Shared IP address only (IPs get reassigned) (ipv4=10.20.4.17) | 0.30 | Weak match, and the records have different serial numbers (C02HAL005 vs C02HAL009): likely different machines. A person decides. |
+| Possible duplicate | Evidence | Why it needs a person |
+|---|---|---|
+| app-01 (CrowdStrike, Tenable) / app-01 (CrowdStrike) | Same hostname, nothing else in common (hostname=app-01) | Weak match, and the records have different cloud instance IDs (i-0a1b2c3d4e5f60101 vs i-0a1b2c3d4e5f60202): likely different machines. A person decides. |
+| fileserver-02 (Tenable) / fileserver-02 (CrowdStrike) | Same hostname, nothing else in common (hostname=fileserver-02) | Not enough on its own to merge. A person decides. |
+| hal-lt-008 (CrowdStrike, Tenable) / hal-lt-008 (Okta) | Device display name equals a hostname (display_name=hal-lt-008) | Not enough on its own to merge. A person decides. |
+| hal-lt-005 (CrowdStrike, Okta) / hal-lt-009 (CrowdStrike, Okta, Tenable) | Shared IP address only (IPs get reassigned) (ipv4=10.20.4.17) | Weak match, and the records have different serial numbers (C02HAL005 vs C02HAL009): likely different machines. A person decides. |
 
 ### Field mappings to confirm
 

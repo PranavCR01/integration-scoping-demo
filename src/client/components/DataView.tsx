@@ -129,8 +129,7 @@ export function DataView({ data, loading, labels, onRun, onCite, decisions, onDe
               <tr className="border-b border-slate-200 text-left text-xs uppercase tracking-wide text-slate-500">
                 <th className="py-2 pr-3 font-medium">Asset</th>
                 <th className="py-2 pr-3 font-medium">Seen by</th>
-                <th className="py-2 pr-3 font-medium">Why merged</th>
-                <th className="py-2 font-medium">Confidence</th>
+                <th className="py-2 font-medium">Why merged</th>
               </tr>
             </thead>
             <tbody>
@@ -152,7 +151,7 @@ export function DataView({ data, loading, labels, onRun, onCite, decisions, onDe
                       ))}
                     </div>
                   </td>
-                  <td className="py-2 pr-3 text-slate-700">
+                  <td className="py-2 text-slate-700">
                     {a.overrides.length > 0 && (
                       <div className="mb-1">
                         <Pill tone="rose">Merged by a person against the evidence</Pill>
@@ -164,7 +163,6 @@ export function DataView({ data, loading, labels, onRun, onCite, decisions, onDe
                       </div>
                     ))}
                   </td>
-                  <td className="py-2 tabular-nums text-slate-700">{a.overrides.length ? <span className="font-medium text-rose-800">Overridden</span> : a.reasons.length ? a.confidence.toFixed(2) : ''}</td>
                 </tr>
               ))}
             </tbody>
@@ -316,7 +314,6 @@ function ReviewRow({ r, onDecide }: { r: ReviewItem; onDecide: (key: string, d: 
           <span className="mx-2 text-slate-400">and</span>
           <span className="font-semibold text-slate-900">{r.b.label}</span>
         </div>
-        <Pill tone="amber">confidence {r.confidence.toFixed(2)}</Pill>
       </div>
       <div className="mt-1 text-sm text-slate-700">
         {r.label}: <code>{r.shared}</code>. {r.why}

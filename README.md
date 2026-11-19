@@ -55,7 +55,7 @@ Every SAFE-specific input is a config file:
 | `config/scoping_template.json` | Plan sections, access items, custom sheet items, standard questions | Based on the example plan |
 | `config/canonical_schema.json` | The common asset and finding format | Small, modeled loosely on OCSF |
 | `config/source_mappings.json` | How each tool's export maps to the common format | Okta and Tenable vuln fields verified; others are placeholders |
-| `config/match_rules.json` | When two records are the same machine, with confidence values | Instance ID, serial, MAC, hostname plus IP, weak rules |
+| `config/match_rules.json` | When two records are the same machine (internal match scores; not shown in the app) | Instance ID, serial, MAC, hostname plus IP, weak rules |
 | `config/data_rules.json` | Staleness window, coverage definitions, readiness gate | Placeholder thresholds |
 | `config/effort_placeholders.json` | Effort per bucket | "TBD", labelled as placeholders |
 

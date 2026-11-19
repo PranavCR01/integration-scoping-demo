@@ -95,7 +95,7 @@
     {
       "key": "duplicates",
       "label": "Duplicates",
-      "text": "The same machine seen by more than one tool is merged once, with the reason and a confidence level for each match. Weak matches go to a person to review."
+      "text": "The same machine seen by more than one tool is merged once, with the reason for each match. Weak matches go to a person to review."
     },
     {
       "key": "staleness",

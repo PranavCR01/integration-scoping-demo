@@ -4,7 +4,7 @@
 
 **Plan built for:** Board-ready risk figure
 
-**Prepared:** Nov 10, 2026 · **Status:** Draft for customer review
+**Prepared:** Nov 19, 2026 · **Status:** Draft for customer review
 
 **Sources:** SAFE public integrations page (captured Nov 4, 2026); vendor API docs listed under each tool. Anything not found in those sources is marked **Confirm**.
 
@@ -65,7 +65,7 @@
 ## 5. Data checks before the data is used
 
 - **Counts:** Asset and finding totals match what each tool's own console shows.
-- **Duplicates:** The same machine seen by more than one tool is merged once, with the reason and a confidence level for each match. Weak matches go to a person to review.
+- **Duplicates:** The same machine seen by more than one tool is merged once, with the reason for each match. Weak matches go to a person to review.
 - **Staleness:** Assets not seen within the customer's agreed window are flagged.
 - **Coverage:** Share of assets with an endpoint agent; share scanned recently.
 - **Orphan findings:** Findings that point to an asset no tool reports are flagged.
