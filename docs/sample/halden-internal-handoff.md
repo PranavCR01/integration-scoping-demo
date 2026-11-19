@@ -2,24 +2,19 @@
 
 Prepared Nov 19, 2026. Integrations config: SAFE public integrations page (captured Nov 4, 2026). Draft: Saved model draft from 2026-11-05 (claude-opus-5-5). Verified again just now against the current config and sources.
 
-Verification: 69/70 cited facts verified in code (0 with a corrected line number). 1 drafted item held back.
-
-## Decisions needed from SAFE
-
-- **Microsoft Defender** (Confirm with SAFE): No card named "Microsoft Defender". 5 cards on SAFE's list contain "defender": Microsoft 365 Defender, Microsoft Defender for Endpoints, Microsoft Defender for Identity via M365, Azure Defender for Cloud, Defender for Endpoint via M365. Need the exact product the customer licenses.
-- **Snyk** (Custom work): Not on SAFE's public list (105 cards). SAFE claims more integrations than it lists publicly, so Confirm with SAFE before scoping a build.
+Verification: 69/70 cited facts verified in code. 1 drafted item held back.
 
 ## Who owes what
 
 ### Okta administrator (Okta)
 
-- access: How we connect: We connect with an Okta API token sent in the Authorization header with the SSWS prefix. Okta also supports an OAuth access token sent in the same header as a Bearer token.
-- access: Permissions or scopes: For OAuth access, read access to the core records uses these scopes: okta.users.read, okta.groups.read, okta.apps.read, okta.devices.read and okta.logs.read.
+- access: How we connect: Authorization, SSWS, Bearer
+- access: Permissions or scopes: okta.users.read, okta.groups.read, okta.apps.read, okta.devices.read, okta.logs.read
 
 ### Vulnerability management lead (Tenable VM)
 
-- access: How we connect: We connect with an access key and secret key generated for a user account. They are sent in the X-APIKeys header as accessKey and secretKey, against https://cloud.tenable.com.
-- access: Permissions or scopes: Vulnerability export needs the Basic role or the custom privilege VM.VM_EXPLORE.VM_EXPLORE.EXPORT. The user also needs Can View access on the exported assets, which the All Assets object can grant. The sources do not name the role needed for asset export.
+- access: How we connect: X-APIKeys, accessKey, secretKey, https://cloud.tenable.com
+- access: Permissions or scopes: Basic, VM.VM_EXPLORE.VM_EXPLORE.EXPORT, Can View, All Assets
 - question: Can you create a dedicated Tenable user account for this integration? Tenable recommends a separate user for each API integration, and each user has one valid API key at a time.
 - data: Your Tenable VM console shows 22 assets, but our export returned 20. Can you help us find which ones are missing?
 
@@ -38,7 +33,7 @@ Verification: 69/70 cited facts verified in code (0 with a corrected line number
 
 ### Application security lead (Snyk)
 
-- access: How we connect: We connect with a Snyk service account token sent in the Authorization header with the token prefix. Snyk API access requires the Enterprise plan.
+- access: How we connect: Authorization, token
 - question: Is your Snyk account on the Enterprise plan, and which Snyk region hosts it? API access needs the Enterprise plan, and tokens only work in their own region.
 
 ### Customer project lead
@@ -60,17 +55,18 @@ Verification: 69/70 cited facts verified in code (0 with a corrected line number
 
 ### Forward deployed engineer (us)
 
-- data: Decide whether app-01 (CrowdStrike, Tenable) and app-01 (CrowdStrike) are the same machine. Evidence: same hostname, nothing else in common.
-- data: Decide whether fileserver-02 (Tenable) and fileserver-02 (CrowdStrike) are the same machine. Evidence: same hostname, nothing else in common.
-- data: Decide whether hal-lt-008 (CrowdStrike, Tenable) and hal-lt-008 (Okta) are the same machine. Evidence: device display name equals a hostname.
-- data: Decide whether hal-lt-005 (CrowdStrike, Okta) and hal-lt-009 (CrowdStrike, Okta, Tenable) are the same machine. Evidence: shared IP address only.
+- data: Review 4 possible duplicates on the Data readiness tab (app-01, fileserver-02, hal-lt-008, hal-lt-005).
 - data: Trace 2 findings that point to assets no export contains (tio-retired-77, tio-retired-78).
 - data: Raise the 2 assets with no endpoint agent with the customer: db-prod-01, fileserver-01.
+
+*Access lines are short here. The full verified wording is in the customer plan, section 3, and in each email.*
 
 ## Every Confirm item
 
 | Tool | What's open | Why | Who resolves it |
 |---|---|---|---|
+| Microsoft Defender | Which product this is | No card named "Microsoft Defender". 5 cards on SAFE's list contain "defender": Microsoft 365 Defender, Microsoft Defender for Endpoints, Microsoft Defender for Identity via M365, Azure Defender for Cloud, Defender for Endpoint via M365. Need the exact product the customer licenses | Customer (which product), then SAFE |
+| Snyk | Whether a connector exists | Not on SAFE's public list (105 cards). SAFE claims more integrations than it lists publicly, so Confirm with SAFE before scoping a build | SAFE |
 | CrowdStrike Falcon | How we connect, Permissions or scopes | No vendor docs on file for this tool, so nothing is guessed | SAFE (what its connector needs) |
 | ServiceNow ITSM | How we connect, Permissions or scopes | No vendor docs on file for this tool, so nothing is guessed | SAFE (what its connector needs) |
 | Microsoft Defender | How we connect, Permissions or scopes | Waiting on the exact product the customer licenses | Customer (which product), then SAFE |
@@ -83,10 +79,6 @@ Verification: 69/70 cited facts verified in code (0 with a corrected line number
 | Item | What the draft said | Why it was held back |
 |---|---|---|
 | custom_sheet/Snyk/versioning | Each request sends a `version` query parameter as a date in `YYYY-MM-DD` format. Snyk recommends `2024-10-15`. Deprecated endpoints return a `Sunset` header with the end-of-support date. | "Sunset" was labelled as an API version, but an API version must be a date such as 2024-10-15 (or the format YYYY-MM-DD). The draft labelled this fact wrongly, so the item is held back |
-
-## Effort
-
-Not estimated here. SAFE's own effort per bucket goes in `config/effort_placeholders.json`, and this section becomes a table once it does.
 
 ## Data readiness (synthetic sample data)
 
@@ -113,29 +105,9 @@ Not estimated here. SAFE's own effort per bucket goes in `config/effort_placehol
 
 *Placeholder field names: the attached docs do not document these export fields. Confirm each one before the data is used.*
 
-| Source | Their field | Our field |
-|---|---|---|
-| Tenable VM asset export | id | source_id |
-| Tenable VM asset export | fqdns | fqdn |
-| Tenable VM asset export | hostnames | hostname |
-| Tenable VM asset export | ipv4s | ipv4 |
-| Tenable VM asset export | macs | mac |
-| Tenable VM asset export | cloud_instance_id | cloud_instance_id |
-| Tenable VM asset export | operating_systems | os |
-| Tenable VM asset export | last_seen | last_seen |
-| Tenable VM vulnerability export | definition.name | title |
-| Tenable VM vulnerability export | severity | severity |
-| Tenable VM vulnerability export | state | status |
-| Tenable VM vulnerability export | first_found | first_seen |
-| Tenable VM vulnerability export | last_found | last_seen |
-| CrowdStrike Falcon host list | device_id | source_id |
-| CrowdStrike Falcon host list | hostname | hostname |
-| CrowdStrike Falcon host list | local_ip | ipv4 |
-| CrowdStrike Falcon host list | mac_address | mac |
-| CrowdStrike Falcon host list | instance_id | cloud_instance_id |
-| CrowdStrike Falcon host list | serial_number | serial_number |
-| CrowdStrike Falcon host list | os_version | os |
-| CrowdStrike Falcon host list | last_seen | last_seen |
+- Tenable VM asset export: `id`, `fqdns`, `hostnames`, `ipv4s`, `macs`, `cloud_instance_id`, `operating_systems`, `last_seen`
+- Tenable VM vulnerability export: `definition.name`, `severity`, `state`, `first_found`, `last_found`
+- CrowdStrike Falcon host list: `device_id`, `hostname`, `local_ip`, `mac_address`, `instance_id`, `serial_number`, `os_version`, `last_seen`
 
 *Placeholder settings to agree with the customer: Stale after 30 days; Scanned within 30 days; Endpoint agent coverage target 90%.*
 
@@ -145,7 +117,7 @@ Not estimated here. SAFE's own effort per bucket goes in `config/effort_placehol
 |---|---|
 | config/integrations.json | SAFE's full connector list, including connectors not on the public website |
 | config/aliases.json | The names customers actually use for each tool, from past onboardings |
-| config/matching.json | SAFE's rules for vague names, such as which ServiceNow or Defender product a customer means |
+| config/matching.json | SAFE's rules for vague names, such as a bare vendor name that covers several products |
 | config/tool_profiles.json | Each tool's role, who usually owns it on the customer side, and SAFE's connector docs to check against instead of vendor docs |
 | config/connection_order.json | SAFE's onboarding playbook: what to connect first for each kind of customer goal |
 | config/scoping_template.json | SAFE's scoping template: plan sections, what to find out per tool, and standard kickoff questions |

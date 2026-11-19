@@ -41,8 +41,8 @@ describe('the goal changes the plan (code and config, not the model)', () => {
   it('the summary sentence and the questions follow the goal', async () => {
     const fix = await plan(cfg.connection_order.goal_profiles.exposure_remediation.example_goal)
     const audit = await plan(cfg.connection_order.goal_profiles.audit_evidence.example_goal)
-    expect(buildSummary(fix, null).headline).toMatch(/Before fixes can be prioritized and tracked/)
-    expect(buildSummary(audit, null).headline).toMatch(/Before the evidence is complete/)
+    expect(buildSummary(fix, null).headline).toMatch(/before fixes can be prioritized and tracked/)
+    expect(buildSummary(audit, null).headline).toMatch(/before the evidence is complete/)
     expect(fix.questions.map((q) => q.key)).toContain('goal:fix_deadlines')
     expect(fix.questions.map((q) => q.key)).not.toContain('goal:framework')
     expect(audit.questions.map((q) => q.key)).toContain('goal:framework')

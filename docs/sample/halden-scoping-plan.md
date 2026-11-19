@@ -8,7 +8,7 @@
 
 **Sources:** SAFE public integrations page (captured Nov 4, 2026); vendor API docs listed under each tool. Anything not found in those sources is marked **Confirm**.
 
-**At a glance:** 4 of 6 tools can be connected now. Before the risk figure can be trusted: 4 items for SAFE to confirm, 11 answers from Halden Outfitters and 3 data issues to clear.
+**At a glance:** 4 tools ready to connect. 18 items to clear before the risk figure can be trusted.
 
 ---
 

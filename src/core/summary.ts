@@ -20,7 +20,8 @@ export type Party = 'customer' | 'safe' | 'us'
 
 export interface ActionItem {
   kind: 'access' | 'question' | 'decision' | 'data'
-  text: string
+  text: string // full text, used in emails
+  short?: string // one line for cards: the item label plus its verified values, built by code
   tool: string | null
 }
 
@@ -68,16 +69,15 @@ export function buildSummary(plan: Plan, data: DataReport | null): Summary {
     } else blockers.push({ who: 'Us', text: `Data: ${c.detail}` })
   }
 
-  const parts = [
-    safeItems ? plural(safeItems, 'item') + ' for SAFE to confirm' : '',
-    customerQuestions ? plural(customerQuestions, 'answer') + ` from ${plan.customer.name}` : '',
-    dataStatus === 'blocked' ? plural(dataBlocks.length, 'data issue') + ' to clear' : dataStatus === 'not_run' ? 'the data checks to run' : '',
-  ].filter(Boolean)
+  // Short on purpose: the tiles and the blocker list below it carry the breakdown.
+  const toClear = safeItems + customerQuestions + (dataStatus === 'blocked' ? dataBlocks.length : 0)
+  const readyLine = later
+    ? `${plural(ready, 'tool')} ready to connect (${later} more can wait).`
+    : `${plural(ready, 'tool')} ready to connect.`
   const headline =
-    (later
-      ? `${ready} of ${plural(needed.length, 'tool')} this goal needs can be connected now; ${plural(later, 'other tool')} can wait.`
-      : `${ready} of ${plural(plan.coverage.length, 'tool')} can be connected now.`) +
-    (parts.length ? ` Before ${plan.goal.outcome}: ${parts.length > 1 ? parts.slice(0, -1).join(', ') + ' and ' + parts[parts.length - 1] : parts[0]}.` : ` Nothing stands between ${plan.customer.name} and ${plan.goal.short}.`)
+    `${readyLine} ` +
+    (toClear ? `${plural(toClear, 'item')} to clear before ${plan.goal.outcome}.` : `Nothing stands between ${plan.customer.name} and ${plan.goal.short}.`) +
+    (dataStatus === 'not_run' ? ' The data checks have not run yet.' : '')
 
   return {
     tools_total: needed.length,
@@ -94,6 +94,13 @@ export function buildSummary(plan: Plan, data: DataReport | null): Summary {
 
 function rowLine(r: PlanRow): string {
   return `${r.label}: ${plain(r.text)}`
+}
+
+// A card line made only from values code verified (headers, scopes, roles, URLs), so no
+// new technical wording is written. Quoted doc sentences are left to the full text.
+function rowShort(r: PlanRow): string {
+  const values = [...new Set(r.citations.filter((c) => c.kind !== 'doc').map((c) => c.value))]
+  return values.length ? `${r.label}: ${values.join(', ')}` : r.label
 }
 
 export function buildActions(plan: Plan, data: DataReport | null): OwnerActions[] {
@@ -113,7 +120,7 @@ export function buildActions(plan: Plan, data: DataReport | null): OwnerActions[
     if (!g.tools.includes(a.input)) g.tools.push(a.input)
     const verified = a.rows.filter((r) => r.status === 'verified')
     if (a.bucket === 'confirm_with_safe') continue // nothing to request until the product is known
-    if (verified.length) for (const r of verified) g.items.push({ kind: 'access', text: rowLine(r), tool: a.input })
+    if (verified.length) for (const r of verified) g.items.push({ kind: 'access', text: rowLine(r), short: rowShort(r), tool: a.input })
     else g.items.push({ kind: 'access', text: `We will confirm the exact access ${a.input} needs and follow up. Please confirm you are the right person to set it up.`, tool: a.input })
   }
   for (const q of plan.questions) {
@@ -149,7 +156,7 @@ export function buildActions(plan: Plan, data: DataReport | null): OwnerActions[
     if (data.stale.length) {
       get(plan.project_owner, 'customer').items.push({ kind: 'data', text: `${plural(data.stale.length, 'asset')} not seen in over ${data.settings.stale_after_days} days (${data.stale.map((s) => s.hostname).join(', ')}): keep, exclude, or investigate?`, tool: null })
     }
-    for (const r of data.review) us.items.push({ kind: 'data', text: `Decide whether ${r.a.label} and ${r.b.label} are the same machine. Evidence: ${r.label.replace(/\s*\(.*\)$/, '').replace(/^./, (ch) => ch.toLowerCase())}.`, tool: null })
+    if (data.review.length) us.items.push({ kind: 'data', text: `Review ${plural(data.review.length, 'possible duplicate')} on the Data readiness tab (${data.review.map((r) => r.a.label.replace(/ \(.*\)$/, '')).filter((x, i, xs) => xs.indexOf(x) === i).join(', ')}).`, tool: null })
     if (data.orphans.length) us.items.push({ kind: 'data', text: `Trace ${plural(data.orphans.length, 'finding')} that point to assets no export contains (${data.orphans.map((o) => o.asset_ref).join(', ')}).`, tool: null })
     if (data.coverage.no_edr.length) us.items.push({ kind: 'data', text: `Raise the ${plural(data.coverage.no_edr.length, 'asset')} with no endpoint agent with the customer: ${data.coverage.no_edr.map((a) => a.hostname).join(', ')}.`, tool: null })
     if (!us.items.length) groups.delete('us|Forward deployed engineer (us)')

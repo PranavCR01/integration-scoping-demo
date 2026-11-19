@@ -17,6 +17,8 @@ const srcName = (s: string) => SRC_NAME[s] ?? s
 
 export function DataView({ data, loading, labels, onRun, onCite, decisions, onDecide }: Props) {
   const [showAll, setShowAll] = useState(false)
+  const [allFields, setAllFields] = useState(false)
+  const [moreReasons, setMoreReasons] = useState<Set<string>>(new Set())
 
   if (!data) {
     return (
@@ -133,11 +135,32 @@ export function DataView({ data, loading, labels, onRun, onCite, decisions, onDe
                         <Pill tone="rose">Merged by a person against the evidence</Pill>
                       </div>
                     )}
-                    {a.reasons.length === 0 ? <span className="text-slate-400">Single record</span> : uniqueReasons(a.reasons).map((r, i) => (
-                      <div key={i} className={r.override ? 'text-rose-800' : undefined}>
-                        {r.label}{r.rule === 'person' ? '' : <>: <code>{r.shared}</code></>}
-                      </div>
-                    ))}
+                    {a.reasons.length === 0 ? (
+                      <span className="text-slate-400">Single record</span>
+                    ) : (
+                      (() => {
+                        // Strongest reason first (links are applied strongest first); the rest on request.
+                        const rs = uniqueReasons(a.reasons)
+                        const shown = moreReasons.has(a.asset_id) ? rs : rs.slice(0, 1)
+                        return (
+                          <>
+                            {shown.map((r, i) => (
+                              <div key={i} className={r.override ? 'text-rose-800' : undefined}>
+                                {r.label}{r.rule === 'person' ? '' : <>: <code>{r.shared}</code></>}
+                              </div>
+                            ))}
+                            {rs.length > 1 && (
+                              <button
+                                onClick={() => setMoreReasons((s) => { const n = new Set(s); n.has(a.asset_id) ? n.delete(a.asset_id) : n.add(a.asset_id); return n })}
+                                className="text-xs text-teal-800 hover:underline"
+                              >
+                                {moreReasons.has(a.asset_id) ? 'Show fewer' : `+${rs.length - 1} more reason${rs.length > 2 ? 's' : ''}`}
+                              </button>
+                            )}
+                          </>
+                        )
+                      })()
+                    )}
                   </td>
                 </tr>
               ))}
@@ -207,8 +230,25 @@ export function DataView({ data, loading, labels, onRun, onCite, decisions, onDe
         </table>
       </Section>
 
-      <Section title="Field mapping into our common format" aside={<span className="text-xs text-slate-500">config/source_mappings.json</span>}>
-        <div className="overflow-x-auto">
+      <Section
+        title="Field mapping into our common format"
+        aside={
+          <label className="flex items-center gap-1.5 text-xs text-slate-600">
+            <input type="checkbox" checked={allFields} onChange={(e) => setAllFields(e.target.checked)} /> show all fields
+          </label>
+        }
+      >
+        <ul className="space-y-1 text-sm text-slate-700">
+          {mappingSummary(data).map((m) => (
+            <li key={m.source}>
+              <span className="font-medium text-slate-900">{m.label}:</span> {m.total} fields, {m.verified} verified
+              {m.placeholder ? <span className="text-amber-800">, {m.placeholder} placeholder{m.placeholder === 1 ? '' : 's'} to confirm</span> : null}
+              {m.failed ? <span className="text-rose-700">, {m.failed} failed</span> : null}
+            </li>
+          ))}
+        </ul>
+        {allFields && (
+        <div className="mt-3 overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-slate-200 text-left text-xs uppercase tracking-wide text-slate-500">
@@ -242,6 +282,7 @@ export function DataView({ data, loading, labels, onRun, onCite, decisions, onDe
             </tbody>
           </table>
         </div>
+        )}
       </Section>
 
     </div>
@@ -299,4 +340,18 @@ function ReviewRow({ r, onDecide }: { r: ReviewItem; onDecide: (key: string, d: 
       )}
     </div>
   )
+}
+
+// One line per source: how many fields map, how many are verified against the docs.
+function mappingSummary(data: DataReport) {
+  const out: { source: string; label: string; total: number; verified: number; placeholder: number; failed: number }[] = []
+  for (const m of data.mapping) {
+    let r = out.find((x) => x.source === m.source)
+    if (!r) out.push((r = { source: m.source, label: data.sources.find((s) => s.key === m.source)?.label ?? m.source, total: 0, verified: 0, placeholder: 0, failed: 0 }))
+    r.total++
+    if (m.status === 'verified') r.verified++
+    else if (m.status === 'placeholder') r.placeholder++
+    else r.failed++
+  }
+  return out
 }

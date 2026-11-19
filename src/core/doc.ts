@@ -100,21 +100,23 @@ export function handoffBlocks(plan: Plan, data: DataReport | null, labels: Recor
   const b: Block[] = []
   b.push({ t: 'h1', text: `Internal handoff: ${plan.customer.name} (FICTIONAL)` })
   b.push({ t: 'p', text: `Prepared ${fmtDate(plan.generated_at)}. Integrations config: ${plan.config_label}. Draft: ${plan.draft_note}` })
-  b.push({ t: 'p', text: `Verification: ${v.facts_verified}/${v.facts_total} cited facts verified in code (${v.facts_corrected} with a corrected line number). ${v.rows_held_back} drafted item${v.rows_held_back === 1 ? '' : 's'} held back.` })
-
-  b.push({ t: 'h2', text: 'Decisions needed from SAFE' })
-  const needs = plan.coverage.filter((c) => c.bucket !== 'out_of_box')
-  b.push({ t: 'list', items: needs.length ? needs.map((c) => `**${c.input}** (${BUCKET_LABEL[c.bucket]}): ${c.why}`) : ['None'] })
+  b.push({ t: 'p', text: `Verification: ${v.facts_verified}/${v.facts_total} cited facts verified in code${v.facts_corrected ? ` (${v.facts_corrected} with a corrected line number)` : ''}. ${v.rows_held_back} drafted item${v.rows_held_back === 1 ? '' : 's'} held back.` })
 
   b.push({ t: 'h2', text: 'Who owes what' })
   for (const a of buildActions(plan, data)) {
     b.push({ t: 'h3', text: `${a.owner}${a.tools.length ? ` (${a.tools.join(', ')})` : ''}` })
-    b.push({ t: 'list', items: a.items.map((i) => `${i.kind}: ${i.text}`) })
+    b.push({ t: 'list', items: a.items.map((i) => `${i.kind}: ${i.short ?? i.text}`) })
   }
+  b.push({ t: 'note', text: 'Access lines are short here. The full verified wording is in the customer plan, section 3, and in each email.' })
 
   b.push({ t: 'h2', text: 'Every Confirm item' })
   // One line per tool and reason, with who can settle it, so nothing open lacks an owner.
   const open = new Map<string, { tool: string; items: string[]; why: string; who: string }>()
+  // Coverage decisions are open items too, though no plan row holds them.
+  for (const c of plan.coverage) {
+    if (c.bucket === 'custom_work') open.set(`${c.input}|coverage`, { tool: c.input, items: ['Whether a connector exists'], why: c.why.replace(/\.$/, ''), who: 'SAFE' })
+    if (c.bucket === 'confirm_with_safe') open.set(`${c.input}|coverage`, { tool: c.input, items: ['Which product this is'], why: c.why.replace(/\.$/, ''), who: 'Customer (which product), then SAFE' })
+  }
   const addOpen = (tool: string, item: string, r: PlanRow, custom: boolean) => {
     const why = r.confirm_reason ?? ''
     const k = `${tool}|${why}`
@@ -127,15 +129,6 @@ export function handoffBlocks(plan: Plan, data: DataReport | null, labels: Recor
 
   b.push({ t: 'h2', text: 'Held back by the verifier' })
   b.push(v.held.length ? { t: 'table', head: ['Item', 'What the draft said', 'Why it was held back'], rows: v.held.map((h) => [h.row, h.draft_text, h.reason]) } : { t: 'p', text: 'Nothing held back.' })
-
-  b.push({ t: 'h2', text: 'Effort' })
-  // A table of TBDs says nothing; show the table only once SAFE's own numbers are in the config.
-  if (plan.effort.rows.every((r) => /^tbd$/i.test(r.value.trim()))) {
-    b.push({ t: 'p', text: "Not estimated here. SAFE's own effort per bucket goes in `config/effort_placeholders.json`, and this section becomes a table once it does." })
-  } else {
-    b.push({ t: 'note', text: `${plan.effort.label}.` })
-    b.push({ t: 'table', head: ['Tool', 'Bucket', 'Effort'], rows: plan.effort.rows.map((r) => [r.tool, BUCKET_LABEL[r.bucket], r.value]) })
-  }
 
   if (data) {
     b.push({ t: 'h2', text: `Data readiness${data.synthetic ? ' (synthetic sample data)' : ''}` })
@@ -150,9 +143,11 @@ export function handoffBlocks(plan: Plan, data: DataReport | null, labels: Recor
     b.push({ t: 'h3', text: 'Field mappings to confirm' })
     if (!ph.length) b.push({ t: 'p', text: 'All mappings verified.' })
     else {
-      const reasons = [...new Set(ph.map((m) => m.detail))]
-      b.push({ t: 'note', text: ph.every((m) => m.status === 'placeholder') ? 'Placeholder field names: the attached docs do not document these export fields. Confirm each one before the data is used.' : reasons.length === 1 ? reasons[0] : 'Each row needs confirming before the data is used.' })
-      b.push({ t: 'table', head: reasons.length === 1 ? ['Source', 'Their field', 'Our field'] : ['Source', 'Their field', 'Our field', 'Why'], rows: ph.map((m) => [srcLabel(m.source), m.from, m.canonical, ...(reasons.length === 1 ? [] : [m.detail])]) })
+      // One line per source; the full field-by-field table is on the Data readiness tab.
+      const bySrc = new Map<string, string[]>()
+      for (const m of ph) bySrc.set(m.source, [...(bySrc.get(m.source) ?? []), m.from])
+      b.push({ t: 'note', text: ph.every((m) => m.status === 'placeholder') ? 'Placeholder field names: the attached docs do not document these export fields. Confirm each one before the data is used.' : 'Each field needs confirming before the data is used.' })
+      b.push({ t: 'list', items: [...bySrc.entries()].map(([src, fields]) => `${srcLabel(src)}: ${fields.map((f) => `\`${f}\``).join(', ')}`) })
     }
     if (data.settings.placeholders.length) b.push({ t: 'note', text: `Placeholder settings to agree with the customer: ${data.settings.placeholders.join('; ')}.` })
   }
@@ -164,7 +159,7 @@ export function handoffBlocks(plan: Plan, data: DataReport | null, labels: Recor
     rows: [
       ['config/integrations.json', "SAFE's full connector list, including connectors not on the public website"],
       ['config/aliases.json', 'The names customers actually use for each tool, from past onboardings'],
-      ['config/matching.json', "SAFE's rules for vague names, such as which ServiceNow or Defender product a customer means"],
+      ['config/matching.json', "SAFE's rules for vague names, such as a bare vendor name that covers several products"],
       ['config/tool_profiles.json', "Each tool's role, who usually owns it on the customer side, and SAFE's connector docs to check against instead of vendor docs"],
       ['config/connection_order.json', "SAFE's onboarding playbook: what to connect first for each kind of customer goal"],
       ['config/scoping_template.json', "SAFE's scoping template: plan sections, what to find out per tool, and standard kickoff questions"],

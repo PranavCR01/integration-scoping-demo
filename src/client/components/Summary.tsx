@@ -62,36 +62,52 @@ const PARTY = {
   us: { tag: 'Our side', tone: 'teal' as const },
 }
 const KIND = { access: 'Access', question: 'Question', decision: 'Decision', data: 'Data' }
+const GROUP_TITLE = {
+  customer: (name: string) => `${name}: people to contact`,
+  safe: () => 'SAFE: decisions needed',
+  us: () => 'Our side: work to do',
+}
 
 export function OwnersView({ actions, customerName, dataRun, later = [] }: { actions: OwnerActions[]; customerName: string; dataRun: boolean; later?: string[] }) {
   return (
     <div className="space-y-4">
       <p className="text-sm text-slate-600">
-        Every open item, grouped by the person who has to act. Emails are built only from verified details and checked questions; nothing new is written for them. {!dataRun && 'Data items appear once the data checks have run.'}
+        Every open item, grouped by the person who has to act. Cards show a short line per access item; the email has the full wording. Emails are built only from verified details and checked questions; nothing new is written for them. {!dataRun && 'Data items appear once the data checks have run.'}
       </p>
       {later.length > 0 && (
         <p className="rounded-lg bg-slate-100 px-3 py-2 text-sm text-slate-600">
           Not needed for this goal, so no requests yet: <span className="font-medium text-slate-700">{later.join(', ')}</span>.
         </p>
       )}
-      {/* Narrow screens: one column in order. Wide screens: two independent columns, cards
-          alternating left and right, so a tall card never leaves a gap beside a short one. */}
-      <div className="space-y-4 xl:hidden">
-        {actions.map((a) => (
-          <OwnerCard key={`${a.party}-${a.owner}`} a={a} customerName={customerName} />
-        ))}
-      </div>
-      <div className="hidden gap-4 xl:grid xl:grid-cols-2 xl:items-start">
-        {[0, 1].map((col) => (
-          <div key={col} className="space-y-4">
-            {actions
-              .filter((_, i) => i % 2 === col)
-              .map((a) => (
-                <OwnerCard key={`${a.party}-${a.owner}`} a={a} customerName={customerName} />
-              ))}
-          </div>
-        ))}
-      </div>
+      {/* Three groups in the order people act: the customer, SAFE, then our side. Only the
+          customer group can be long, so it alone uses two columns on wide screens. */}
+      {(['customer', 'safe', 'us'] as const).map((party) => {
+        const group = actions.filter((a) => a.party === party)
+        if (!group.length) return null
+        return (
+          <section key={party} className="space-y-2">
+            <h3 className="text-xs font-semibold uppercase tracking-wide text-slate-500">{GROUP_TITLE[party](customerName)}</h3>
+            {party === 'customer' ? (
+              <>
+                <div className="space-y-4 xl:hidden">
+                  {group.map((a) => <OwnerCard key={`${a.party}-${a.owner}`} a={a} customerName={customerName} />)}
+                </div>
+                <div className="hidden gap-4 xl:grid xl:grid-cols-2 xl:items-start">
+                  {[0, 1].map((col) => (
+                    <div key={col} className="space-y-4">
+                      {group.filter((_, i) => i % 2 === col).map((a) => <OwnerCard key={`${a.party}-${a.owner}`} a={a} customerName={customerName} />)}
+                    </div>
+                  ))}
+                </div>
+              </>
+            ) : (
+              <div className="grid gap-4 xl:grid-cols-2 xl:items-start">
+                {group.map((a) => <OwnerCard key={`${a.party}-${a.owner}`} a={a} customerName={customerName} />)}
+              </div>
+            )}
+          </section>
+        )
+      })}
     </div>
   )
 }
@@ -137,7 +153,7 @@ function OwnerCard({ a, customerName }: { a: OwnerActions; customerName: string 
         {a.items.map((i, k) => (
           <li key={k} className="flex gap-2 text-sm text-slate-700">
             <span className="mt-0.5 w-16 shrink-0 text-[11px] font-semibold uppercase tracking-wide text-slate-400">{KIND[i.kind]}</span>
-            <span>{i.text}</span>
+            <span>{i.short ?? i.text}</span>
           </li>
         ))}
       </ul>
