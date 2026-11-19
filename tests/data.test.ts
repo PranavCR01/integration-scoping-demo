@@ -64,13 +64,6 @@ describe('data normalization and checks (synthetic Halden data)', () => {
     expect(r.mapping.some((m) => m.status === 'failed')).toBe(false)
   })
 
-  it('an uploaded file replaces the synthetic export for that source', () => {
-    const up = runData({ customer, uploads: { crowdstrike_hosts: [{ device_id: 'x1', hostname: 'NEW-HOST', last_seen: '2026-11-01T00:00:00Z' }] } })
-    const s = up.sources.find((x) => x.key === 'crowdstrike_hosts')!
-    expect(s.records).toBe(1)
-    expect(s.uploaded).toBe(true)
-    expect(up.synthetic).toBe(false)
-  })
 })
 
 describe('review decisions by a person', () => {

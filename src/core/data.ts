@@ -107,7 +107,7 @@ export interface DataReport {
   excerpts?: Record<string, { file: string; start: number; lines: string[]; highlight: number }>
   as_of: string
   synthetic: boolean
-  sources: { key: string; label: string; short: string; entity: 'asset' | 'finding'; tool: string; records: number; console: number | null; mismatch: boolean; uploaded: boolean; in_scope: boolean }[]
+  sources: { key: string; label: string; short: string; entity: 'asset' | 'finding'; tool: string; records: number; console: number | null; mismatch: boolean; in_scope: boolean }[]
   mapping: { source: string; canonical: string; from: string; status: 'verified' | 'placeholder' | 'failed'; citation: { file: string; line: number } | null; detail: string }[]
   decisions_applied: number
   totals: { asset_records: number; merged_assets: number; cross_tool_merges: number; same_tool_duplicates: number; review: number; stale: number; identity_only: number; orphans: number; findings: number }
@@ -226,7 +226,6 @@ export interface DataInput {
   mappings: Record<string, SourceMapping>
   rows: Record<string, Record<string, unknown>[]>
   console_counts: Record<string, number>
-  uploaded?: string[]
   match: MatchRules
   rules: DataRules
   mapping_checks?: DataReport['mapping']
@@ -407,7 +406,7 @@ export function analyze(input: DataInput): DataReport {
   const sources = Object.entries(mappings).map(([key, m]) => {
     const n = (rows[key] ?? []).length
     const c = input.console_counts[key]
-    return { key, label: m.label, short: m.short ?? m.tool, entity: m.entity, tool: m.tool, records: n, console: c ?? null, mismatch: c !== undefined && c !== n, uploaded: (input.uploaded ?? []).includes(key), in_scope: inScopeSrc(key) }
+    return { key, label: m.label, short: m.short ?? m.tool, entity: m.entity, tool: m.tool, records: n, console: c ?? null, mismatch: c !== undefined && c !== n, in_scope: inScopeSrc(key) }
   })
 
   const inReview = new Set(review.flatMap((x) => [x.a.asset_id, x.b.asset_id]))

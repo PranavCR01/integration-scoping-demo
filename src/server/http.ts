@@ -86,8 +86,7 @@ export async function handle(route: string, method: string, body: any): Promise<
     }
     if (route === 'data') {
       const customer = customerFrom(body)
-      const uploads = body?.uploads && typeof body.uploads === 'object' ? body.uploads : undefined
-      return { status: 200, body: runData({ customer, uploads, decisions: body?.decisions, overrides }) }
+      return { status: 200, body: runData({ customer, decisions: body?.decisions, overrides }) }
     }
     return { status: 404, body: { error: `Unknown route ${route}` } }
   } catch (e) {

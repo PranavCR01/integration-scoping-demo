@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import Papa from 'papaparse'
 import type { DataReport, MatchEdge, ReviewItem } from '../../core/data'
 import { CiteChip, Pill, Section, Stat, shortLabel, type CiteTarget } from './ui'
 
@@ -11,35 +10,13 @@ interface Props {
   onCite: (c: CiteTarget) => void
   decisions: Record<string, 'same' | 'different'>
   onDecide: (pair: string, d: 'same' | 'different' | null) => void
-  uploads: Record<string, unknown[]>
-  onUpload: (source: string, rows: unknown[] | null) => void
 }
 
 const SRC_NAME: Record<string, string> = { tenable_assets: 'Tenable', tenable_vulns: 'Tenable vulns', crowdstrike_hosts: 'CrowdStrike', okta_devices: 'Okta' }
 const srcName = (s: string) => SRC_NAME[s] ?? s
 
-export function DataView({ data, loading, labels, onRun, onCite, decisions, onDecide, uploads, onUpload }: Props) {
+export function DataView({ data, loading, labels, onRun, onCite, decisions, onDecide }: Props) {
   const [showAll, setShowAll] = useState(false)
-  const [uploadSource, setUploadSource] = useState('crowdstrike_hosts')
-  const [uploadError, setUploadError] = useState<string | null>(null)
-
-  const readFile = async (f: File) => {
-    setUploadError(null)
-    const text = await f.text()
-    try {
-      if (f.name.endsWith('.csv')) {
-        const r = Papa.parse<Record<string, unknown>>(text, { header: true, skipEmptyLines: true })
-        if (r.errors.length) throw new Error(r.errors[0].message)
-        onUpload(uploadSource, r.data)
-      } else {
-        const j = JSON.parse(text)
-        if (!Array.isArray(j)) throw new Error('Expected a JSON array of records')
-        onUpload(uploadSource, j)
-      }
-    } catch (e) {
-      setUploadError((e as Error).message)
-    }
-  }
 
   if (!data) {
     return (
@@ -67,7 +44,6 @@ export function DataView({ data, loading, labels, onRun, onCite, decisions, onDe
           </div>
           <div className="flex flex-wrap gap-1.5">
             {data.synthetic && <Pill tone="amber">Synthetic sample exports (fictional)</Pill>}
-            {Object.keys(uploads).length > 0 && <Pill tone="teal">Uploaded: {Object.keys(uploads).map(srcName).join(', ')}</Pill>}
             <Pill>As of {data.as_of.slice(0, 10)}</Pill>
           </div>
         </div>
@@ -268,25 +244,6 @@ export function DataView({ data, loading, labels, onRun, onCite, decisions, onDe
         </div>
       </Section>
 
-      <Section title="Try your own export">
-        <p className="text-sm text-slate-600">Replace one source with a CSV or JSON export. Columns are read with the same mapping config.</p>
-        <div className="mt-3 flex flex-wrap items-center gap-2">
-          <select value={uploadSource} onChange={(e) => setUploadSource(e.target.value)} className="rounded-md border border-slate-300 bg-white px-2 py-1.5 text-sm">
-            {data.sources.map((s) => (
-              <option key={s.key} value={s.key}>
-                {s.label}
-              </option>
-            ))}
-          </select>
-          <input type="file" accept=".csv,.json" onChange={(e) => e.target.files?.[0] && readFile(e.target.files[0])} className="text-sm" />
-          {Object.keys(uploads).length > 0 && (
-            <button onClick={() => Object.keys(uploads).forEach((k) => onUpload(k, null))} className="text-sm text-teal-800 underline">
-              Back to sample exports
-            </button>
-          )}
-        </div>
-        {uploadError && <p className="mt-2 text-sm text-rose-700">{uploadError}</p>}
-      </Section>
     </div>
   )
 }

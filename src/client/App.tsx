@@ -26,7 +26,6 @@ export default function App() {
   const [changed, setChanged] = useState<Record<string, string>>({})
   const [data, setData] = useState<DataReport | null>(null)
   const [decisions, setDecisions] = useState<Record<string, 'same' | 'different'>>({})
-  const [uploads, setUploads] = useState<Record<string, unknown[]>>({})
   const [busy, setBusy] = useState<'plan' | 'data' | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [tab, setTab] = useState<Tab>('plan')
@@ -52,12 +51,11 @@ export default function App() {
     try {
       const [p, d] = await Promise.all([
         getPlan({ customer, mode, overrides: ov }),
-        prev ? Promise.resolve(null) : getData({ customer, decisions: {}, uploads: {}, overrides: ov }).catch(() => null),
+        prev ? Promise.resolve(null) : getData({ customer, decisions: {}, overrides: ov }).catch(() => null),
       ])
       if (!prev) {
         setData(d)
         setDecisions({})
-        setUploads({})
       }
       const diff: Record<string, string> = {}
       if (prev) for (const c of p.coverage) {
@@ -73,12 +71,12 @@ export default function App() {
     }
   }
 
-  const runData = async (dec = decisions, up = uploads) => {
+  const runData = async (dec = decisions) => {
     if (!customer) return
     setBusy('data')
     setError(null)
     try {
-      setData(await getData({ customer, decisions: dec, uploads: up, overrides }))
+      setData(await getData({ customer, decisions: dec, overrides }))
     } catch (e) {
       setError((e as Error).message)
     } finally {
@@ -226,16 +224,7 @@ export default function App() {
                     if (d) next[pair] = d
                     else delete next[pair]
                     setDecisions(next)
-                    runData(next, uploads)
-                  }}
-                  uploads={uploads}
-                  onUpload={(src, rows) => {
-                    const next = { ...uploads }
-                    if (rows) next[src] = rows
-                    else delete next[src]
-                    setUploads(next)
-                    setDecisions({})
-                    runData({}, next)
+                    runData(next)
                   }}
                 />
               )}

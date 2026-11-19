@@ -19,4 +19,4 @@ async function call<T>(route: string, body?: unknown): Promise<T> {
 
 export const getMeta = () => call<Meta>('meta')
 export const getPlan = (b: { customer: Customer; mode: 'saved' | 'live'; overrides: Record<string, unknown> }) => call<Plan>('plan', b)
-export const getData = (b: { customer: Customer; uploads?: Record<string, unknown[]>; decisions?: Record<string, 'same' | 'different'>; overrides: Record<string, unknown> }) => call<DataReport>('data', b)
+export const getData = (b: { customer: Customer; decisions?: Record<string, 'same' | 'different'>; overrides: Record<string, unknown> }) => call<DataReport>('data', b)
