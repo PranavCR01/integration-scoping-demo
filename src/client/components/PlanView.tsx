@@ -1,4 +1,5 @@
 import type { Plan, PlanRow } from '../../core/types'
+import { accessLines, LATER_ACCESS } from '../../core/doc'
 import { BucketBadge, CiteChip, ConfirmTag, Rich, Section, shortLabel, type CiteTarget } from './ui'
 
 interface Props {
@@ -155,12 +156,16 @@ export function PlanView({ plan, labels, onCite, changed, evidence, dataAsks = [
                 <div className="text-sm text-slate-800">{a.owner}</div>
               </div>
               <div className="space-y-3">
-                {a.rows.map((r) => (
-                  <div key={r.item}>
-                    <div className="text-xs font-medium uppercase tracking-wide text-slate-500">{r.label}</div>
-                    <RowBody row={r} labels={labels} onCite={onCite} evidence={evidence} />
-                  </div>
-                ))}
+                {(() => {
+                  const al = accessLines(plan, a)
+                  if (al.later) return <p className="text-sm text-slate-500">{LATER_ACCESS}</p>
+                  return al.lines.map((l) => (
+                    <div key={l.row.item}>
+                      <div className="text-xs font-medium uppercase tracking-wide text-slate-500">{l.label}</div>
+                      <RowBody row={l.row} labels={labels} onCite={onCite} evidence={evidence} />
+                    </div>
+                  ))
+                })()}
               </div>
             </div>
           ))}

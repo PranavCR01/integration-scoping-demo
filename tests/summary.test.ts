@@ -17,7 +17,7 @@ describe('summary and who-owes-what (code-built from the verified plan)', async 
     expect(s.ready_now).toBe(plan.coverage.filter((c) => c.bucket === 'out_of_box').length)
     // the tile counts exactly the SAFE lines in the list underneath it
     expect(s.safe_items).toBe(s.blockers.filter((b) => b.who === 'SAFE').length)
-    expect(s.safe_items).toBe(4) // Defender, Snyk, CrowdStrike access, ServiceNow access
+    expect(s.safe_items).toBe(2) // Snyk connector, CrowdStrike access
     expect(s.data.status).toBe('blocked')
     expect(s.data.blockers).toBe(data.checks.filter((c) => c.level === 'block').length)
     expect(buildSummary(plan, null).data.status).toBe('not_run')
@@ -40,9 +40,15 @@ describe('summary and who-owes-what (code-built from the verified plan)', async 
     for (const g of buildActions(plan, data)) if (g.email) for (const c of confirmText) expect(g.email.body).not.toContain(c)
   })
 
-  it('every customer tool owner gets a card, and every question lands with someone', () => {
+  it('owners with verified access get a card; a tool with nothing verified stays a SAFE decision; every question lands', () => {
     const acts = buildActions(plan, data)
-    for (const a of plan.access) expect(acts.some((g) => g.owner === a.owner)).toBe(true)
+    for (const a of plan.access) {
+      const hasVerified = a.rows.some((r) => r.status === 'verified')
+      if (hasVerified) expect(acts.some((g) => g.owner === a.owner), a.tool).toBe(true)
+    }
+    // CrowdStrike has no docs on file: no customer card, and SAFE is asked about its access instead
+    expect(acts.some((g) => g.party === 'customer' && g.tools.includes('CrowdStrike Falcon'))).toBe(false)
+    expect(acts.find((g) => g.party === 'safe')!.items.some((i) => i.text.startsWith('CrowdStrike Falcon:'))).toBe(true)
     const asked = acts.flatMap((g) => g.items.filter((i) => i.kind === 'question')).length
     expect(asked).toBe(plan.questions.length)
   })

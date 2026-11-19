@@ -2,7 +2,7 @@
 
 Prepared Nov 19, 2026. Integrations config: SAFE public integrations page (captured Nov 4, 2026). Draft: Saved model draft from 2026-11-05 (claude-opus-5-5). Verified again just now against the current config and sources.
 
-Verification: 69/70 cited facts verified in code. 1 drafted item held back.
+Verification: 56/57 cited facts verified in code. 1 drafted item held back.
 
 ## Who owes what
 
@@ -18,19 +18,6 @@ Verification: 69/70 cited facts verified in code. 1 drafted item held back.
 - question: Can you create a dedicated Tenable user account for this integration? Tenable recommends a separate user for each API integration, and each user has one valid API key at a time.
 - data: Your Tenable VM console shows 22 assets, but our export returned 20. Can you help us find which ones are missing?
 
-### Endpoint security (EDR) administrator (CrowdStrike Falcon)
-
-- access: We will confirm the exact access CrowdStrike Falcon needs and follow up. Please confirm you are the right person to set it up.
-- question: SAFE also lists "Crowdstrike Falcon Exposure Management (Spotlight)". Do you use it in addition to CrowdStrike Falcon?
-
-### ServiceNow administrator (ServiceNow ITSM)
-
-- access: We will confirm the exact access ServiceNow ITSM needs and follow up. Please confirm you are the right person to set it up.
-
-### Microsoft security administrator (Microsoft Defender)
-
-- question: Which Microsoft Defender product do you license? SAFE lists these: Microsoft 365 Defender, Microsoft Defender for Endpoints, Microsoft Defender for Identity via M365, Azure Defender for Cloud, Defender for Endpoint via M365.
-
 ### Application security lead (Snyk)
 
 - access: How we connect: Authorization, token
@@ -39,18 +26,15 @@ Verification: 69/70 cited facts verified in code. 1 drafted item held back.
 ### Customer project lead
 
 - question: Who will present the risk figure to the board, and when is the first meeting it needs to be ready for?
-- question: Who owns the admin account for each tool, and who approves API access?
 - question: Which systems hold your most critical data or drive the most revenue? These count first in the risk figure.
+- question: Who owns the admin account for each tool, and who approves API access?
 - question: How far back should vulnerability history go, and after how many days without activity should an asset count as stale?
-- question: Do you have an existing asset inventory, such as a CMDB, that we should treat as the source of truth?
 - data: 3 assets not seen in over 30 days (legacy-erp-01, print-srv-01, scanner-test-vm): keep, exclude, or investigate?
 
 ### SAFE platform team
 
-- decision: Microsoft Defender: which listed product does the connector cover? Candidates: Microsoft 365 Defender, Microsoft Defender for Endpoints, Microsoft Defender for Identity via M365, Azure Defender for Cloud, Defender for Endpoint via M365.
 - decision: Snyk: is there a connector beyond the public list? If not, review the custom scoping sheet.
 - decision: CrowdStrike Falcon: what access does SAFE's connector need? No vendor docs on file here.
-- decision: ServiceNow ITSM: what access does SAFE's connector need? No vendor docs on file here.
 - decision: For connectors with vendor docs on file: confirm the exact scopes and roles SAFE's connector needs (the plan lists what each vendor documents).
 
 ### Forward deployed engineer (us)
@@ -65,11 +49,8 @@ Verification: 69/70 cited facts verified in code. 1 drafted item held back.
 
 | Tool | What's open | Why | Who resolves it |
 |---|---|---|---|
-| Microsoft Defender | Which product this is | No card named "Microsoft Defender". 5 cards on SAFE's list contain "defender": Microsoft 365 Defender, Microsoft Defender for Endpoints, Microsoft Defender for Identity via M365, Azure Defender for Cloud, Defender for Endpoint via M365. Need the exact product the customer licenses | Customer (which product), then SAFE |
 | Snyk | Whether a connector exists | Not on SAFE's public list (105 cards). SAFE claims more integrations than it lists publicly, so Confirm with SAFE before scoping a build | SAFE |
 | CrowdStrike Falcon | How we connect, Permissions or scopes | No vendor docs on file for this tool, so nothing is guessed | SAFE (what its connector needs) |
-| ServiceNow ITSM | How we connect, Permissions or scopes | No vendor docs on file for this tool, so nothing is guessed | SAFE (what its connector needs) |
-| Microsoft Defender | How we connect, Permissions or scopes | Waiting on the exact product the customer licenses | Customer (which product), then SAFE |
 | Snyk | Permissions or scopes | The attached sources do not state this | SAFE (whether a connector exists, and what it needs) |
 | Snyk | Scoping sheet: Versioning | The draft for this item could not be verified against the sources, so it was held back | Us (a new model draft, checked again) |
 | Snyk | Scoping sheet: How records relate to assets | Needs input from the customer | Customer |

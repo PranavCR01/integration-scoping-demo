@@ -29,6 +29,17 @@ export function citeText(row: PlanRow, labels: Record<string, string>): string {
     .join('; ')
 }
 
+export const LATER_ACCESS = 'Not needed for this goal. Access details appear when the goal needs it.'
+
+// What the access checklist shows for one tool: nothing per row for a tool the goal does not
+// need, and one line instead of several when every row is Confirm for the same reason.
+export function accessLines(plan: Plan, a: Plan['access'][number]): { later: boolean; lines: { label: string; row: PlanRow }[] } {
+  if (plan.scope && !plan.scope.needed.includes(a.tool)) return { later: true, lines: [] }
+  const same = a.rows.length > 1 && a.rows.every((r) => r.status === 'confirm' && r.confirm_reason === a.rows[0].confirm_reason)
+  if (same) return { later: false, lines: [{ label: a.rows.map((r) => r.label).join(' and '), row: a.rows[0] }] }
+  return { later: false, lines: a.rows.map((r) => ({ label: r.label, row: r })) }
+}
+
 const rowText = (r: PlanRow) => (r.status === 'verified' ? r.text : `**Confirm.** ${r.confirm_reason ?? ''}`.trim())
 
 export function planBlocks(plan: Plan, labels: Record<string, string>, oobNote: string, footer: string, titlePrefix: string, status: string, data: DataReport | null = null): Block[] {
@@ -67,8 +78,9 @@ export function planBlocks(plan: Plan, labels: Record<string, string>, oobNote: 
     t: 'table',
     head: ['Tool', 'What we need', 'Customer owner', 'Source'],
     rows: plan.access.map((a) => {
-      const need = a.rows.map((r) => `${r.label}: ${rowText(r)}`).join(' ')
-      const src = a.rows.map((r) => citeText(r, labels)).filter(Boolean).join('; ') || (a.docs_label ? a.docs_label : 'None (no vendor docs on file)')
+      const al = accessLines(plan, a)
+      const need = al.later ? LATER_ACCESS : al.lines.map((l) => `${l.label}: ${rowText(l.row)}`).join(' ')
+      const src = al.later ? '' : a.rows.map((r) => citeText(r, labels)).filter(Boolean).join('; ') || (a.docs_label ? a.docs_label : 'None (no vendor docs on file)')
       return [a.input === a.tool ? a.tool : `${a.input} (${a.tool})`, need, a.owner, src]
     }),
   })

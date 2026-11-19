@@ -4,7 +4,7 @@
     "title_prefix": "Integration Scoping Plan",
     "status": "Draft for customer review",
     "footer": "Fictional customer. Built from public documentation only. SAFE's internal connector list and scoping template would replace the public versions used here.",
-    "oob_access_note": "For out-of-the-box connectors, SAFE's connector documentation decides the exact access needed. The access details above are what each vendor documents; confirm them with SAFE."
+    "oob_access_note": "These are the access details each vendor documents. SAFE's connector docs decide the exact access; confirm them with SAFE."
   },
   "access_items": [
     {
@@ -25,13 +25,6 @@
   ],
   "custom_sheet_items": [
     {
-      "key": "base_url",
-      "label": "Base URL",
-      "expects": [
-        "base_url"
-      ]
-    },
-    {
       "key": "versioning",
       "label": "Versioning",
       "expects": [
@@ -50,13 +43,6 @@
       "label": "Endpoints",
       "expects": [
         "endpoint"
-      ]
-    },
-    {
-      "key": "filters",
-      "label": "Useful filters",
-      "expects": [
-        "param"
       ]
     },
     {
@@ -131,16 +117,14 @@
       "text": "Who owns each tool's admin account, and who approves API access?"
     },
     {
-      "key": "crown_jewels",
-      "text": "Which systems hold your most critical data or revenue? This decides what counts first in the risk figure."
-    },
-    {
       "key": "lookback",
       "text": "What lookback window should vulnerability history use, and after how many days should an asset count as stale?"
-    },
+    }
+  ],
+  "hidden_data_notes": [
     {
-      "key": "source_of_truth",
-      "text": "Is there an existing asset inventory (a CMDB) we should treat as the source of truth?"
+      "tool": "Okta",
+      "item": "Device matching"
     }
   ]
 }

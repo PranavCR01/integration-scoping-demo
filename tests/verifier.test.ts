@@ -30,6 +30,10 @@ describe('verifier', () => {
       const rowName = `${e.row.section}/${e.row.tool}/${e.row.item}`
       expect(p.verification.held.map((h) => h.row)).toContain(rowName)
       expect(caughtBy(p, e), 'the planted fact or token itself must be what failed').toBeTruthy()
+      if (e.failure) {
+        const f = p.verification.log.find((l) => l.row === rowName && l.fact.value === e.fact!.value)!
+        expect(f.failure, 'caught by the check it was planted to test').toBe(e.failure)
+      }
       expect(shown(p)).not.toContain(e.bad)
     })
   }
@@ -42,7 +46,8 @@ describe('verifier', () => {
   })
 
   it('tools with no vendor docs on file show Confirm, never a guess', async () => {
-    const p = await buildPlan({ customer, draftOverride: saved })
+    // ServiceNow and Defender are no longer Halden tools, but the rule still holds for them
+    const p = await buildPlan({ customer: { ...customer, tools: [...customer.tools, 'ServiceNow ITSM', 'Microsoft Defender'] }, draftOverride: saved })
     for (const tool of ['CrowdStrike Falcon', 'ServiceNow ITSM', 'Microsoft Defender']) {
       const a = p.access.find((x) => x.tool === tool)!
       expect(a.rows.every((r) => r.status === 'confirm' && r.text === ''), tool).toBe(true)

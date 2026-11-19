@@ -22,6 +22,7 @@ export interface IntegrationsConfig {
 export interface MatchingConfig {
   stopwords: string[]
   ignore_variant_suffixes: string[]
+  variant_questions?: boolean // false: do not ask about related product cards
   bare_name_max_tokens: number
 }
 
@@ -86,6 +87,7 @@ export interface ScopingTemplate {
   data_checks: { key: string; label: string; text: string }[]
   retrieval_default_keywords: string[]
   standard_questions: { key: string; text: string }[]
+  hidden_data_notes?: { tool: string; item: string }[] // drafted data notes left out of the plan
 }
 
 export type CanonicalSchema = { asset: Record<string, string>; finding: Record<string, string> }

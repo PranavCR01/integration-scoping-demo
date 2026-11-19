@@ -129,8 +129,9 @@ export function buildActions(plan: Plan, data: DataReport | null): OwnerActions[
     if (!g.tools.includes(a.input)) g.tools.push(a.input)
     const verified = a.rows.filter((r) => r.status === 'verified')
     if (a.bucket === 'confirm_with_safe') continue // nothing to request until the product is known
-    if (verified.length) for (const r of verified) g.items.push({ kind: 'access', text: rowLine(r), short: rowShort(r), tool: a.input })
-    else g.items.push({ kind: 'access', text: `We will confirm the exact access ${a.input} needs and follow up. Please confirm you are the right person to set it up.`, tool: a.input })
+    // A tool with nothing verified to ask for gets no request: its access stays a SAFE
+    // decision, and the project lead's owners question already asks who runs it.
+    for (const r of verified) g.items.push({ kind: 'access', text: rowLine(r), short: rowShort(r), tool: a.input })
   }
   for (const q of plan.questions) {
     if (!inScope(plan, q.tool)) continue

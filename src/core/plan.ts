@@ -83,7 +83,7 @@ export function questionSeeds(coverage: CoverageResult[], cfg: AppConfig, goalKe
         allow: [c.input, ...c.candidates],
       })
     }
-    if (c.bucket === 'out_of_box') {
+    if (c.bucket === 'out_of_box' && cfg.matching.variant_questions !== false) {
       const distinct = c.variants.filter((v) => !/via m365$/i.test(v))
       for (const v of distinct) {
         seeds.push({ key: `variant:${v}`, tool: c.tool_key, text: `SAFE also lists "${v}". Do you use it as well as ${c.input}?`, allow: [v, c.input, c.tool_key] })
@@ -186,6 +186,8 @@ export function assemble({ cfg, coverage, order, draft, ctxFor, goalKey }: Assem
   const dataNotes: PlanRow[] = []
   for (const d of draft?.rows ?? []) {
     if (d.section !== 'data_note' || !d.tool) continue
+    // A drafted note can be left out by config; it is never reworded.
+    if (cfg.scoping_template.hidden_data_notes?.some((h) => h.tool === d.tool && h.item === d.item)) continue
     const c = byTool.get(d.tool)
     if (!c) continue
     const check = checkRow(d.text, d.facts, ctxFor(c), toolNames)

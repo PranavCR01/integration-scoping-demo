@@ -61,72 +61,10 @@
         {
           "key": "goal:board_audience",
           "text": "Who will present the risk figure to the board, and when is the first meeting it needs to be ready for?"
-        }
-      ]
-    },
-    "exposure_remediation": {
-      "label": "Fix the most exploitable exposures",
-      "example_goal": "Find and fix our most exploitable exposures first.",
-      "match_keywords": [
-        "exposure",
-        "exploit",
-        "remediat",
-        "patch",
-        "fix",
-        "prioriti",
-        "vulnerab",
-        "ctem"
-      ],
-      "outcome": "fixes can be prioritized and tracked",
-      "short": "prioritized, tracked fixes",
-      "needed_roles": [
-        "vulnerabilities",
-        "endpoint",
-        "ticketing",
-        "appsec",
-        "cloud"
-      ],
-      "steps": [
-        {
-          "step": 1,
-          "roles": [
-            "vulnerabilities",
-            "endpoint"
-          ],
-          "unlocks": "What is exposed, and on which machines."
         },
         {
-          "step": 2,
-          "roles": [
-            "ticketing"
-          ],
-          "unlocks": "Fixes reach the team that owns them, and closure can be tracked."
-        },
-        {
-          "step": 3,
-          "roles": [
-            "appsec",
-            "cloud"
-          ],
-          "unlocks": "Exposures in code and cloud, prioritized the same way."
-        },
-        {
-          "step": 4,
-          "roles": [
-            "identity",
-            "other"
-          ],
-          "unlocks": "Who owns and can reach each machine."
-        }
-      ],
-      "questions": [
-        {
-          "key": "goal:fix_deadlines",
-          "text": "What deadlines do you set for fixing issues at each severity level?"
-        },
-        {
-          "key": "goal:fix_owners",
-          "text": "Which teams own fixes, and which ticket queue does each team use?"
+          "key": "crown_jewels",
+          "text": "Which systems hold your most critical data or revenue? This decides what counts first in the risk figure."
         }
       ]
     },
@@ -195,71 +133,6 @@
         {
           "key": "goal:shared_accounts",
           "text": "Are there shared or service accounts we should know about before we start?"
-        }
-      ]
-    },
-    "audit_evidence": {
-      "label": "Evidence for an audit",
-      "example_goal": "Pull together evidence for our upcoming security audit.",
-      "match_keywords": [
-        "audit",
-        "compliance",
-        "evidence",
-        "soc 2",
-        "soc2",
-        "iso",
-        "regulator",
-        "nist"
-      ],
-      "outcome": "the evidence is complete",
-      "short": "complete audit evidence",
-      "needed_roles": [
-        "identity",
-        "endpoint",
-        "vulnerabilities",
-        "ticketing"
-      ],
-      "steps": [
-        {
-          "step": 1,
-          "roles": [
-            "identity",
-            "endpoint"
-          ],
-          "unlocks": "Which accounts and devices the evidence has to cover."
-        },
-        {
-          "step": 2,
-          "roles": [
-            "vulnerabilities"
-          ],
-          "unlocks": "Evidence that weaknesses are being found."
-        },
-        {
-          "step": 3,
-          "roles": [
-            "ticketing"
-          ],
-          "unlocks": "Evidence that they are being fixed, with dates."
-        },
-        {
-          "step": 4,
-          "roles": [
-            "appsec",
-            "cloud",
-            "other"
-          ],
-          "unlocks": "Additional evidence."
-        }
-      ],
-      "questions": [
-        {
-          "key": "goal:framework",
-          "text": "Which framework and audit date are we preparing for?"
-        },
-        {
-          "key": "goal:first_controls",
-          "text": "Which controls does your auditor expect evidence for first?"
         }
       ]
     },

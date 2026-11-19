@@ -18,12 +18,14 @@ export interface PlantedError {
   bad: string
   text: string // appended to the row text
   fact: Fact | null // appended to the row facts (null: text-only error)
+  // When set, the planted fact must fail with exactly this check, not another that fires first.
+  failure?: string
 }
 
 export const PLANTED: PlantedError[] = [
   { id: 'fake-endpoint', description: 'Made-up Snyk endpoint', row: { section: 'custom_sheet', tool: 'Snyk', item: 'endpoints' }, bad: '/orgs/{org_id}/vulnerabilities', text: ' Vulnerabilities: `/orgs/{org_id}/vulnerabilities`.', fact: F({ kind: 'endpoint', value: '/orgs/{org_id}/vulnerabilities', cite_file: SNYK_SPEC }) },
   { id: 'wrong-method', description: 'Real path, wrong HTTP method', row: { section: 'custom_sheet', tool: 'Snyk', item: 'endpoints' }, bad: 'POST /orgs/{org_id}/issues', text: ' Create issues with `POST /orgs/{org_id}/issues`.', fact: F({ kind: 'endpoint', value: 'POST /orgs/{org_id}/issues', cite_file: SNYK_SPEC }) },
-  { id: 'fake-param', description: 'Made-up filter parameter', row: { section: 'custom_sheet', tool: 'Snyk', item: 'filters' }, bad: 'severity_min', text: ' `severity_min` sets a minimum severity.', fact: F({ kind: 'param', value: 'severity_min', path: ISSUES, cite_file: SNYK_SPEC }) },
+  { id: 'fake-param', description: 'Made-up filter parameter', failure: 'PARAM_NOT_IN_SPEC', row: { section: 'custom_sheet', tool: 'Snyk', item: 'endpoints' }, bad: 'severity_min', text: ' `severity_min` sets a minimum severity.', fact: F({ kind: 'param', value: 'severity_min', path: ISSUES, cite_file: SNYK_SPEC }) },
   { id: 'fake-pagination', description: 'Made-up pagination parameter', row: { section: 'custom_sheet', tool: 'Snyk', item: 'pagination' }, bad: 'page_number', text: ' `page_number` selects a page.', fact: F({ kind: 'pagination', value: 'page_number', path: ISSUES, cite_file: SNYK_SPEC }) },
   { id: 'fake-field', description: 'Made-up response field', row: { section: 'custom_sheet', tool: 'Snyk', item: 'key_fields' }, bad: 'attributes.cvss_score', text: ' `attributes.cvss_score` maps to `severity`.', fact: F({ kind: 'field', value: 'attributes.cvss_score', path: ISSUES, cite_file: SNYK_SPEC }) },
   { id: 'fake-canonical', description: 'Maps to a field our common format does not have', row: { section: 'custom_sheet', tool: 'Snyk', item: 'key_fields' }, bad: 'risk_score', text: ' `attributes.title` also maps to `risk_score`.', fact: F({ kind: 'canonical_field', value: 'risk_score', cite_file: 'config/canonical_schema.json' }) },
@@ -33,7 +35,7 @@ export const PLANTED: PlantedError[] = [
   { id: 'wrong-rate-limit', description: 'Wrong rate limit, real quote', row: { section: 'custom_sheet', tool: 'Snyk', item: 'rate_limits' }, bad: '2000', text: ' That is `2000` requests per minute.', fact: F({ kind: 'rate_limit', value: '2000 requests per minute', cite_file: SNYK_ABOUT, cite_line: 135, quote: 'There is a limit of **1620 requests per minute**, per API key.' }) },
   { id: 'invented-quote', description: 'Quote that is not in the doc', row: { section: 'custom_sheet', tool: 'Snyk', item: 'rate_limits' }, bad: '5000', text: ' Bursts of `5000` requests are allowed.', fact: F({ kind: 'rate_limit', value: '5000', cite_file: SNYK_ABOUT, cite_line: 135, quote: 'Bursts of 5000 requests are allowed per API key.' }) },
   { id: 'wrong-version', description: 'Wrong recommended API version', row: { section: 'custom_sheet', tool: 'Snyk', item: 'versioning' }, bad: '2023-01-01', text: ' Snyk recommends `2023-01-01`.', fact: F({ kind: 'version', value: '2023-01-01', cite_file: SNYK_ABOUT, cite_line: 56, quote: 'Snyk recommends using `2024-10-15` the version number' }) },
-  { id: 'wrong-base-url', description: 'Wrong base URL', row: { section: 'custom_sheet', tool: 'Snyk', item: 'base_url' }, bad: 'https://api.snyk.com/rest', text: ' Or `https://api.snyk.com/rest`.', fact: F({ kind: 'base_url', value: 'https://api.snyk.com/rest', cite_file: SNYK_SPEC }) },
+  { id: 'wrong-base-url', description: 'Wrong base URL', failure: 'BASE_URL_NOT_IN_SPEC', row: { section: 'access', tool: 'Snyk', item: 'auth' }, bad: 'https://api.snyk.com/rest', text: ' Or `https://api.snyk.com/rest`.', fact: F({ kind: 'base_url', value: 'https://api.snyk.com/rest', cite_file: SNYK_SPEC }) },
   { id: 'wrong-source-file', description: 'Real fact cited to a file that is not this tool\'s docs', row: { section: 'custom_sheet', tool: 'Snyk', item: 'rate_limits' }, bad: 'okta-cited', text: ' (okta-cited) `1620` per minute.', fact: F({ kind: 'rate_limit', value: '1620', cite_file: OKTA_SPEC, quote: 'There is a limit of 1620 requests per minute' }) },
   { id: 'wrong-tenable-header', description: 'Wrong Tenable auth header', row: { section: 'access', tool: 'Tenable Vulnerability Management', item: 'auth' }, bad: 'X-API-Token', text: ' Send it as `X-API-Token`.', fact: F({ kind: 'auth', value: 'X-API-Token', cite_file: TENABLE, cite_line: 8, quote: 'Header: `X-APIKeys: accessKey=<access_key>;secretKey=<secret_key>`' }) },
   { id: 'wrong-tenable-role', description: 'Wrong Tenable role', row: { section: 'access', tool: 'Tenable Vulnerability Management', item: 'permissions' }, bad: 'Administrator [32]', text: ' Or the `Administrator [32]` role.', fact: F({ kind: 'permission', value: 'Administrator [32]', cite_file: TENABLE, cite_line: 14, quote: 'Administrator [64] users are exempt from the Can View requirement.' }) },
@@ -60,7 +62,9 @@ export function caughtBy(plan: import('../src/core/types').Plan, e: PlantedError
   const row = `${e.row.section}/${e.row.tool}/${e.row.item}`
   if (e.fact) {
     const f = plan.verification.log.find((l) => l.row === row && !l.verified && l.fact.value === e.fact!.value && l.fact.kind === e.fact!.kind)
-    return f ? f.detail : null
+    if (!f) return null
+    if (e.failure && f.failure !== e.failure) return null // caught, but by a different check
+    return f.detail
   }
   const h = plan.verification.held.find((x) => x.row === row)
   const token = e.text.match(/`([^`]+)`/)?.[1] ?? e.bad.split(' ')[0]
