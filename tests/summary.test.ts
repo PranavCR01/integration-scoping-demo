@@ -126,6 +126,9 @@ describe('summary sentence and card lines (code-written)', () => {
       // a blocking data issue that is already a customer answer is not counted again
       const asked = s.blockers.filter((b) => b.who === 'Customer').length
       expect(Number(m[1]), k.name).toBe(s.safe_items + s.customer_questions + s.data.blockers - asked)
+      // the third tile says how many of its blockers are also customer answers, so the tiles add up to the headline
+      expect(s.data.asked_of_customer, k.name).toBe(asked)
+      expect(s.data.asked_of_customer, k.name).toBe(k.name === 'access' ? 0 : 1)
     }
   })
 

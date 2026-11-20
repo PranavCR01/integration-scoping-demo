@@ -20,7 +20,7 @@ export function SummaryCard({ plan, summary, onOwners }: { plan: Plan; summary: 
         <Tile value={summary.customer_questions} label={`${summary.customer_questions === 1 ? 'answer' : 'answers'} needed from ${plan.customer.name.split(' ')[0]}`} tone={summary.customer_questions ? 'amber' : 'emerald'} />
         <Tile
           value={d.status === 'not_run' ? 'Not checked' : d.blockers}
-          label={d.status === 'not_run' ? 'data checks not run yet' : d.blockers === 1 ? 'data issue blocking use' : 'data issues blocking use'}
+          label={d.status === 'not_run' ? 'data checks not run yet' : `${d.blockers === 1 ? 'data issue' : 'data issues'} blocking use${d.asked_of_customer ? ` (${d.asked_of_customer} also asked of ${plan.customer.name.split(' ')[0]})` : ''}`}
           tone={d.status === 'ready' ? 'emerald' : d.status === 'blocked' ? 'rose' : 'slate'}
         />
       </div>

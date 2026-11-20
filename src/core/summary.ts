@@ -11,7 +11,7 @@ export interface Summary {
   safe_items: number // every line in the list that SAFE has to confirm
   customer_questions: number
   people_to_contact: number
-  data: { status: 'not_run' | 'ready' | 'blocked'; blockers: number; warnings: number }
+  data: { status: 'not_run' | 'ready' | 'blocked'; blockers: number; warnings: number; asked_of_customer: number } // asked_of_customer: blockers that are also a customer answer
   headline: string
   blockers: { who: 'SAFE' | 'Customer' | 'Us'; text: string }[]
 }
@@ -98,7 +98,7 @@ export function buildSummary(plan: Plan, data: DataReport | null): Summary {
     safe_items: safeItems,
     customer_questions: customerQuestions,
     people_to_contact: customerOwners.length,
-    data: { status: dataStatus, blockers: dataBlocks.length, warnings: dataWarns.length },
+    data: { status: dataStatus, blockers: dataBlocks.length, warnings: dataWarns.length, asked_of_customer: blockers.filter((b) => b.who === 'Customer').length },
     headline,
     blockers,
   }
