@@ -4,11 +4,11 @@
 
 **Plan built for:** Board-ready risk figure
 
-**Prepared:** Nov 19, 2026 · **Status:** Draft for customer review
+**Prepared:** Nov 20, 2026 · **Status:** Draft for customer review
 
 **Sources:** SAFE public integrations page (captured Nov 4, 2026); vendor API docs listed under each tool. Anything not found in those sources is marked **Confirm**.
 
-**At a glance:** 3 tools ready to connect. 13 items to clear before the risk figure can be trusted.
+**At a glance:** 3 tools ready to connect. 12 items to clear before the risk figure can be trusted: 2 for SAFE, 8 answers from Halden and 2 data fixes on our side.
 
 ---
 

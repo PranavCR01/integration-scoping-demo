@@ -73,14 +73,22 @@ export function buildSummary(plan: Plan, data: DataReport | null): Summary {
     } else blockers.push({ who: 'Us', text: `Data: ${c.detail}` })
   }
 
-  // Short on purpose: the tiles and the blocker list below it carry the breakdown.
-  const toClear = safeItems + customerQuestions + (dataStatus === 'blocked' ? dataBlocks.length : 0)
+  // Each open item is counted once. A blocking data issue the customer is already asked about
+  // (a count mismatch) is one of their answers, so only the data issues left for us to fix are
+  // added on top. The parts are named so the total adds up from what is on screen.
+  const ourDataFixes = blockers.filter((b) => b.who === 'Us').length
+  const parts = [
+    safeItems ? `${safeItems} for SAFE` : '',
+    customerQuestions ? `${plural(customerQuestions, 'answer')} from ${plan.customer.name.split(' ')[0]}` : '',
+    ourDataFixes ? `${plural(ourDataFixes, 'data fix', 'data fixes')} on our side` : '',
+  ].filter(Boolean)
+  const toClear = safeItems + customerQuestions + ourDataFixes
   const readyLine = later
     ? `${plural(ready, 'tool')} ready to connect (${later} more can wait).`
     : `${plural(ready, 'tool')} ready to connect.`
   const headline =
     `${readyLine} ` +
-    (toClear ? `${plural(toClear, 'item')} to clear before ${plan.goal.outcome}.` : `Nothing stands between ${plan.customer.name} and ${plan.goal.short}.`) +
+    (toClear ? `${plural(toClear, 'item')} to clear before ${plan.goal.outcome}: ${parts.length > 1 ? parts.slice(0, -1).join(', ') + ' and ' + parts[parts.length - 1] : parts[0]}.` : `Nothing stands between ${plan.customer.name} and ${plan.goal.short}.`) +
     (dataStatus === 'not_run' ? ' The data checks have not run yet.' : '')
 
   return {

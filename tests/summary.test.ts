@@ -105,11 +105,28 @@ describe('internal handoff layout', () => {
 })
 
 describe('summary sentence and card lines (code-written)', () => {
-  it('the headline is short and its count matches the tiles', async () => {
-    const p = await buildPlan({ customer })
-    const d = runData({ customer })
-    const s = buildSummary(p, d)
-    expect(s.headline).toBe(`${s.ready_now} tools ready to connect. ${s.safe_items + s.customer_questions + s.data.blockers} items to clear before ${p.goal.outcome}.`)
+  it('the headline counts every item once, and its total is the sum of the parts it names', async () => {
+    const { readJson } = await import('../src/server/store')
+    const swapped = { integrations: readJson('config/variants/integrations.safe-internal-example.json') }
+    const accessGoal = { ...customer, goal: 'Understand who has access to what across our systems.' }
+    const cases = [
+      { name: 'board', c: customer, ov: {}, total: 12 },
+      { name: 'board after swap', c: customer, ov: swapped, total: 11 },
+      { name: 'access', c: accessGoal, ov: {}, total: 5 },
+    ]
+    for (const k of cases) {
+      const p = await buildPlan({ customer: k.c, overrides: k.ov as never })
+      const d = runData({ customer: k.c, overrides: k.ov as never })
+      const s = buildSummary(p, d)
+      const m = s.headline.match(/(\d+) items to clear before [^:]+: (.+)\.$/)!
+      expect(m, k.name).toBeTruthy()
+      const parts = [...m[2].matchAll(/(\d+) /g)].map((x) => Number(x[1]))
+      expect(Number(m[1]), k.name).toBe(parts.reduce((a, b) => a + b, 0))
+      expect(Number(m[1]), k.name).toBe(k.total)
+      // a blocking data issue that is already a customer answer is not counted again
+      const asked = s.blockers.filter((b) => b.who === 'Customer').length
+      expect(Number(m[1]), k.name).toBe(s.safe_items + s.customer_questions + s.data.blockers - asked)
+    }
   })
 
   it('card lines use only verified values; emails keep the full verified text', async () => {
